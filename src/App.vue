@@ -13,7 +13,7 @@ export default {
 
   components: {
     AppHeader,
-    AppMain,
+    AppHome,
     AppFooter,
   },
 };

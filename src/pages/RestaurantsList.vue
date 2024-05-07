@@ -10,15 +10,16 @@ export default {
       title: "Restaurants",
       store,
       restaurants: [],
+      types: [],
     };
   },
 
   components: { AppCard },
-
   methods: {
     fetchRestaurants() {
       axios.get(store.baseApiURI + "restaurants").then((response) => {
         this.restaurants = response.data.restaurants;
+        this.types = response.data.types;
       });
     },
   },
@@ -26,26 +27,113 @@ export default {
   created() {
     this.fetchRestaurants();
   },
+
+  mounted() {},
 };
 </script>
 
 <template>
-  <div id="restaurantList">
+  <div id="mainContent">
     <div class="container-md">
-      <h1>{{ title }}</h1>
+      <h1 class="text-center">{{ title }}</h1>
+      <!-- ROW -->
+      <div class="row justify-content-between">
+        <!-- Search column -->
+        <div class="col-md-4 row justify-content-center">
+          <div id="searchCard">
+            <h5>Ricerca ristoranti</h5>
+          </div>
+          <!-- Type Badges for search -->
+          <div>
+            <div class="badge" v-for="badge in types">
+              <div class="typeBadge">
+                <div class="badgeImg">
+                  <img :src="badge.image" alt="" width="100%" />
+                </div>
+                <span class="piselon">{{ badge.label }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <p v-for="restaurant in restaurants">
-        {{ restaurant.name }}
-      </p>
+        <!-- Results column -->
+        <div class="col-md-8 row justify-content-center">
+          <div
+            v-for="restaurant in restaurants"
+            class="myCard col-md-3 col-sm-12 me-3 mb-3"
+          >
+            <!-- Restaurant image -->
+            <div class="coverImage">
+              <img :src="restaurant.image" />
+            </div>
+            <h3 class="detailCap">{{ restaurant.name }}</h3>
+            <p class="detailCap">{{ restaurant.address }}</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-#restaurantList {
-  box-shadow: 0 0 5px black;
-  background: #3535ec;
-  min-height: calc(100vh - 160px);
-  height: 100%;
+// TYPE BADGES
+.badge {
+  display: inline-block;
+  margin-right: 10px;
+
+  .typeBadge {
+    width: 100%;
+    border-radius: 50px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: 120px;
+    object-fit: cover;
+
+    span {
+      z-index: 2;
+      text-shadow: 0px 0px 20px black;
+      letter-spacing: 2px;
+      text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000,
+        2px 2px 0 #000;
+    }
+    .badgeImg {
+      position: absolute;
+      width: 100%;
+      filter: brightness(90%);
+    }
+  }
+}
+
+// RESTAURANT CARDS
+.myCard {
+  background-color: #2929b9;
+  padding-top: 10px;
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  &:hover {
+    box-shadow: 0 0 7px black;
+    transform: scale(1.02);
+    transition: all 0.1s ease-in-out 0.1s;
+  }
+
+  .coverImage {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    aspect-ratio: 1 / 1;
+
+    img {
+      height: 100%;
+    }
+  }
 }
 </style>

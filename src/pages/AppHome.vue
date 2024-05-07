@@ -5,12 +5,17 @@ export default {
       titleComponent: "Home Page",
     };
   },
+
+  created() {},
 };
 </script>
 
 <template>
-  <div class="container">
-    <h1>{{ titleComponent }}</h1>
+  <div id="mainContent">
+    <div class="container">
+      <h1>{{ titleComponent }}</h1>
+    </div>
+    <div class="test text-center"><span class="text">TEST</span></div>
   </div>
 </template>
 
@@ -20,5 +25,10 @@ export default {
 
 h1 {
   color: black;
+}
+
+.test {
+  height: 300px;
+  width: 400px;
 }
 </style>
