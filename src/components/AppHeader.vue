@@ -43,7 +43,7 @@ export default {
               :to="{ name: 'restaurants.index' }"
               class="nav-link text-white"
               href="#"
-              >Restaurants</router-link
+              >Ristoranti</router-link
             >
           </li>
         </ul>

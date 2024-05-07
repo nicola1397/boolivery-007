@@ -13,17 +13,23 @@ export default {
 
   components: {
     AppHeader,
+    AppMain,
     AppFooter,
   },
 };
 </script>
 
 <template>
-  <app-header />
-  <router-view></router-view>
-  <app-footer />
+  <div class="app">
+    <app-header />
+    <router-view></router-view>
+    <app-footer />
+  </div>
 </template>
 
 <style lang="scss">
 @use "./style/general.scss";
+.app {
+  min-height: 100vh;
+}
 </style>

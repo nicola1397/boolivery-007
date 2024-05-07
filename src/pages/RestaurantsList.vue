@@ -30,18 +30,22 @@ export default {
 </script>
 
 <template>
-  <div class="container">
-    <h1>{{ title }}</h1>
+  <div id="restaurantList">
+    <div class="container-md">
+      <h1>{{ title }}</h1>
 
-    <p v-for="restaurant in restaurants">
-      {{ restaurant.name }}
-    </p>
+      <p v-for="restaurant in restaurants">
+        {{ restaurant.name }}
+      </p>
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-h1,
-p {
-  color: black;
+#restaurantList {
+  box-shadow: 0 0 5px black;
+  background: #3535ec;
+  min-height: calc(100vh - 160px);
+  height: 100%;
 }
 </style>
