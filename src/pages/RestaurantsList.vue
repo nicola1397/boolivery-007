@@ -1,5 +1,5 @@
 <script>
-    import { store } from "../store";
+import { store } from "../store";
 import axios from "axios";
 
 import AppCard from "../components/AppCard.vue";
@@ -30,7 +30,7 @@ export default {
 </script>
 
 <template>
-    <div class="container">
+  <div class="container">
     <h1>{{ title }}</h1>
 
     <p v-for="restaurant in restaurants">
@@ -40,4 +40,8 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+h1,
+p {
+  color: black;
+}
 </style>

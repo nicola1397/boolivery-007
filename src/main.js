@@ -43,9 +43,6 @@ import {
   faInstagram,
 } from "@fortawesome/free-brands-svg-icons";
 
-// * import route
-import { router } from "./router";
-
 // * add icons to the library */
 library.add(
   faChevronDown,
@@ -75,6 +72,9 @@ library.add(
 );
 
 import App from "./App.vue";
+
+// * import route
+import { router } from "./router";
 
 const app = createApp(App);
 

@@ -19,4 +19,7 @@ export default {
 <style lang="scss" scoped>
 @use "../style/partials/mixins" as *;
 @use "../style/partials/variables" as *;
+h5 {
+  color: black;
+}
 </style>
