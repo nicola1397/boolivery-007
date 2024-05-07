@@ -11,7 +11,7 @@ export default {
 </script>
 
 <template>
-  <div class="container mt-3">
+  <div class="container-fluid mt-3">
     <h5>Footer</h5>
   </div>
 </template>
