@@ -1,18 +1,16 @@
 <script>
-// import { store } from "../store";
-
-export default {
-  data() {
+  export default {
+    data() {
     return {
-      // store,
+      titleComponent: 'Home Page',
     };
   },
-};
+  }
 </script>
 
 <template>
-  <div class="container mt-3">
-    <h5>Footer</h5>
+  <div class="container">
+    <h1>{{titleComponent}}</h1>
   </div>
 </template>
 

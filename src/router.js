@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import AppMain from "./pages/AppMain.vue";
+import AppHome from "./pages/AppHome.vue";
+import RestaurantsList from "./pages/RestaurantsList.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -8,7 +9,12 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      component: AppMain,
+      component: AppHome,
+    },
+    {
+      path: "/restaurants",
+      name: "restaurants.index",
+      component: RestaurantsList,
     },
   ],
 });

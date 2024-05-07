@@ -3,7 +3,7 @@
 
 // Import components
 import AppHeader from "./components/AppHeader.vue";
-import AppMain from "./pages/AppMain.vue";
+import AppMain from "./pages/AppHome.vue";
 import AppFooter from "./components/AppFooter.vue";
 
 export default {
@@ -13,7 +13,6 @@ export default {
 
   components: {
     AppHeader,
-    //AppMain,
     AppFooter,
   },
 };

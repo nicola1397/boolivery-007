@@ -1,8 +1,8 @@
 <script>
-import { store } from "../store";
+    import { store } from "../store";
 import axios from "axios";
 
-import AppCard from "./AppCard.vue";
+import AppCard from "../components/AppCard.vue";
 
 export default {
   data() {
@@ -30,14 +30,14 @@ export default {
 </script>
 
 <template>
-  <h1>{{ title }}</h1>
+    <div class="container">
+    <h1>{{ title }}</h1>
 
-  <p v-for="restaurant in restaurants">
-    {{ restaurant.name }}
-  </p>
+    <p v-for="restaurant in restaurants">
+      {{ restaurant.name }}
+    </p>
+  </div>
 </template>
 
 <style lang="scss" scoped>
-@use "../style/partials/mixins" as *;
-@use "../style/partials/variables" as *;
 </style>
