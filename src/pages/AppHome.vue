@@ -51,7 +51,7 @@ export default {
   overflow: hidden;
 
   .row {
-    min-height: calc(100vh - 160px);
+    min-height: calc(100vh - $headerHeight - $footerHeight);
 
     .jumboTextContainer {
       text-align: center;
@@ -132,7 +132,7 @@ export default {
 
   img {
     min-width: 100vw;
-    min-height: calc(100vh - 160px);
+    min-height: calc(100vh - $headerHeight - $footerHeight);
   }
 }
 </style>
