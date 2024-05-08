@@ -1,5 +1,5 @@
 <script>
-import { store } from "../store";
+import { api, store } from "../store";
 import axios from "axios";
 import AppCard from "../components/AppCard.vue";
 
@@ -18,7 +18,7 @@ export default {
   components: { AppCard },
   methods: {
     fetchRestaurants() {
-      axios.get(store.baseApiURI + "restaurants").then((response) => {
+      axios.get(api.baseApiURI + "restaurants").then((response) => {
         this.restaurants = response.data.restaurants;
         this.types = response.data.types;
       });
@@ -68,7 +68,8 @@ export default {
           <div
             class="badge"
             v-for="badge in types"
-            @click="search(badge.label)">
+            @click="search(badge.label)"
+          >
             <div class="typeBadge">
               <div class="badgeImg">
                 <img :src="badge.image" alt="" width="100%" />
@@ -81,16 +82,29 @@ export default {
 
       <!-- Results column -->
       <div class="col-md-8 row justify-content-center">
-        <div
+        <!-- Restaurant Card by component -->
+        <app-card
+          class="col-md-3 col-sm-12 me-3 mb-3"
           v-for="restaurant in restaurants"
-          class="myCard col-md-3 col-sm-12 me-3 mb-3">
-          <!-- Restaurant image -->
+          :restaurant="restaurant"
+        ></app-card>
+
+        <!-- Restaurant card -->
+        <!--         <div
+          v-for="restaurant in restaurants"
+          class="myCard col-md-3 col-sm-12 me-3 mb-3"
+        >
           <div class="coverImage">
             <img :src="restaurant.image" />
           </div>
           <h3 class="detailCap">{{ restaurant.name }}</h3>
           <p class="detailCap">{{ restaurant.address }}</p>
-        </div>
+          <router-link
+            :to="{ name: 'restaurants.show', params: { id: restaurant.slug } }"
+          >
+            <button type="button" class="btn btn-warning">Seleziona</button>
+          </router-link>
+        </div> -->
       </div>
     </div>
   </div>
@@ -126,35 +140,6 @@ export default {
       position: absolute;
       width: 100%;
       filter: brightness(90%);
-    }
-  }
-}
-
-// RESTAURANT CARDS
-.myCard {
-  background-color: #2929b9;
-  padding-top: 10px;
-  padding: 20px;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
-  &:hover {
-    box-shadow: 0 0 7px black;
-    transform: scale(1.02);
-    transition: all 0.1s ease-in-out 0.1s;
-  }
-
-  .coverImage {
-    width: 100%;
-    overflow: hidden;
-    border-radius: 10px;
-    margin-bottom: 15px;
-    aspect-ratio: 1 / 1;
-
-    img {
-      height: 100%;
     }
   }
 }
