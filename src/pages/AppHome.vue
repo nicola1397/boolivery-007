@@ -11,25 +11,33 @@ export default {
 </script>
 
 <template>
-  <div class="mb-4">
-    <div class="row d-block d-md-flex">
-      <div class="col-md-6 column">
-        <img src="../assets/img/bg-alt.svg" alt="" />
-      </div>
-      <div class="col-md-6 column">
-        <!-- <h1 class="display-2">Diventa partner Boolivery! 🛵🍝</h1>
-          <p class="fs-2 rob4 my-5">
-            Registra la tua attività ed entra a far parte della famiglia di
-            Boolivery! Aggiungi i tuoi piatti e raggiungi subito nuovi clienti!
-          </p> -->
-        <div class="btn-restaurant">
+  <div id="splash">
+    <img src="../assets/img/jumbo-2.svg" alt="" />
+  </div>
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-6 d-flex justify-content-center text-center">
+        <div>
+          <h2 class="display-2 title">Ordina subito con Boolivery! 🛵🍝</h2>
+
           <!-- BUTTON -->
-          <router-link
-            :to="{ name: 'restaurants.index' }"
-            href="#"
-            class="btn btn--action"
-            ><span>Scegli il tuo ristorante</span></router-link
-          >
+          <div class="btn-restaurant mb-5">
+            <router-link
+              :to="{ name: 'restaurants.index' }"
+              href="#"
+              class="btn btn--action"
+              ><span>Vai ai ristoranti</span></router-link
+            >
+          </div>
+
+          <h5 class="title">oppure</h5>
+          <h3 class="display-5 title">Sei un ristoratore?</h3>
+          <!-- BUTTON -->
+          <div class="btn-restaurant mb-5">
+            <a class="btn btn--action" href="http://127.0.0.1:8000/login"
+              ><span>Accedi al tuo account</span></a
+            >
+          </div>
         </div>
       </div>
     </div>
@@ -39,25 +47,15 @@ export default {
 <style lang="scss" scoped>
 @use "../style/partials/mixins" as *;
 @use "../style/partials/variables" as *;
-.row {
-  @include d-flex-center;
+.container {
+  min-height: calc(100vh - 160px);
+  overflow: hidden;
 
-  .column {
-    margin: 0 auto;
-    @include d-flex-center;
-    justify-content: center;
-
-    img {
-      max-height: 500px;
-    }
-
+  .row {
     .btn-restaurant {
-      width: 70%;
-
       .btn--action {
         font-size: 1.5rem;
         display: block;
-        width: 100%;
         padding: 1rem;
         border-radius: 100px;
         background-color: white;
@@ -103,6 +101,23 @@ export default {
         transform: translateY(5px);
       }
     }
+    .title {
+      text-shadow: -2px -2px 15px #4477d5, 2px -2px 15px #4477d5,
+        -2px 2px 15px #4477d5, 2px 2px 15px #4477d5;
+    }
+  }
+}
+
+// JUMBO IMAGE
+#splash {
+  z-index: -1;
+  position: absolute;
+  overflow: hidden;
+
+  img {
+    min-width: 100vw;
+    min-height: calc(100vh - 160px);
+    object-fit: cover;
   }
 }
 </style>
