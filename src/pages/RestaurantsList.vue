@@ -21,6 +21,7 @@ export default {
       axios.get(api.baseApiURI + "restaurants").then((response) => {
         this.restaurants = response.data.restaurants;
         this.types = response.data.types;
+        console.log(response.data);
       });
     },
 

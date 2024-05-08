@@ -5,8 +5,7 @@ export default {
 </script>
 
 <template>
-  <div class="myCard m-5">
-    <span>{{ restaurant }}</span>
+  <div class="myCard mx-4">
     <div class="coverImage">
       <img :src="restaurant.image" />
     </div>

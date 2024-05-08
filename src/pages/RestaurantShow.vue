@@ -1,13 +1,14 @@
 <script>
 import axios from "axios";
 import { api } from "../store";
-
 import AppCard from "../components/AppCard.vue";
 
 export default {
   data() {
     return {
-      restaurant: {},
+      restaurant: [],
+      /* store,
+      restaurant: null, */
     };
   },
 
@@ -19,8 +20,8 @@ export default {
       axios
         .get(api.baseApiURI + `restaurants/${restaurantSlug}`)
         .then((response) => {
-          console.log(response.data);
-          this.restaurant = response.data.restaurants;
+          this.restaurant = response.data.restaurants[0];
+          console.log(response.data.restaurants[0]);
           /* this.types = response.data.types; */
         });
     },
@@ -29,20 +30,44 @@ export default {
   created() {
     this.fetchRestaurants();
   },
+
+  mounted() {},
 };
 </script>
 
 <template>
-  <h1>
-    Dettagli ristorante
-    <!-- {{ route.params.slug }} -->
-  </h1>
-  <div class="row justify-content-between">
-    <div class="d-flex justify-content-center">
-      <app-card :restaurant="this.restaurant" class="col-4"></app-card>
-      <div class="col-6">
-        <h3>Menù</h3>
-      </div>
+  <div class="row justify-content-between container">
+    <h1 class="mb-4">
+      Dettagli ristorante:
+      {{ restaurant.name }}
+    </h1>
+    <div class="d-flex justify-content-center flex-column col-5">
+      <app-card :restaurant="restaurant" class="w-100"></app-card>
+    </div>
+    <div class="col-6">
+      <h3 class="">Menù</h3>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Piatto</th>
+            <th scope="col">Prezzo</th>
+            <th scope="col">Dettagli</th>
+            <th scope="col">Acquista</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="dish in restaurant.dishes">
+            <th>{{ dish.name }}</th>
+            <td>€{{ dish.price }}</td>
+            <td>
+              <font-awesome-icon :icon="['fas', 'eye']" />
+            </td>
+            <td>
+              <font-awesome-icon :icon="['fas', 'cart-shopping']" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
