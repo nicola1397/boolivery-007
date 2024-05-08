@@ -21,6 +21,7 @@ export default {
       axios.get(store.baseApiURI + "restaurants").then((response) => {
         this.restaurants = response.data.restaurants;
         this.types = response.data.types;
+        this.searchOn = true;
       });
     },
 
@@ -38,7 +39,6 @@ export default {
     },
 
     search(name) {
-      this.searchOn = true;
       this.activeTypes.push(name);
       console.log(this.activeTypes);
       this.filteredRestaurants(this.activeTypes);
@@ -55,16 +55,14 @@ export default {
 
 <template>
   <div id="mainContent">
-    <h1 class="text-center">{{ title }}</h1>
     <!-- ROW -->
     <div class="row justify-content-between">
       <!-- Search column -->
-      <div class="col-md-4 row justify-content-center">
-        <div id="searchCard">
-          <h5>Ricerca ristoranti</h5>
-        </div>
+      <div class="col-md-4 searchColumn my-2">
+        <h3 class="mb-3 ms-2">Ricerca ristoranti</h3>
+
         <!-- Type Badges for search -->
-        <div>
+        <div class="badges-wrapper">
           <div
             class="badge"
             v-for="badge in types"
@@ -80,7 +78,9 @@ export default {
       </div>
 
       <!-- Results column -->
-      <div class="col-md-8 row justify-content-center">
+      <div class="col-md-8 row justify-content-center result-column">
+        <h1 class="text-center mb-3">{{ title }}</h1>
+
         <div
           v-for="restaurant in restaurants"
           class="myCard col-md-3 col-sm-12 me-3 mb-3">
@@ -98,63 +98,71 @@ export default {
 
 <style lang="scss" scoped>
 // TYPE BADGES
-.badge {
-  display: inline-block;
-  margin-right: 10px;
+.searchColumn {
+  text-align: center;
+  .badges-wrapper {
+    margin-top: 10px;
 
-  .typeBadge {
-    width: 100%;
-    border-radius: 50px;
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 40px;
-    width: 120px;
-    object-fit: cover;
+    .badge {
+      display: inline-block;
+      margin-right: 10px;
+      .typeBadge {
+        width: 100%;
+        border-radius: 50px;
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 40px;
+        width: 120px;
+        object-fit: cover;
 
-    span {
-      z-index: 2;
-      text-shadow: 0px 0px 20px black;
-      font-size: 17px;
-      letter-spacing: 2px;
-      text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000,
-        2px 2px 0 #000;
-    }
-    .badgeImg {
-      position: absolute;
-      width: 100%;
-      filter: brightness(90%);
+        span {
+          z-index: 2;
+          text-shadow: 0px 0px 20px black;
+          font-size: 17px;
+          letter-spacing: 2px;
+          text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000,
+            2px 2px 0 #000;
+        }
+        .badgeImg {
+          position: absolute;
+          width: 100%;
+          filter: brightness(90%);
+        }
+      }
     }
   }
 }
 
 // RESTAURANT CARDS
-.myCard {
-  background-color: #2929b9;
-  padding-top: 10px;
-  padding: 20px;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
-  &:hover {
-    box-shadow: 0 0 7px black;
-    transform: scale(1.02);
-    transition: all 0.1s ease-in-out 0.1s;
-  }
-
-  .coverImage {
-    width: 100%;
-    overflow: hidden;
+.result-column {
+  .myCard {
+    background-color: #2929b9;
+    padding-top: 10px;
+    padding: 20px;
     border-radius: 10px;
-    margin-bottom: 15px;
-    aspect-ratio: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
-    img {
-      height: 100%;
+    &:hover {
+      box-shadow: 0 0 7px black;
+      transform: scale(1.02);
+      transition: all 0.1s ease-in-out 0.1s;
+    }
+
+    .coverImage {
+      width: 100%;
+      overflow: hidden;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      aspect-ratio: 1 / 1;
+
+      img {
+        height: 100%;
+      }
     }
   }
 }

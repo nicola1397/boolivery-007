@@ -48,7 +48,7 @@ export default {
     justify-content: center;
 
     img {
-      max-height: 550px;
+      max-height: 500px;
     }
 
     .btn-restaurant {
