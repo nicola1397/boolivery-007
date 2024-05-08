@@ -65,7 +65,10 @@ export default {
         </div>
         <!-- Type Badges for search -->
         <div>
-          <div class="badge" v-for="badge in types">
+          <div
+            class="badge"
+            v-for="badge in types"
+            @click="search(badge.label)">
             <div class="typeBadge">
               <div class="badgeImg">
                 <img :src="badge.image" alt="" width="100%" />
@@ -75,31 +78,6 @@ export default {
           </div>
         </div>
       </div>
-    <div class="container-md">
-      <h1 class="text-center">{{ title }}</h1>
-      <!-- ROW -->
-      <div class="row justify-content-between">
-        <!-- Search column -->
-        <div class="col-md-4 row justify-content-center">
-          <div id="searchCard">
-            <h5>Ricerca ristoranti</h5>
-          </div>
-          <!-- Type Badges for search -->
-          <div>
-            <div
-              class="badge"
-              v-for="badge in types"
-              @click="search(badge.label)"
-            >
-              <div class="typeBadge">
-                <div class="badgeImg">
-                  <img :src="badge.image" alt="" width="100%" />
-                </div>
-                <span class="piselon">{{ badge.label }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
 
       <!-- Results column -->
       <div class="col-md-8 row justify-content-center">
