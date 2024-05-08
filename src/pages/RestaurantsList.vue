@@ -1,7 +1,6 @@
 <script>
 import { store } from "../store";
 import axios from "axios";
-
 import AppCard from "../components/AppCard.vue";
 
 export default {
@@ -11,6 +10,8 @@ export default {
       store,
       restaurants: [],
       types: [],
+      searchOn: false,
+      activeTypes: [],
     };
   },
 
@@ -21,6 +22,26 @@ export default {
         this.restaurants = response.data.restaurants;
         this.types = response.data.types;
       });
+    },
+
+    filteredRestaurants(argument) {
+      const argumentString = Array.isArray(argument)
+        ? argument.join("&")
+        : argument;
+
+      axios
+        .get(store.baseApiURI + "restaurants/search=" + argumentString)
+        .then((response) => {
+          this.restaurants = response.data.restaurants;
+          this.types = response.data.types;
+        });
+    },
+
+    search(name) {
+      this.searchOn = true;
+      this.activeTypes.push(name);
+      console.log(this.activeTypes);
+      this.filteredRestaurants(this.activeTypes);
     },
   },
 
@@ -45,7 +66,11 @@ export default {
           </div>
           <!-- Type Badges for search -->
           <div>
-            <div class="badge" v-for="badge in types">
+            <div
+              class="badge"
+              v-for="badge in types"
+              @click="search(badge.label)"
+            >
               <div class="typeBadge">
                 <div class="badgeImg">
                   <img :src="badge.image" alt="" width="100%" />
@@ -96,6 +121,7 @@ export default {
     span {
       z-index: 2;
       text-shadow: 0px 0px 20px black;
+      font-size: 17px;
       letter-spacing: 2px;
       text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000,
         2px 2px 0 #000;
