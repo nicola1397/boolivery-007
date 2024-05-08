@@ -3,7 +3,7 @@
 
 // Import components
 import AppHeader from "./components/AppHeader.vue";
-import AppHome from "./pages/AppHome.vue";
+import AppMain from "./components/AppMain.vue";
 import AppFooter from "./components/AppFooter.vue";
 
 export default {
@@ -13,7 +13,7 @@ export default {
 
   components: {
     AppHeader,
-    AppHome,
+    AppMain,
     AppFooter,
   },
 };
@@ -22,7 +22,7 @@ export default {
 <template>
   <div class="app">
     <app-header />
-    <router-view></router-view>
+    <app-main />
     <app-footer />
   </div>
 </template>
@@ -30,6 +30,6 @@ export default {
 <style lang="scss">
 @use "./style/general.scss";
 .app {
-  min-height: 100vh;
+  // min-height: 100vh;
 }
 </style>

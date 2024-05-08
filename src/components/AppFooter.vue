@@ -27,8 +27,12 @@ export default {
 <style lang="scss" scoped>
 @use "../style/partials/mixins" as *;
 @use "../style/partials/variables" as *;
-footer div {
-  height: 80px;
+
+footer {
+  position: sticky;
+  bottom: 0;
+  margin: auto 0;
+  height: $footerHeight;
   box-shadow: 0 0 5px black;
   background: #2929b9;
 }

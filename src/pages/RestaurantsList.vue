@@ -34,41 +34,38 @@ export default {
 
 <template>
   <div id="mainContent">
-    <div class="container-md">
-      <h1 class="text-center">{{ title }}</h1>
-      <!-- ROW -->
-      <div class="row justify-content-between">
-        <!-- Search column -->
-        <div class="col-md-4 row justify-content-center">
-          <div id="searchCard">
-            <h5>Ricerca ristoranti</h5>
-          </div>
-          <!-- Type Badges for search -->
-          <div>
-            <div class="badge" v-for="badge in types">
-              <div class="typeBadge">
-                <div class="badgeImg">
-                  <img :src="badge.image" alt="" width="100%" />
-                </div>
-                <span class="piselon">{{ badge.label }}</span>
+    <h1 class="text-center">{{ title }}</h1>
+    <!-- ROW -->
+    <div class="row justify-content-between">
+      <!-- Search column -->
+      <div class="col-md-4 row justify-content-center">
+        <div id="searchCard">
+          <h5>Ricerca ristoranti</h5>
+        </div>
+        <!-- Type Badges for search -->
+        <div>
+          <div class="badge" v-for="badge in types">
+            <div class="typeBadge">
+              <div class="badgeImg">
+                <img :src="badge.image" alt="" width="100%" />
               </div>
+              <span class="piselon">{{ badge.label }}</span>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Results column -->
-        <div class="col-md-8 row justify-content-center">
-          <div
-            v-for="restaurant in restaurants"
-            class="myCard col-md-3 col-sm-12 me-3 mb-3"
-          >
-            <!-- Restaurant image -->
-            <div class="coverImage">
-              <img :src="restaurant.image" />
-            </div>
-            <h3 class="detailCap">{{ restaurant.name }}</h3>
-            <p class="detailCap">{{ restaurant.address }}</p>
+      <!-- Results column -->
+      <div class="col-md-8 row justify-content-center">
+        <div
+          v-for="restaurant in restaurants"
+          class="myCard col-md-3 col-sm-12 me-3 mb-3">
+          <!-- Restaurant image -->
+          <div class="coverImage">
+            <img :src="restaurant.image" />
           </div>
+          <h3 class="detailCap">{{ restaurant.name }}</h3>
+          <p class="detailCap">{{ restaurant.address }}</p>
         </div>
       </div>
     </div>

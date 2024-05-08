@@ -13,19 +13,37 @@ export default {
 
 <template>
   <nav class="headerNav navbar navbar-expand-lg">
-    <div class="container-md">
-      <a class="navbar-brand" href="#"
-        ><img src="../assets/img/boolivery.svg" alt=""
-      /></a>
-      <button
+    <div class="container-md d-flex">
+      <ul class="navbar-ul">
+        <li class="nav-item me-2">
+          <a class="navbar-brand" href="#"
+            ><img src="../assets/img/boolivery_manager.svg" alt=""
+          /></a>
+          <a href="#"><i class="fa-solid fa-cart-shopping"></i></a>
+        </li>
+        <li class="nav-item">
+          <router-link
+            :to="{ name: 'home' }"
+            class="nav-link text-white"
+            aria-current="page"
+            >Home</router-link
+          >
+        </li>
+      </ul>
+      <ul class="chart-icon">
+        <li>
+          <a href="#"><i class="fa-solid fa-cart-shopping chart-icon"></i></a>
+        </li>
+      </ul>
+
+      <!-- <button
         class="navbar-toggler"
         type="button"
         data-bs-toggle="collapse"
         data-bs-target="#navbarNav"
         aria-controls="navbarNav"
         aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
+        aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
@@ -47,7 +65,7 @@ export default {
             >
           </li>
         </ul>
-      </div>
+      </div> -->
     </div>
   </nav>
 </template>
@@ -57,9 +75,14 @@ export default {
 @use "../style/partials/variables" as *;
 
 .headerNav {
-  height: 80px;
+  height: $headerHeight;
   box-shadow: 0 0 5px black;
   background: #2929b9;
+
+  .navbar-ul {
+    // width: 100%;
+    @include d-flex-center;
+  }
 
   img {
     height: 50px;
@@ -68,6 +91,12 @@ export default {
   a:hover {
     transform: scale(1.1);
     transition: all 0.1s ease 0.1s;
+  }
+
+  .chart-icon li {
+    width: 50px;
+    height: 50px;
+    color: white;
   }
 }
 </style>

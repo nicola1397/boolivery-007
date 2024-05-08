@@ -13,12 +13,19 @@ body {
   font-weight: 400;
   font-style: normal;
   color: white;
+  background: #3535ec;
 }
 
-#mainContent {
-  box-shadow: 0 0 5px black;
-  background: #3535ec;
-  min-height: calc(100vh - 160px);
-  height: 100%;
-  padding: 30px 0;
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
+
+// #mainContent {
+//   box-shadow: 0 0 5px black;
+//   background: #3535ec;
+//   min-height: calc(100vh - 160px);
+//   height: 100%;
+//   padding: 30px 0;
+// }
