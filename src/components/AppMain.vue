@@ -18,9 +18,7 @@ export default {
 @use "../style/partials/mixins" as *;
 @use "../style/partials/variables" as *;
 
-// .container {
-//   background: #3535ec;
-//   height: calc(100vh - 160px);
-//   overflow-x: hidden;
-// }
+div {
+  min-height: calc(100vh - $footerHeight - $headerHeight);
+}
 </style>

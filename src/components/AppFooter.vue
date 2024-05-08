@@ -34,6 +34,6 @@ footer {
   margin: auto 0;
   height: $footerHeight;
   box-shadow: 0 0 5px black;
-  background: #2929b9;
+  background: $midblue;
 }
 </style>

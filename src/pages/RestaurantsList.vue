@@ -54,19 +54,22 @@ export default {
 </script>
 
 <template>
-  <div id="mainContent">
+  <div class="container">
+    <h1 class="text-center mb-3">{{ title }}</h1>
+
     <!-- ROW -->
     <div class="row justify-content-between">
       <!-- Search column -->
-      <div class="col-md-4 searchColumn my-2">
-        <h3 class="mb-3 ms-2">Ricerca ristoranti</h3>
+      <div class="col-md-3 searchColumn py-4">
+        <h3 class="mb-3">Tipologia</h3>
 
         <!-- Type Badges for search -->
         <div class="badges-wrapper">
           <div
             class="badge"
             v-for="badge in types"
-            @click="search(badge.label)">
+            @click="search(badge.label)"
+          >
             <div class="typeBadge">
               <div class="badgeImg">
                 <img :src="badge.image" alt="" width="100%" />
@@ -78,12 +81,11 @@ export default {
       </div>
 
       <!-- Results column -->
-      <div class="col-md-8 row justify-content-center result-column">
-        <h1 class="text-center mb-3">{{ title }}</h1>
-
+      <div class="col-md-9 row result-column">
         <div
           v-for="restaurant in restaurants"
-          class="myCard col-md-3 col-sm-12 me-3 mb-3">
+          class="myCard col-md-3 col-sm-12 me-3 mb-3"
+        >
           <!-- Restaurant image -->
           <div class="coverImage">
             <img :src="restaurant.image" />
@@ -97,9 +99,14 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+@use "../style/partials/mixins" as *;
+@use "../style/partials/variables" as *;
 // TYPE BADGES
 .searchColumn {
+  background-color: $midblue;
+  border-radius: 5px;
   text-align: center;
+  flex: 0 1 auto;
   .badges-wrapper {
     margin-top: 10px;
 
@@ -139,7 +146,7 @@ export default {
 // RESTAURANT CARDS
 .result-column {
   .myCard {
-    background-color: #2929b9;
+    background-color: $midblue;
     padding-top: 10px;
     padding: 20px;
     border-radius: 10px;
@@ -165,5 +172,9 @@ export default {
       }
     }
   }
+}
+
+.detailCap {
+  text-transform: capitalize;
 }
 </style>

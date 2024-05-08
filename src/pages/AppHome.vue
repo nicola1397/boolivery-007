@@ -48,7 +48,6 @@ export default {
 @use "../style/partials/mixins" as *;
 @use "../style/partials/variables" as *;
 .container {
-  min-height: calc(100vh - 160px);
   overflow: hidden;
 
   .row {
@@ -67,10 +66,10 @@ export default {
           display: block;
           padding: 1rem;
           border-radius: 100px;
-          background-color: #2929b9;
+          background-color: $midblue;
           color: white;
           transition: all 0.5s ease 0s;
-          box-shadow: 0 10px #18186c;
+          box-shadow: 0 10px $darkblue;
         }
 
         .btn--action span {
@@ -96,7 +95,7 @@ export default {
           content: "🧑🏻‍🍳";
         }
         .btn--action:hover {
-          background-color: #18186c;
+          background-color: $darkblue;
         }
 
         .btn--action:hover span {
@@ -113,7 +112,7 @@ export default {
         }
       }
       .title {
-        color: #2929b9;
+        color: $midblue;
         margin-bottom: 30px;
         // text-shadow: -2px -2px 15px #4477d5, 2px -2px 15px #4477d5,
         //   -2px 2px 15px #4477d5, 2px 2px 15px #4477d5;
