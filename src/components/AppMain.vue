@@ -9,7 +9,7 @@ export default {
 </script>
 
 <template>
-  <div class="container">
+  <div>
     <router-view></router-view>
   </div>
 </template>
@@ -18,10 +18,7 @@ export default {
 @use "../style/partials/mixins" as *;
 @use "../style/partials/variables" as *;
 
-.container {
-  overflow: scroll;
-  background: #3535ec;
-  height: calc(100vh - 160px);
-  padding: 30px 0;
+div {
+  min-height: calc(100vh - $footerHeight - $headerHeight);
 }
 </style>
