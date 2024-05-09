@@ -141,7 +141,9 @@ export default {
       > -->
 
       <!-- Results column -->
-      <div class="col result-column px-5">
+      <div class="col result-column px-5 py-4">
+        <h3 class="mb-3 title text-center">I nostri ristoranti</h3>
+
         <div class="row pe-5">
           <!-- <h3 class="mb-3 title">Ristoranti</h3> -->
 
@@ -160,6 +162,12 @@ export default {
                 <p class="detailCap">{{ restaurant.address }}</p>
               </div>
             </div>
+          </div>
+
+          <div v-if="this.restaurants.length == 0">
+            <p class="text-center text-secondary">
+              Nessun risultato corrispondente. 😓
+            </p>
           </div>
         </div>
       </div>
