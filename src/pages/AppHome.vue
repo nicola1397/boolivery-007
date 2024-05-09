@@ -11,25 +11,33 @@ export default {
 </script>
 
 <template>
-  <div class="mb-4">
-    <div class="row d-block d-md-flex">
-      <div class="col-md-6 column">
-        <img src="../assets/img/bg-alt.svg" alt="" />
-      </div>
-      <div class="col-md-6 column">
-        <!-- <h1 class="display-2">Diventa partner Boolivery! 🛵🍝</h1>
-          <p class="fs-2 rob4 my-5">
-            Registra la tua attività ed entra a far parte della famiglia di
-            Boolivery! Aggiungi i tuoi piatti e raggiungi subito nuovi clienti!
-          </p> -->
-        <div class="btn-restaurant">
+  <div class="container">
+    <div id="splash">
+      <img src="../assets/img/jumbo-2.svg" alt="" />
+    </div>
+    <div class="row align-items-center">
+      <div class="col-sm-12 col-md-6 jumboTextContainer">
+        <div>
+          <h2 class="display-2 title">Ordina subito con Boolivery! 🛵🍝</h2>
+
           <!-- BUTTON -->
-          <router-link
-            :to="{ name: 'restaurants.index' }"
-            href="#"
-            class="btn btn--action"
-            ><span>Scegli il tuo ristorante</span></router-link
-          >
+          <div class="btn-restaurant mb-5">
+            <router-link
+              :to="{ name: 'restaurants.index' }"
+              href="#"
+              class="btn btn--action"
+              ><span class="guest">Vai ai ristoranti</span></router-link
+            >
+          </div>
+
+          <h5 class="title">oppure</h5>
+          <h3 class="display-5 title">Sei un ristoratore?</h3>
+          <!-- BUTTON -->
+          <div class="btn-restaurant mb-3">
+            <a class="btn btn--action" href="http://127.0.0.1:8000/login"
+              ><span class="user">Accedi al tuo account</span></a
+            >
+          </div>
         </div>
       </div>
     </div>
@@ -39,70 +47,92 @@ export default {
 <style lang="scss" scoped>
 @use "../style/partials/mixins" as *;
 @use "../style/partials/variables" as *;
-.row {
-  @include d-flex-center;
+.container {
+  overflow: hidden;
 
-  .column {
-    margin: 0 auto;
-    @include d-flex-center;
-    justify-content: center;
+  .row {
+    min-height: calc(100vh - $headerHeight - $footerHeight);
 
-    img {
-      max-height: 550px;
+    .jumboTextContainer {
+      text-align: center;
+      background-color: white;
+      padding: 60px 20px;
+      border-radius: 3px;
+
+      // BUTTONS
+      .btn-restaurant {
+        .btn--action {
+          font-size: 1.5rem;
+          display: block;
+          padding: 1rem;
+          border-radius: 100px;
+          background-color: $midblue;
+          color: white;
+          transition: all 0.5s ease 0s;
+          box-shadow: 0 10px $darkblue;
+        }
+
+        .btn--action span {
+          display: inline-block;
+          position: relative;
+          transition: all 0.5s ease;
+        }
+
+        .btn--action span::before {
+          display: inline-block;
+          position: absolute;
+          top: 50%;
+          font-size: 2rem;
+          transform: translate(-100%, -50%);
+          left: 1.5rem;
+          opacity: 0;
+          transition: all 0.1s ease 0s;
+        }
+        .btn--action .guest::before {
+          content: "🍔";
+        }
+        .btn--action .user::before {
+          content: "🧑🏻‍🍳";
+        }
+        .btn--action:hover {
+          background-color: $darkblue;
+        }
+
+        .btn--action:hover span {
+          padding-left: 1.5rem;
+        }
+
+        .btn--action:hover span:before {
+          left: 0;
+          opacity: 1;
+        }
+
+        .btn--action:active {
+          transform: translateY(5px);
+        }
+      }
+      .title {
+        color: $midblue;
+        margin-bottom: 30px;
+        // text-shadow: -2px -2px 15px #4477d5, 2px -2px 15px #4477d5,
+        //   -2px 2px 15px #4477d5, 2px 2px 15px #4477d5;
+      }
     }
+  }
+}
 
-    .btn-restaurant {
-      width: 70%;
+// JUMBO IMAGE
+#splash {
+  z-index: -1;
+  position: absolute;
+  right: 0;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
 
-      .btn--action {
-        font-size: 1.5rem;
-        display: block;
-        width: 100%;
-        padding: 1rem;
-        border-radius: 100px;
-        background-color: white;
-        color: black;
-        transition: all 0.5s ease 0s;
-        box-shadow: 0 10px #18186c;
-      }
-
-      .btn--action span {
-        display: inline-block;
-        position: relative;
-        transition: all 0.5s ease;
-      }
-
-      .btn--action span::before {
-        content: "🧑🏻‍🍳";
-        display: inline-block;
-        position: absolute;
-        top: 50%;
-        font-size: 2rem;
-        transform: translate(-100%, -50%);
-        left: 1.5rem;
-        opacity: 0;
-        transition: all 0.1s ease 0s;
-      }
-
-      .btn--action:hover {
-        background-color: #2929b9;
-      }
-
-      .btn--action:hover span {
-        padding-left: 1.5rem;
-        color: white;
-      }
-
-      .btn--action:hover span:before {
-        left: 0;
-        opacity: 1;
-      }
-
-      .btn--action:active {
-        box-shadow: 0 5px #58e888;
-        transform: translateY(5px);
-      }
-    }
+  img {
+    min-width: 100vw;
+    min-height: calc(100vh - $headerHeight - $footerHeight);
   }
 }
 </style>

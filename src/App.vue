@@ -23,13 +23,10 @@ export default {
   <div class="app">
     <app-header />
     <app-main />
-    <app-footer />
+    <!-- <app-footer /> -->
   </div>
 </template>
 
 <style lang="scss">
 @use "./style/general.scss";
-.app {
-  // min-height: 100vh;
-}
 </style>

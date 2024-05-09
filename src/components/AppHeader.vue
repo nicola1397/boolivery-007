@@ -77,7 +77,7 @@ export default {
 .headerNav {
   height: $headerHeight;
   box-shadow: 0 0 5px black;
-  background: #2929b9;
+  background: $midblue;
 
   .navbar-ul {
     // width: 100%;
