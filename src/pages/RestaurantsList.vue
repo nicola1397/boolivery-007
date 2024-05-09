@@ -97,7 +97,7 @@ export default {
         <!-- Type Badges for search -->
         <div class="badges-wrapper">
           <div class="badge" v-for="badge in types">
-            <div class="form-check d-flex">
+            <div class="form-check d-flex" @click="search(badge.label)">
               <input
                 class="form-check-input big"
                 type="checkbox"
@@ -105,11 +105,7 @@ export default {
                 :id="badge.id"
                 :name="badge.label"
               />
-              <label
-                class="form-check-label type ms-3 w-100"
-                :for="badge.id"
-                @click="search(badge.label)"
-              >
+              <label class="form-check-label type ms-3 w-100" :for="badge.id">
                 {{ badge.label }}
               </label>
             </div>
@@ -145,21 +141,24 @@ export default {
       > -->
 
       <!-- Results column -->
-      <div class="col row result-column align-items-stretch">
-        <!-- <h3 class="mb-3 title">Ristoranti</h3> -->
+      <div class="col result-column pe-5">
+        <div class="row pe-5">
+          <!-- <h3 class="mb-3 title">Ristoranti</h3> -->
 
-        <div
-          v-for="restaurant in restaurants"
-          class="col-md-2 col-sm-12 p-2 mb-3 cardContainer"
-        >
-          <div class="myCard">
-            <!-- Restaurant image -->
-            <div class="coverImage">
-              <img :src="restaurant.image" />
-            </div>
-            <div class="restaurantDetails">
-              <h3 class="detailCap">{{ restaurant.name }}</h3>
-              <p class="detailCap">{{ restaurant.address }}</p>
+          <div
+            v-for="restaurant in restaurants"
+            class="col-md-2 col-sm-12 p-2 mb-3 cardContainer"
+          >
+            <div class="myCard">
+              <!-- Restaurant image -->
+              <div class="coverImage">
+                <img :src="restaurant.image" />
+              </div>
+              <!-- Restaurant details -->
+              <div class="restaurantDetails">
+                <h3 class="detailCap">{{ restaurant.name }}</h3>
+                <p class="detailCap">{{ restaurant.address }}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -197,6 +196,7 @@ export default {
   background-color: white;
   text-align: center;
   height: calc(100vh - $headerHeight - $footerHeight);
+  border-right: 2px dashed $midblue;
   .badges-wrapper {
     margin: 10px 30px;
     .big {
@@ -263,14 +263,22 @@ export default {
 
     .myCard {
       background-color: white;
+      height: 100%;
       color: $darkblue;
       border-radius: 5px;
       border: 1px solid $darkblue;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      // overflow: hidden;
+      // white-space: nowrap;
+
       .restaurantDetails {
         padding: 0px 15px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex-grow: 1;
       }
       &:hover {
         box-shadow: 0 0 7px black;
@@ -297,5 +305,10 @@ h3.detailCap {
 }
 .detailCap {
   text-transform: capitalize;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  width: 100%;
 }
 </style>
