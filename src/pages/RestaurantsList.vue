@@ -87,18 +87,36 @@ export default {
 </script>
 
 <template>
-  <div class="container">
-    <h1 class="text-center mb-3">{{ title }}</h1>
-
+  <div class="containerApp">
     <!-- ROW -->
-    <div class="row justify-content-between">
+    <div class="row">
       <!-- Search column -->
-      <div class="col-md-3 searchColumn d-flex flex-column py-4">
-        <h3 class="mb-3 title">Tipologia</h3>
+      <div class="col-md-2 searchColumn d-flex flex-column py-4">
+        <h3 class="mb-3 title">Cucina</h3>
 
         <!-- Type Badges for search -->
         <div class="badges-wrapper">
-          <div
+          <div class="badge" v-for="badge in types">
+            <div class="form-check d-flex">
+              <input
+                class="form-check-input big"
+                type="checkbox"
+                :value="badge.id"
+                :id="badge.id"
+                :name="badge.label"
+              />
+              <label
+                class="form-check-label type ms-3 w-100"
+                :for="badge.id"
+                @click="search(badge.label)"
+              >
+                {{ badge.label }}
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- <div
             class="badge"
             v-for="badge in types"
             @click="search(badge.label)"
@@ -110,23 +128,47 @@ export default {
               <span>{{ badge.label }}</span>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
 
+      <!-- <label
+        for="filter_cuisine_option_6-sidebar"
+        class="Input-d1881dbe6743b209"
+        ><input
+          id="filter_cuisine_option_6-sidebar"
+          type="checkbox"
+          class="Input-a1d53f8a950e40af Input-7bcc37def01a8db8"
+          value="filter_cuisine_option_6-sidebar"
+        /><span class="Input-c4208a4c6287f4a7"
+          ><span>Americano </span></span
+        ></label
+      > -->
+
       <!-- Results column -->
-      <div class="col-md-9 row result-column">
+      <div class="col row result-column align-items-stretch">
+        <!-- <h3 class="mb-3 title">Ristoranti</h3> -->
+
         <div
           v-for="restaurant in restaurants"
-          class="myCard col-md-3 col-sm-12 me-3 mb-3"
+          class="col-md-2 col-sm-12 p-2 mb-3 cardContainer"
         >
-          <!-- Restaurant image -->
-          <div class="coverImage">
-            <img :src="restaurant.image" />
+          <div class="myCard">
+            <!-- Restaurant image -->
+            <div class="coverImage">
+              <img :src="restaurant.image" />
+            </div>
+            <div class="restaurantDetails">
+              <h3 class="detailCap">{{ restaurant.name }}</h3>
+              <p class="detailCap">{{ restaurant.address }}</p>
+            </div>
           </div>
-          <h3 class="detailCap">{{ restaurant.name }}</h3>
-          <p class="detailCap">{{ restaurant.address }}</p>
-          <div class="btn mb-5">
-            <!-- <router-link
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+<!--  <div class="btn mb-5">
+             <router-link
               :to="{
                 name: 'restaurants.show',
                 params: { slug: restaurant.slug },
@@ -134,14 +176,8 @@ export default {
               href="#"
               class="btn btn-danger"
               ><span class="guest">Vai al ristorante</span></router-link
-            > -->
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
+            > 
+            </div>-->
 <style lang="scss" scoped>
 @use "../style/partials/mixins" as *;
 @use "../style/partials/variables" as *;
@@ -149,88 +185,116 @@ export default {
 .title {
   color: $darkblue;
 }
+.containerApp {
+  min-height: calc(100vh - $headerHeight - $footerHeight);
+  overflow: auto;
+  overflow-x: hidden;
+}
+
 // TYPE BADGES
 
 .searchColumn {
   background-color: white;
-  border-radius: 5px;
   text-align: center;
-  height: fit-content;
+  height: calc(100vh - $headerHeight - $footerHeight);
   .badges-wrapper {
-    margin-top: 10px;
+    margin: 10px 30px;
+    .big {
+      width: 25px;
+      height: 25px;
+      transform: translateY(-25%);
+    }
 
+    label {
+      color: $darkblue;
+      text-align: left;
+      font-size: large;
+      font-weight: 100;
+    }
     .badge {
-      display: inline-block;
-      margin-right: 10px;
+      // display: inline-block;
+      // margin-right: 10px;
+      display: block;
 
-      .typeBadge {
-        border: 3px solid $midblue;
-        width: 100%;
+      // .typeBadge {
+      //   border: 3px solid $midblue;
+      //   width: 100%;
 
-        border-radius: 50px;
-        overflow: hidden;
-        position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 40px;
-        width: 120px;
-        object-fit: cover;
+      //   border-radius: 50px;
+      //   overflow: hidden;
+      //   position: relative;
+      //   display: flex;
+      //   justify-content: center;
+      //   align-items: center;
+      //   height: 40px;
+      //   width: 120px;
+      //   object-fit: cover;
 
-        span {
-          z-index: 2;
-          text-shadow: 0px 0px 20px black;
-          font-size: 17px;
-          letter-spacing: 2px;
-          text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000,
-            2px 2px 0 #000;
-        }
-        .badgeImg {
-          position: absolute;
-          width: 100%;
-          filter: brightness(90%);
-        }
-      }
+      //   span {
+      //     z-index: 2;
+      //     text-shadow: 0px 0px 20px black;
+      //     font-size: 17px;
+      //     letter-spacing: 2px;
+      //     text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000,
+      //       2px 2px 0 #000;
+      //   }
+      //   .badgeImg {
+      //     position: absolute;
+      //     width: 100%;
+      //     filter: brightness(90%);
+      //   }
+      // }
     }
   }
 }
 // DEACTIVATED
-
-.off {
-  filter: brightness(50%);
-}
+// .off {
+//   filter: brightness(50%);
+// }
 
 // RESTAURANT CARDS
 .result-column {
-  .myCard {
-    background-color: $midblue;
-    padding-top: 10px;
-    padding: 20px;
-    border-radius: 10px;
+  height: calc(100vh - $headerHeight - $footerHeight);
+  overflow: auto;
+  background-color: white;
+  .cardContainer {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
 
-    &:hover {
-      box-shadow: 0 0 7px black;
-      transform: scale(1.02);
-      transition: all 0.1s ease-in-out 0.1s;
-    }
+    .myCard {
+      background-color: white;
+      color: $darkblue;
+      border-radius: 5px;
+      border: 1px solid $darkblue;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      .restaurantDetails {
+        padding: 0px 15px;
+      }
+      &:hover {
+        box-shadow: 0 0 7px black;
+        transform: scale(1.02);
+        transition: all 0.1s ease-in-out 0.1s;
+      }
 
-    .coverImage {
-      width: 100%;
-      overflow: hidden;
-      border-radius: 10px;
-      margin-bottom: 15px;
-      aspect-ratio: 1 / 1;
+      .coverImage {
+        width: 100%;
+        overflow: hidden;
+        // border-radius: 10px;
+        margin-bottom: 15px;
+        aspect-ratio: 1 / 1;
 
-      img {
-        height: 100%;
+        img {
+          height: 100%;
+        }
       }
     }
   }
 }
-
+h3.detailCap {
+  font-size: 25px;
+}
 .detailCap {
   text-transform: capitalize;
 }
