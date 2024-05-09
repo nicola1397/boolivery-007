@@ -1,5 +1,6 @@
 <script>
-import { store } from "../store";
+import { store, api } from "../store";
+
 import axios from "axios";
 import AppCard from "../components/AppCard.vue";
 
@@ -18,12 +19,13 @@ export default {
   components: { AppCard },
   methods: {
     fetchTypes() {
-      axios.get(store.baseApiURI + "restaurants").then((response) => {
+      axios.get(api.baseApiURI + "restaurants").then((response) => {
         this.types = response.data.types;
       });
     },
     fetchRestaurants() {
-      axios.get(store.baseApiURI + "restaurants").then((response) => {
+      axios.get(api.baseApiURI + "restaurants").then((response) => {
+        console.log(response.data);
         this.restaurants = response.data.restaurants;
       });
     },
@@ -34,7 +36,7 @@ export default {
         : argument;
 
       axios
-        .get(store.baseApiURI + "restaurants/search=" + argumentString)
+        .get(api.baseApiURI + "restaurants/search=" + argumentString)
         .then((response) => {
           this.restaurants = response.data.restaurants;
         });
@@ -48,6 +50,9 @@ export default {
     // 1 - TUTTI BADGE CLASSE OFF - AL CLICK, AGGIUNGI LABEL IN ACTIVETYPE -  SE BUTTON INNERTEXT SI TROVA IN ACTIVETYPES, CLASSE OFF VIENE RIMOSSA
 
     search(name) {
+      console.log(
+        "ho cliccato: " + name + " " + "Tipi attivi ora: " + this.activeTypes
+      );
       if (!this.activeTypes.includes(name)) {
         this.activeTypes.push(name);
         console.log("non c'era " + this.activeTypes);
@@ -91,21 +96,21 @@ export default {
     <!-- ROW -->
     <div class="row">
       <!-- Search column -->
-      <div class="col-md-2 searchColumn d-flex flex-column py-4">
+      <div class="col-md-2 searchColumn d-flex flex-column py-4 px-0">
         <h3 class="mb-3 title">Cucina</h3>
 
         <!-- Type Badges for search -->
         <div class="badges-wrapper">
           <div class="badge" v-for="badge in types">
-            <div class="form-check d-flex" @click="search(badge.label)">
+            <div class="form-check checkboxContainer">
               <input
                 class="form-check-input big"
                 type="checkbox"
                 :value="badge.id"
                 :id="badge.id"
-                :name="badge.label"
+                @click="search(badge.label)"
               />
-              <label class="form-check-label type ms-3 w-100" :for="badge.id">
+              <label class="form-check-label h-100 w-100" :for="badge.id">
                 {{ badge.label }}
               </label>
             </div>
@@ -144,24 +149,32 @@ export default {
       <div class="col result-column px-5 py-4">
         <h3 class="mb-3 title text-center">I nostri ristoranti</h3>
 
-        <div class="row pe-5">
+        <div class="row justify-content-centerpe-5">
           <!-- <h3 class="mb-3 title">Ristoranti</h3> -->
 
           <div
             v-for="restaurant in restaurants"
             class="col-md-2 col-sm-12 p-2 mb-3 cardContainer"
           >
-            <div class="myCard">
-              <!-- Restaurant image -->
-              <div class="coverImage">
-                <img :src="restaurant.image" />
+            <router-link
+              :to="{
+                name: 'restaurants.show',
+                params: { slug: restaurant.slug },
+              }"
+              class="router-link"
+            >
+              <div class="myCard">
+                <!-- Restaurant image -->
+                <div class="coverImage">
+                  <img :src="restaurant.image" />
+                </div>
+                <!-- Restaurant details -->
+                <div class="restaurantDetails">
+                  <h3 class="detailCap">{{ restaurant.name }}</h3>
+                  <p class="detailCap">{{ restaurant.address }}</p>
+                </div>
               </div>
-              <!-- Restaurant details -->
-              <div class="restaurantDetails">
-                <h3 class="detailCap">{{ restaurant.name }}</h3>
-                <p class="detailCap">{{ restaurant.address }}</p>
-              </div>
-            </div>
+            </router-link>
           </div>
 
           <div v-if="this.restaurants.length == 0">
@@ -205,25 +218,41 @@ export default {
   text-align: center;
   height: calc(100vh - $headerHeight - $footerHeight);
   border-right: 2px solid rgba($midblue, 0.2);
-  .badges-wrapper {
-    margin: 10px 30px;
-    .big {
-      width: 25px;
-      height: 25px;
-      transform: translateY(-25%);
-    }
 
-    label {
-      color: $darkblue;
-      text-align: left;
-      font-size: large;
-      font-weight: 100;
-    }
+  .badges-wrapper {
+    display: flex;
+    padding: 0 40px;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    overflow: auto;
     .badge {
-      // display: inline-block;
-      // margin-right: 10px;
       display: block;
 
+      margin: 10px 0;
+      .checkboxContainer {
+        display: flex;
+        justify-content: center;
+        align-items: start;
+        .big {
+          // width: 25px;
+          // height: 25px;
+
+          transform: scale(2);
+        }
+
+        label {
+          color: $darkblue;
+          text-align: left;
+          font-size: large;
+          font-weight: 100;
+          line-height: 24px;
+          margin-left: 30px;
+        }
+      }
+
+      // display: inline-block;
+      // margin-right: 10px;
       // .typeBadge {
       //   border: 3px solid $midblue;
       //   width: 100%;
@@ -318,5 +347,9 @@ h3.detailCap {
   text-overflow: ellipsis;
   display: block;
   width: 100%;
+}
+
+.router-link {
+  text-decoration: none;
 }
 </style>
