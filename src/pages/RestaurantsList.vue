@@ -141,7 +141,7 @@ export default {
       > -->
 
       <!-- Results column -->
-      <div class="col result-column pe-5">
+      <div class="col result-column px-5">
         <div class="row pe-5">
           <!-- <h3 class="mb-3 title">Ristoranti</h3> -->
 
@@ -196,7 +196,7 @@ export default {
   background-color: white;
   text-align: center;
   height: calc(100vh - $headerHeight - $footerHeight);
-  border-right: 2px dashed $midblue;
+  border-right: 2px solid rgba($midblue, 0.2);
   .badges-wrapper {
     margin: 10px 30px;
     .big {
