@@ -1,5 +1,5 @@
 <script>
-import { store } from "../store";
+import { api, store } from "../store";
 import axios from "axios";
 import AppCard from "../components/AppCard.vue";
 
@@ -23,8 +23,10 @@ export default {
       });
     },
     fetchRestaurants() {
-      axios.get(store.baseApiURI + "restaurants").then((response) => {
+      axios.get(api.baseApiURI + "restaurants").then((response) => {
         this.restaurants = response.data.restaurants;
+        this.types = response.data.types;
+        console.log(response.data);
       });
     },
 
@@ -114,29 +116,16 @@ export default {
       </div>
 
       <!-- Results column -->
-      <div class="col-md-9 row result-column">
-        <div
+
+      <div class="col-md-8 row justify-content-center">
+        <!-- Restaurant Card by component -->
+        <app-card
+          class="col-md-3 col-sm-12 me-3 mb-3"
           v-for="restaurant in restaurants"
-          class="myCard col-md-3 col-sm-12 me-3 mb-3"
-        >
-          <!-- Restaurant image -->
-          <div class="coverImage">
-            <img :src="restaurant.image" />
-          </div>
-          <h3 class="detailCap">{{ restaurant.name }}</h3>
-          <p class="detailCap">{{ restaurant.address }}</p>
-          <div class="btn mb-5">
-            <!-- <router-link
-              :to="{
-                name: 'restaurants.show',
-                params: { slug: restaurant.slug },
-              }"
-              href="#"
-              class="btn btn-danger"
-              ><span class="guest">Vai al ristorante</span></router-link
-            > -->
-          </div>
-        </div>
+          :restaurant="restaurant"
+        ></app-card>
+
+        
       </div>
     </div>
   </div>
@@ -194,44 +183,5 @@ export default {
     }
   }
 }
-// DEACTIVATED
 
-.off {
-  filter: brightness(50%);
-}
-
-// RESTAURANT CARDS
-.result-column {
-  .myCard {
-    background-color: $midblue;
-    padding-top: 10px;
-    padding: 20px;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-
-    &:hover {
-      box-shadow: 0 0 7px black;
-      transform: scale(1.02);
-      transition: all 0.1s ease-in-out 0.1s;
-    }
-
-    .coverImage {
-      width: 100%;
-      overflow: hidden;
-      border-radius: 10px;
-      margin-bottom: 15px;
-      aspect-ratio: 1 / 1;
-
-      img {
-        height: 100%;
-      }
-    }
-  }
-}
-
-.detailCap {
-  text-transform: capitalize;
-}
 </style>
