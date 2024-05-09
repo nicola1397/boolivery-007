@@ -21,7 +21,7 @@ export default {
         .get(api.baseApiURI + `restaurants/${restaurantSlug}`)
         .then((response) => {
           this.restaurant = response.data.restaurants[0];
-          console.log(response.data.restaurants[0]);
+          console.log(response.data.restaurants[0].dishes);
           /* this.types = response.data.types; */
         });
     },
@@ -59,8 +59,62 @@ export default {
           <tr v-for="dish in restaurant.dishes">
             <th>{{ dish.name }}</th>
             <td>€{{ dish.price }}</td>
-            <td>
-              <font-awesome-icon :icon="['fas', 'eye']" />
+            <td class="d-flex justify-content-center">
+              <!-- Button trigger modal -->
+              <button
+                :dish="dish"
+                type="button"
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#staticBackdrop"
+              >
+                <font-awesome-icon :icon="['fas', 'eye']" />
+              </button>
+
+              <!-- Modal -->
+              <div
+                class="modal fade"
+                id="staticBackdrop"
+                data-bs-backdrop="static"
+                data-bs-keyboard="false"
+                tabindex="-1"
+                aria-labelledby="#staticBackdrop"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog">
+                  <div class="modal-content bg-secondary">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="staticBackdropLabel">
+                        {{ dish.name }}
+                      </h5>
+
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      <img :src="dish.image" class="w-100" />
+                      <p>Descrizione: {{ dish.description }}</p>
+                      <p>Prezzo: €{{ dish.price }}</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-warning"
+                        data-bs-dismiss="modal"
+                      >
+                        Chiudi
+                      </button>
+                      <button type="button" class="btn btn-info">
+                        Aggiungi al carrello
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </td>
             <td>
               <font-awesome-icon :icon="['fas', 'cart-shopping']" />
