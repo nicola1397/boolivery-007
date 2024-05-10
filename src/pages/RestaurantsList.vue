@@ -90,7 +90,7 @@ export default {
     <!-- ROW -->
     <div class="row">
       <!-- Search column -->
-      <div class="col-md-2 searchColumn d-flex flex-column py-4 px-0">
+      <div class="col-2 col-md-3 searchColumn d-flex flex-column py-4 px-0">
         <h3 class="mb-3 title">Cucina</h3>
 
         <!-- Type Badges for search -->
