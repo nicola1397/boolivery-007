@@ -33,6 +33,7 @@ export default {
 
     quantity(operator, dish) {
       let value = document.getElementById(dish);
+      console.log(value.value);
       if (operator == "minus" && value.value > 0) {
         if (value.value == 1) {
           let thisPlate = document.getElementById(dish);
@@ -50,6 +51,38 @@ export default {
         value.value++;
       }
     },
+
+    addToCart() {
+      if (
+        !store.myOrder["restaurant_id"] ||
+        store.myOrder["restaurant_id"] == this.restaurant.id
+      ) {
+        const numberInputs = document.querySelectorAll('input[type="number"]');
+        store.myOrder["restaurant_id"] = this.restaurant.id;
+        for (let i = 0; i < numberInputs.length; i++) {
+          if (numberInputs[i].value > 0) {
+            if (!store.myOrder[i]) store.myOrder[i] = {};
+            store.myOrder[i]["dish_id"] = numberInputs[i].id;
+            store.myOrder[i]["quantity"] = numberInputs[i].value;
+          }
+        }
+      } else {
+        alert("Stavi già ordinando da un altro ristorante!");
+      }
+    },
+    getClass(event) {
+      let input = document.getElementById(event);
+      if (input.value > 0) {
+        input.classList.remove("off");
+      } else {
+        input.classList.add("off");
+      }
+    },
+    emptyField(event) {
+      console.log("funziono");
+      let input = document.getElementById(event);
+      if (!input.value) input.value = 0;
+    },
   },
 
   created() {
@@ -62,7 +95,7 @@ export default {
 </script>
 
 <template>
-  <div class="row justify-content-between containerApp p-3">
+  <div class="row justify-content-between containerApp ps-3">
     <div class="col-sm-12 col-md-3 bg-white pe-0 leftColumn">
       <router-link
         :to="{ name: 'restaurants.index' }"
@@ -101,7 +134,12 @@ export default {
         class="dishCard pe-5 col-12 col-md-6"
       >
         <!-- IMMAGINE -->
-        <div class="dishImage col-2">
+
+        <div
+          class="dishImage col-2"
+          data-bs-toggle="modal"
+          :data-bs-target="`#dish-` + dish.id"
+        >
           <img :src="dish.image" alt="dish.name" />
         </div>
         <!-- TESTO -->
@@ -112,59 +150,47 @@ export default {
         <!-- PREZZO -->
         <div class="dishPrice col-2">
           <h5>€ {{ dish.price }}</h5>
-
-          <!-- Button trigger modal -->
-          <button
-            type="button"
-            class="btn btn-primary w-50"
-            data-bs-toggle="modal"
-            :data-bs-target="`#dish-` + dish.id"
-          >
-            <font-awesome-icon :icon="['fas', 'eye']" />
-          </button>
-
-          <!-- Modal -->
+        </div>
+        <!-- MODAL CONTENT -->
+        <div
+          class="modal fade"
+          :id="`dish-` + dish.id"
+          data-bs-backdrop="static"
+          data-bs-keyboard="false"
+          tabindex="-1"
+          :aria-labelledby="`dish-` + dish.id"
+          aria-hidden="true"
+        >
           <div
-            class="modal fade"
-            :id="`dish-` + dish.id"
-            data-bs-backdrop="static"
-            data-bs-keyboard="false"
-            tabindex="-1"
-            :aria-labelledby="`dish-` + dish.id"
-            aria-hidden="true"
+            class="modal-dialog modal-dialog-centered position-absolute top-50 start-50 translate-middle"
           >
-            <div
-              class="modal-dialog modal-dialog-centered position-absolute top-50 start-50 translate-middle"
-            >
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="staticBackdropLabel">
-                    Dettagli: {{ dish.name }}
-                  </h5>
-                  <button
-                    type="button"
-                    class="btn-close w-25"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                  ></button>
-                </div>
-                <div class="modal-body">
-                  <img :src="dish.image" alt="dish.name" />
-                  <p>Descrizione: {{ dish.description }}</p>
-                  <h6>Prezzo: €{{ dish.price }}</h6>
-                </div>
-                <div class="modal-footer">
-                  <button
-                    type="button"
-                    class="btn btn-secondary mb-2"
-                    data-bs-dismiss="modal"
-                  >
-                    Chiudi
-                  </button>
-                  <button type="button" class="btn btn-primary">
-                    Aggiungi al carrello
-                  </button>
-                </div>
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">
+                  Dettagli: {{ dish.name }}
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close w-25"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <img :src="dish.image" alt="dish.name" class="modalImage" />
+                <p>Descrizione: {{ dish.description }}</p>
+                <h6>Prezzo: €{{ dish.price }}</h6>
+              </div>
+              <div
+                class="modal-footer d-flex flex-column justify-content-center align-items-center"
+              >
+                <button
+                  type="button"
+                  class="btn btn-secondary mb-2"
+                  data-bs-dismiss="modal"
+                >
+                  Chiudi
+                </button>
               </div>
             </div>
           </div>
@@ -178,7 +204,15 @@ export default {
           >
             -
           </button>
-          <input type="number" :id="dish.id" value="0" class="off" />
+          <input
+            type="number"
+            :id="dish.id"
+            min="0"
+            value="0"
+            class="off"
+            @keyup="getClass($event.target.id)"
+            @blur="emptyField($event.target.id)"
+          />
           <button
             id="plus"
             class="quantityButton rounded-end"
@@ -189,6 +223,8 @@ export default {
         </div>
       </div>
     </div>
+
+    <div class="goToCart" @click="addToCart()">🛒</div>
   </div>
 </template>
 
@@ -196,6 +232,38 @@ export default {
 @use "../style/partials/mixins" as *;
 
 @use "../style/partials/variables" as *;
+
+// GO TO CART
+.goToCart {
+  position: absolute;
+  background-color: $midblue;
+  border-radius: 50%;
+  aspect-ratio: 1/1;
+  max-width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 4rem;
+  text-shadow: 5px 5px 5px $darkblue;
+  right: 30px;
+  bottom: 30px;
+
+  &:hover {
+    transform: scale(1.1);
+    transition: all 0.08s ease 0.08s;
+  }
+  &:hover {
+    transform: scale(1.1);
+    transition: all 0.08s ease 0.08s;
+  }
+}
+
+// MODAL CLASSES
+
+.modalImage {
+  width: 100%;
+  margin-bottom: 20px;
+}
 
 .containerApp {
   height: calc(100vh - $headerHeight - $footerHeight);
@@ -205,12 +273,14 @@ export default {
 }
 
 .leftColumn {
+  height: 100%;
   position: relative;
   color: $darkblue;
   background-color: white;
   text-align: center;
   // min-height: calc(100vh - $headerHeight - $footerHeight);
   border-right: 2px solid rgba($midblue, 0.2);
+  border-bottom: 2px solid rgba($midblue, 0.2);
 }
 
 #badgesContainer {
@@ -328,9 +398,6 @@ button {
 // DISH CARD
 
 .dishCard {
-  &:first-of-type {
-    border-top: 1px solid rgba($midblue, 0.2);
-  }
   height: fit-content;
   display: flex;
   background-color: white;
@@ -402,5 +469,10 @@ button {
   .off {
     color: lightgray;
   }
+}
+
+.blueColor {
+  background-color: $midblue;
+  color: white;
 }
 </style>
