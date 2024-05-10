@@ -115,10 +115,10 @@ export default {
       <div class="col result-column px-5 py-4">
         <h3 class="mb-3 title text-center">I nostri ristoranti</h3>
 
-        <div class="row justify-content-center pe-5">
+        <div class="row pe-5">
           <div
             v-for="(restaurant, index) in this.restaurants"
-            class="col-md-2 col-sm-12 p-2 mb-3 cardContainer">
+            class="col-sm-5 col-md-4 col-xl-3 p-2 mb-3 cardContainer">
             <app-card :restaurant="restaurant" :index="index" />
           </div>
 
@@ -197,6 +197,7 @@ export default {
   .cardContainer {
     display: flex;
     flex-direction: column;
+    // flex-wrap: wrap;
   }
 }
 </style>
