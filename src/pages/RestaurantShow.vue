@@ -59,14 +59,13 @@ export default {
 </script>
 
 <template>
-  <div class="row justify-content-between containerApp">
+  <div class="row justify-content-between containerApp p-3">
     <div class="col-sm-12 col-md-3 bg-white pe-0 leftColumn">
       <router-link
         :to="{ name: 'restaurants.index' }"
         href="#"
         class="col-lg-3 col-md-6 col-sm-12"
-        id="addButton"
-      >
+        id="addButton">
         <!-- <div class="col-lg-3 col-md-6 col-sm-12" id="addButton"> -->
         <button class="ballButton">👈🏻</button>
       </router-link>
@@ -92,8 +91,10 @@ export default {
         </div>
       </div>
     </div>
-    <div class="col-12 col-md-9 ps-md-1 rightColumn">
-      <div v-for="dish in restaurant.dishes" class="dishCard col-12 col-lg-6">
+    <div class="col-12 col-md-9 rightColumn px-2">
+      <div
+        v-for="dish in restaurant.dishes"
+        class="dishCard pe-5 col-12 col-md-6">
         <!-- IMMAGINE -->
         <div class="dishImage col-2">
           <img :src="dish.image" alt="dish.name" />
@@ -112,16 +113,14 @@ export default {
           <button
             id="minus"
             class="quantityButton rounded-start"
-            @click="quantity($event.target.id, dish.id)"
-          >
+            @click="quantity($event.target.id, dish.id)">
             -
           </button>
           <input type="number" :id="dish.id" value="0" class="off" />
           <button
             id="plus"
             class="quantityButton rounded-end"
-            @click="quantity($event.target.id, dish.id)"
-          >
+            @click="quantity($event.target.id, dish.id)">
             +
           </button>
         </div>
