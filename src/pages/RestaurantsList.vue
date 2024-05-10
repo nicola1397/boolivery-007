@@ -119,7 +119,7 @@ export default {
           <div
             v-for="(restaurant, index) in this.restaurants"
             class="col-sm-5 col-md-4 col-xl-3 p-2 mb-3 cardContainer">
-            <app-card :restaurant="restaurant" :index="index" />
+            <app-card :restaurant="restaurant" :index="index" class="h-100" />
           </div>
 
           <div v-if="this.restaurants.length == 0">
