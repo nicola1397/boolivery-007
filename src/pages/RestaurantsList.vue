@@ -1,6 +1,7 @@
 <script>
 import { store, api } from "../store";
 
+
 import axios from "axios";
 import AppCard from "../components/AppCard.vue";
 
@@ -25,8 +26,10 @@ export default {
     },
     fetchRestaurants() {
       axios.get(api.baseApiURI + "restaurants").then((response) => {
-        console.log(response.data);
+
         this.restaurants = response.data.restaurants;
+        this.types = response.data.types;
+        console.log(response.data);
       });
     },
 
@@ -183,6 +186,7 @@ export default {
             </p>
           </div>
         </div>
+
       </div>
     </div>
   </div>
@@ -352,4 +356,5 @@ h3.detailCap {
 .router-link {
   text-decoration: none;
 }
+
 </style>

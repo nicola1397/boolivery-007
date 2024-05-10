@@ -15,18 +15,26 @@ export default {
   <nav class="headerNav navbar navbar-expand-lg">
     <div class="container-md d-flex">
       <ul class="navbar-ul">
-        <li class="nav-item me-2">
+        <li class="nav-item me-4">
           <a class="navbar-brand" href="#"
             ><img src="../assets/img/boolivery_manager.svg" alt=""
           /></a>
           <a href="#"><i class="fa-solid fa-cart-shopping"></i></a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item me-4">
           <router-link
             :to="{ name: 'home' }"
             class="nav-link text-white"
             aria-current="page"
             >Home</router-link
+          >
+        </li>
+        <li class="nav-item">
+          <router-link
+            :to="{ name: 'restaurants.index' }"
+            class="nav-link text-white"
+            aria-current="page"
+            >Lista ristoranti</router-link
           >
         </li>
       </ul>

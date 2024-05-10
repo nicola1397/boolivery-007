@@ -1,12 +1,15 @@
 <script>
 import axios from "axios";
+
 import { store, api } from "../store";
 // import AppCard from "../components/AppCard.vue";
+
 
 export default {
   data() {
     return {
       restaurant: [],
+
       types: [],
       store,
       /* restaurant: null, */
@@ -15,6 +18,7 @@ export default {
 
   // components: { AppCard },
 
+
   methods: {
     fetchRestaurants() {
       const restaurantSlug = this.$route.params.slug;
@@ -22,6 +26,7 @@ export default {
         .get(api.baseApiURI + `restaurants/${restaurantSlug}`)
         .then((response) => {
           this.restaurant = response.data.restaurants[0];
+
           console.log(response.data.restaurants[0]);
           /* this.types = response.data.types; */
           this.types = response.data.restaurants[0].types;
@@ -47,11 +52,13 @@ export default {
         value.value++;
       }
     },
+
   },
 
   created() {
     this.fetchRestaurants();
     // this.fetchTypes();
+
   },
 
   mounted() {},
@@ -125,6 +132,7 @@ export default {
           </button>
         </div>
       </div>
+
     </div>
   </div>
 </template>
@@ -333,3 +341,4 @@ button {
   }
 }
 </style>
+
