@@ -4,7 +4,6 @@ import axios from "axios";
 import { store, api } from "../store";
 // import AppCard from "../components/AppCard.vue";
 
-
 export default {
   data() {
     return {
@@ -17,7 +16,6 @@ export default {
   },
 
   // components: { AppCard },
-
 
   methods: {
     fetchRestaurants() {
@@ -52,13 +50,11 @@ export default {
         value.value++;
       }
     },
-
   },
 
   created() {
     this.fetchRestaurants();
     // this.fetchTypes();
-
   },
 
   mounted() {},
@@ -72,7 +68,8 @@ export default {
         :to="{ name: 'restaurants.index' }"
         href="#"
         class="col-lg-3 col-md-6 col-sm-12"
-        id="addButton">
+        id="addButton"
+      >
         <!-- <div class="col-lg-3 col-md-6 col-sm-12" id="addButton"> -->
         <button class="ballButton">👈🏻</button>
       </router-link>
@@ -101,7 +98,8 @@ export default {
     <div class="col-12 col-md-9 rightColumn px-2">
       <div
         v-for="dish in restaurant.dishes"
-        class="dishCard pe-5 col-12 col-md-6">
+        class="dishCard pe-5 col-12 col-md-6"
+      >
         <!-- IMMAGINE -->
         <div class="dishImage col-2">
           <img :src="dish.image" alt="dish.name" />
@@ -114,25 +112,82 @@ export default {
         <!-- PREZZO -->
         <div class="dishPrice col-2">
           <h5>€ {{ dish.price }}</h5>
+
+          <!-- Button trigger modal -->
+          <button
+            type="button"
+            class="btn btn-primary w-50"
+            data-bs-toggle="modal"
+            :data-bs-target="`#dish-` + dish.id"
+          >
+            <font-awesome-icon :icon="['fas', 'eye']" />
+          </button>
+
+          <!-- Modal -->
+          <div
+            class="modal fade"
+            :id="`dish-` + dish.id"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+            tabindex="-1"
+            :aria-labelledby="`dish-` + dish.id"
+            aria-hidden="true"
+          >
+            <div
+              class="modal-dialog modal-dialog-centered position-absolute top-50 start-50 translate-middle"
+            >
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="staticBackdropLabel">
+                    Dettagli: {{ dish.name }}
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close w-25"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <img :src="dish.image" alt="dish.name" />
+                  <p>Descrizione: {{ dish.description }}</p>
+                  <h6>Prezzo: €{{ dish.price }}</h6>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary mb-2"
+                    data-bs-dismiss="modal"
+                  >
+                    Chiudi
+                  </button>
+                  <button type="button" class="btn btn-primary">
+                    Aggiungi al carrello
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <!-- QUANTITA -->
         <div class="amountContainer col-2">
           <button
             id="minus"
             class="quantityButton rounded-start"
-            @click="quantity($event.target.id, dish.id)">
+            @click="quantity($event.target.id, dish.id)"
+          >
             -
           </button>
           <input type="number" :id="dish.id" value="0" class="off" />
           <button
             id="plus"
             class="quantityButton rounded-end"
-            @click="quantity($event.target.id, dish.id)">
+            @click="quantity($event.target.id, dish.id)"
+          >
             +
           </button>
         </div>
       </div>
-
     </div>
   </div>
 </template>
@@ -262,6 +317,14 @@ button {
   cursor: pointer;
 }
 
+.btn-primary {
+  background-color: #0d6efd;
+}
+
+.btn-secondary {
+  background-color: grey;
+}
+
 // DISH CARD
 
 .dishCard {
@@ -341,4 +404,3 @@ button {
   }
 }
 </style>
-
