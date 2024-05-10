@@ -19,7 +19,6 @@ export default {
     }"
     class="router-link">
     <div class="myCard">
-      {{ console.log(restaurant.types) }}
       <!-- Restaurant image -->
       <div class="coverImage">
         <img :src="restaurant.image" />
