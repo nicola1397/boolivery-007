@@ -7,7 +7,7 @@ export default {
       // store,
     };
   },
-  props: { restaurant: Object, index: Number },
+  props: { restaurant: Object, index: Number, types: Array },
 };
 </script>
 
@@ -27,6 +27,22 @@ export default {
       <div class="restaurantDetails">
         <h3 class="detailCap">{{ restaurant.name }}</h3>
         <p class="detailCap">{{ restaurant.address }}</p>
+      </div>
+
+      <!-- BADGE -->
+      <div id="badgesContainer">
+        <span
+          v-for="badge in restaurant.types"
+          class="badge mx-2"
+          :style="'background-color: ' + badge.color">
+          {{ badge.label }}
+          <!-- <div class="typeBadge">
+            <div class="badgeImg">
+              <img :src="badge.image" alt="" width="100%" />
+            </div>
+            <span>{{ badge.label }}</span>
+          </div> -->
+        </span>
       </div>
     </div>
   </router-link>
@@ -87,5 +103,61 @@ h3.detailCap {
 
 .router-link {
   text-decoration: none;
+}
+
+#badgesContainer {
+  margin-bottom: 30px;
+  // .badge {
+  //   display: inline-block;
+  //   margin-right: 10px;
+
+  //   .typeBadge {
+  //     // border: 3px solid $midblue;
+  //     width: 100%;
+  //     border-radius: 60%;
+  //     overflow: hidden;
+  //     position: relative;
+  //     display: flex;
+  //     justify-content: center;
+  //     align-items: center;
+  //     height: 32px;
+  //     width: 100%;
+  //     object-fit: cover;
+
+  //     span {
+  //       z-index: 2;
+  //       text-shadow: 0px 0px 20px black;
+  //       font-size: 100%;
+  //       letter-spacing: 2px;
+  //       text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000,
+  //         2px 2px 0 #000;
+  //     }
+  //     .badgeImg {
+  //       position: absolute;
+  //       width: 100%;
+  //       filter: brightness(90%);
+  //     }
+  //   }
+  // }
+}
+
+.rightColumn {
+  padding: 0;
+  // height: calc(100vh - $headerHeight - $footerHeight);
+  overflow: auto;
+  // background-color: $midblue;
+  display: flex;
+  justify-content: start;
+  flex-wrap: wrap;
+  align-content: flex-start;
+}
+
+.detailCap {
+  text-transform: capitalize;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  width: 100%;
 }
 </style>
