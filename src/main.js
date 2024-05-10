@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 // * import specific icons */
 import {
+  faCircleArrowLeft,
   faChevronDown,
   faMagnifyingGlass,
   faUser,
@@ -46,6 +47,7 @@ import {
 
 // * add icons to the library */
 library.add(
+  faCircleArrowLeft,
   faChevronDown,
   faMagnifyingGlass,
   faUser,
