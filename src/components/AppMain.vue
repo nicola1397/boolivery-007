@@ -1,10 +1,11 @@
 <script>
+import AppHome from "../pages/AppHome.vue";
 export default {
   data() {
     return {};
   },
 
-  components: {},
+  components: { AppHome },
 };
 </script>
 

@@ -1,14 +1,13 @@
 <script>
 import { store, api } from "../store";
 
-
 import axios from "axios";
 import AppCard from "../components/AppCard.vue";
 
 export default {
   data() {
     return {
-      title: "Restaurants",
+      title: "Ristoranti",
       store,
       restaurants: [],
       types: [],
@@ -19,17 +18,10 @@ export default {
 
   components: { AppCard },
   methods: {
-    fetchTypes() {
-      axios.get(api.baseApiURI + "restaurants").then((response) => {
-        this.types = response.data.types;
-      });
-    },
     fetchRestaurants() {
       axios.get(api.baseApiURI + "restaurants").then((response) => {
-
         this.restaurants = response.data.restaurants;
         this.types = response.data.types;
-        console.log(response.data);
       });
     },
 
@@ -87,7 +79,6 @@ export default {
 
   created() {
     this.fetchRestaurants();
-    this.fetchTypes();
   },
 
   mounted() {},
@@ -111,73 +102,24 @@ export default {
                 type="checkbox"
                 :value="badge.id"
                 :id="badge.id"
-                @click="search(badge.label)"
-              />
+                @click="search(badge.label)" />
               <label class="form-check-label h-100 w-100" :for="badge.id">
                 {{ badge.label }}
               </label>
             </div>
           </div>
         </div>
-
-        <!-- <div
-            class="badge"
-            v-for="badge in types"
-            @click="search(badge.label)"
-          >
-            <div class="typeBadge">
-              <div class="badgeImg">
-                <img :src="badge.image" alt="" width="100%" />
-              </div>
-              <span>{{ badge.label }}</span>
-            </div>
-          </div>
-        </div> -->
       </div>
-
-      <!-- <label
-        for="filter_cuisine_option_6-sidebar"
-        class="Input-d1881dbe6743b209"
-        ><input
-          id="filter_cuisine_option_6-sidebar"
-          type="checkbox"
-          class="Input-a1d53f8a950e40af Input-7bcc37def01a8db8"
-          value="filter_cuisine_option_6-sidebar"
-        /><span class="Input-c4208a4c6287f4a7"
-          ><span>Americano </span></span
-        ></label
-      > -->
 
       <!-- Results column -->
       <div class="col result-column px-5 py-4">
         <h3 class="mb-3 title text-center">I nostri ristoranti</h3>
 
-        <div class="row justify-content-centerpe-5">
-          <!-- <h3 class="mb-3 title">Ristoranti</h3> -->
-
+        <div class="row justify-content-center pe-5">
           <div
-            v-for="restaurant in restaurants"
-            class="col-md-2 col-sm-12 p-2 mb-3 cardContainer"
-          >
-            <router-link
-              :to="{
-                name: 'restaurants.show',
-                params: { slug: restaurant.slug },
-              }"
-              class="router-link"
-            >
-              <div class="myCard">
-                <!-- Restaurant image -->
-                <div class="coverImage">
-                  <img :src="restaurant.image" />
-                </div>
-                <!-- Restaurant details -->
-                <div class="restaurantDetails">
-                  <h3 class="detailCap">{{ restaurant.name }}</h3>
-                  <p class="detailCap">{{ restaurant.address }}</p>
-                </div>
-              </div>
-            </router-link>
+            v-for="(restaurant, index) in this.restaurants"
+            class="col-md-2 col-sm-12 p-2 mb-3 cardContainer">
+            <app-card :restaurant="restaurant" :index="index" />
           </div>
 
           <div v-if="this.restaurants.length == 0">
@@ -186,22 +128,11 @@ export default {
             </p>
           </div>
         </div>
-
       </div>
     </div>
   </div>
 </template>
-<!--  <div class="btn mb-5">
-             <router-link
-              :to="{
-                name: 'restaurants.show',
-                params: { slug: restaurant.slug },
-              }"
-              href="#"
-              class="btn btn-danger"
-              ><span class="guest">Vai al ristorante</span></router-link
-            > 
-            </div>-->
+
 <style lang="scss" scoped>
 @use "../style/partials/mixins" as *;
 @use "../style/partials/variables" as *;
@@ -254,44 +185,9 @@ export default {
           margin-left: 30px;
         }
       }
-
-      // display: inline-block;
-      // margin-right: 10px;
-      // .typeBadge {
-      //   border: 3px solid $midblue;
-      //   width: 100%;
-
-      //   border-radius: 50px;
-      //   overflow: hidden;
-      //   position: relative;
-      //   display: flex;
-      //   justify-content: center;
-      //   align-items: center;
-      //   height: 40px;
-      //   width: 120px;
-      //   object-fit: cover;
-
-      //   span {
-      //     z-index: 2;
-      //     text-shadow: 0px 0px 20px black;
-      //     font-size: 17px;
-      //     letter-spacing: 2px;
-      //     text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000,
-      //       2px 2px 0 #000;
-      //   }
-      //   .badgeImg {
-      //     position: absolute;
-      //     width: 100%;
-      //     filter: brightness(90%);
-      //   }
-      // }
     }
   }
 }
-// DEACTIVATED
-// .off {
-//   filter: brightness(50%);
-// }
 
 // RESTAURANT CARDS
 .result-column {
@@ -301,60 +197,6 @@ export default {
   .cardContainer {
     display: flex;
     flex-direction: column;
-
-    .myCard {
-      background-color: white;
-      height: 100%;
-      color: $darkblue;
-      border-radius: 5px;
-      border: 1px solid $darkblue;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      // overflow: hidden;
-      // white-space: nowrap;
-
-      .restaurantDetails {
-        padding: 0px 15px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        flex-grow: 1;
-      }
-      &:hover {
-        box-shadow: 0 0 7px black;
-        transform: scale(1.02);
-        transition: all 0.1s ease-in-out 0.1s;
-      }
-
-      .coverImage {
-        width: 100%;
-        overflow: hidden;
-        // border-radius: 10px;
-        margin-bottom: 15px;
-        aspect-ratio: 1 / 1;
-
-        img {
-          height: 100%;
-        }
-      }
-    }
   }
 }
-h3.detailCap {
-  font-size: 25px;
-}
-.detailCap {
-  text-transform: capitalize;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: block;
-  width: 100%;
-}
-
-.router-link {
-  text-decoration: none;
-}
-
 </style>
