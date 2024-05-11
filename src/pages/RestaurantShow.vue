@@ -7,15 +7,24 @@ import { store, api } from "../store";
 export default {
   data() {
     return {
-      restaurant: [],
-
+      restaurant: null,
+      filled: false,
       types: [],
       store,
-      /* restaurant: null, */
     };
   },
-
-  // components: { AppCard },
+  watch: {
+    restaurant: {
+      handler() {
+        if (this.restaurant && this.filled === false) {
+          console.log("watcher");
+          this.filled = true;
+          setTimeout(this.cartQuantity, 500);
+        }
+      },
+      deep: true,
+    },
+  },
 
   methods: {
     fetchRestaurants() {
@@ -24,21 +33,16 @@ export default {
         .get(api.baseApiURI + `restaurants/${restaurantSlug}`)
         .then((response) => {
           this.restaurant = response.data.restaurants[0];
-
-          console.log(response.data.restaurants[0]);
-          /* this.types = response.data.types; */
           this.types = response.data.restaurants[0].types;
         });
     },
 
     quantity(operator, dish) {
       let value = document.getElementById(dish);
-      console.log(value.value);
       if (operator == "minus" && value.value > 0) {
         if (value.value == 1) {
           let thisPlate = document.getElementById(dish);
           thisPlate.classList.add("off");
-          console.log(thisPlate);
         }
         value.value--;
       }
@@ -46,34 +50,44 @@ export default {
         if (value.value == 0) {
           let thisPlate = document.getElementById(dish);
           thisPlate.classList.remove("off");
-          console.log(thisPlate);
         }
         value.value++;
       }
     },
 
+    emptyCart() {
+      localStorage.removeItem("myOrder");
+      console.log("localStorage svuotato!");
+    },
     addToCart() {
-      console.log(store.myOrder);
+      const localOrder = JSON.parse(localStorage.getItem("myOrder")) || {};
+      console.log("arrivato");
+      console.log(localOrder);
+
       if (
-        !store.myOrder["restaurant_id"] ||
-        store.myOrder["restaurant_id"] == this.restaurant.id
+        !localOrder["restaurant_id"] ||
+        localOrder["restaurant_id"] == this.restaurant.id
       ) {
         const numberInputs = document.querySelectorAll('input[type="number"]');
-        store.myOrder["restaurant_id"] = this.restaurant.id;
-        store.myOrder["dishes"] = [];
+        localOrder["restaurant_id"] = this.restaurant.id;
+        if (!localOrder["dishes"]) localOrder["dishes"] = [];
         for (let i = 0; i < numberInputs.length; i++) {
           if (numberInputs[i].value > 0) {
-            let dish = {
+            let thisDish = {
               dish_id: numberInputs[i].id,
-              quantity: numberInputs[i].value,
+              quantity: parseInt(numberInputs[i].value),
             };
-            store.myOrder["dishes"].push(dish);
+            localOrder["dishes"].push(thisDish);
+            console.log("Piatto aggiunto");
+            console.log(localOrder);
           }
         }
+        localStorage.setItem("myOrder", JSON.stringify(localOrder));
       } else {
-        alert("Stavi già ordinando da un altro ristorante!");
+        alert("Stai già ordinando da un altro ristorante!");
       }
     },
+
     getClass(event) {
       let input = document.getElementById(event);
       if (input.value > 0) {
@@ -83,7 +97,6 @@ export default {
       }
     },
     emptyField(event) {
-      console.log("funziono");
       let input = document.getElementById(event);
       if (!input.value) input.value = 0;
     },
@@ -91,39 +104,50 @@ export default {
       return Object.keys(obj).length === 0 && obj.constructor === Object;
     },
     cartQuantity() {
-      console.log("funziono");
-      if (this.isEmpty(store.myOrder)) {
-        console.log("Ordine vuoto");
-      } else {
-        console.log(store.myOrder);
-      }
+      if (this.restaurant) {
+        console.log("partita la funzione");
+        console.log(this.restaurant);
+        const orderString = localStorage.getItem("myOrder");
 
-      // if (store.myOrder && this.restaurant.id == store.myOrder.restaurant_id) {
-      //   // for (let i = 0; i < store.myOrder.dishes.length; i++) {
-      //   //   let dish = document.getElementById(store.myOrder.dishes[i].dish_id);
-      //   //   dish.value = store.myOrder.dishes[i].quantity;
-      //   // }
-      // }
+        if (orderString !== null) {
+          console.log("Ordine trovato");
+          const order = JSON.parse(orderString);
+          console.log(order.dishes);
+          if (this.restaurant.id == order.restaurant_id) {
+            for (let i = 0; i < order.dishes.length; i++) {
+              console.log("ciclo gli elementi");
+              let dish = document.getElementById(order.dishes[i].dish_id);
+              console.log(dish);
+              dish.value = order.dishes[i].quantity;
+              dish.classList.remove("off");
+            }
+          }
+          store.myOrder = order;
+        } else {
+          console.log("Ordine non trovato");
+          // Inizializza store.myOrder come un oggetto vuoto se non esiste
+          store.myOrder = {};
+        }
+      }
     },
   },
 
   created() {
     this.fetchRestaurants();
-    // this.fetchTypes();
   },
 
-  mounted() {
-    this.cartQuantity();
-  },
+  mounted() {},
 };
 </script>
 
 <template>
-  <div class="row justify-content-between containerApp ps-3">
+  <div
+    class="row justify-content-between containerApp ps-3"
+    v-if="this.restaurant"
+  >
     <div class="col-sm-12 col-md-3 bg-white pe-0 leftColumn">
       <router-link
-        :to="{ name: 'restaurants.index' }"
-        href="#"
+        :to="{ name: 'home' }"
         class="col-lg-3 col-md-6 col-sm-12"
         id="addButton"
       >
@@ -255,7 +279,9 @@ export default {
       }"
       class="router-link"
     > -->
+    <div class="bin" @click="emptyCart()">🗑️</div>
     <div class="goToCart" @click="addToCart()">🛒</div>
+
     <!-- </router-link
     > -->
   </div>
@@ -265,6 +291,31 @@ export default {
 @use "../style/partials/mixins" as *;
 
 @use "../style/partials/variables" as *;
+
+// GO TO CART
+.bin {
+  position: absolute;
+  background-color: red;
+  border-radius: 50%;
+  aspect-ratio: 1/1;
+  max-width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 4rem;
+  text-shadow: 0 1px 5px black;
+  right: 150px;
+  bottom: 30px;
+
+  &:hover {
+    transform: scale(1.1);
+    transition: all 0.08s ease 0.08s;
+  }
+  &:hover {
+    transform: scale(1.1);
+    transition: all 0.08s ease 0.08s;
+  }
+}
 
 // GO TO CART
 .goToCart {

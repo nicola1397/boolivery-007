@@ -8,9 +8,9 @@ export default {
   data() {
     return {
       restaurant: [],
+
       types: [],
       store,
-      myOrder: {},
       /* restaurant: null, */
     };
   },
@@ -55,27 +55,53 @@ export default {
     },
 
     addToCart() {
-      const localOrder = localStorage.getItem(storage.myOrder);
-
+      const localOrder = JSON.parse(localStorage.getItem("myOrder")) || {};
       if (
-        !store.myOrder["restaurant_id"] ||
-        store.myOrder["restaurant_id"] == this.restaurant.id
+        !localOrder["restaurant_id"] ||
+        localOrder["restaurant_id"] == this.restaurant.id
       ) {
         const numberInputs = document.querySelectorAll('input[type="number"]');
-        store.myOrder["restaurant_id"] = this.restaurant.id;
+        localOrder["restaurant_id"] = this.restaurant.id;
         for (let i = 0; i < numberInputs.length; i++) {
           if (numberInputs[i].value > 0) {
-            if (!store.myOrder[i]) store.myOrder[i] = {};
-            store.myOrder[i]["dish_id"] = numberInputs[i].id;
-            store.myOrder[i]["quantity"] = numberInputs[i].value;
-            console.log(store.myOrder);
+            if (!localOrder[numberInputs[i].id])
+              localOrder[numberInputs[i].id] = {};
+            localOrder[numberInputs[i].id]["dish_id"] = numberInputs[i].id;
+            localOrder[numberInputs[i].id]["quantity"] = parseInt(
+              numberInputs[i].value,
+              10
+            );
+            console.log(localOrder);
           }
         }
-        localStorage.setItem(storage.myOrder);
+        localStorage.setItem("myOrder", JSON.stringify(localOrder));
       } else {
-        alert("Stavi già ordinando da un altro ristorante!");
+        alert("Stai già ordinando da un altro ristorante!");
       }
     },
+
+    // addToCart() {
+    //   const localOrder = localStorage.getItem(store.myOrder);
+    //   if (
+    //     !store.myOrder["restaurant_id"] ||
+    //     store.myOrder["restaurant_id"] == this.restaurant.id
+    //   ) {
+    //     const numberInputs = document.querySelectorAll('input[type="number"]');
+    //     store.myOrder["restaurant_id"] = this.restaurant.id;
+    //     for (let i = 0; i < numberInputs.length; i++) {
+    //       if (numberInputs[i].value > 0) {
+    //         if (!store.myOrder[i]) store.myOrder[i] = {};
+    //         store.myOrder[i]["dish_id"] = numberInputs[i].id;
+    //         store.myOrder[i]["quantity"] = numberInputs[i].value;
+    //         console.log(store.myOrder);
+    //       }
+    //     }
+    //     localStorage.setItem(store.myOrder);
+    //   } else {
+    //     alert("Stavi già ordinando da un altro ristorante!");
+    //   }
+    // },
+
     getClass(event) {
       let input = document.getElementById(event);
       if (input.value > 0) {
