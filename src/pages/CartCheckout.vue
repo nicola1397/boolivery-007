@@ -8,9 +8,9 @@ export default {
   data() {
     return {
       restaurant: [],
-
       types: [],
       store,
+      myOrder: {},
       /* restaurant: null, */
     };
   },
@@ -19,6 +19,8 @@ export default {
 
   methods: {
     fetchRestaurants() {
+      console.log("CART CHECKOUT");
+
       const restaurantSlug = this.$route.params.slug;
       axios
         .get(api.baseApiURI + `restaurants/${restaurantSlug}`)
@@ -53,23 +55,23 @@ export default {
     },
 
     addToCart() {
-      console.log(store.myOrder);
+      const localOrder = localStorage.getItem(storage.myOrder);
+
       if (
         !store.myOrder["restaurant_id"] ||
         store.myOrder["restaurant_id"] == this.restaurant.id
       ) {
         const numberInputs = document.querySelectorAll('input[type="number"]');
         store.myOrder["restaurant_id"] = this.restaurant.id;
-        store.myOrder["dishes"] = [];
         for (let i = 0; i < numberInputs.length; i++) {
           if (numberInputs[i].value > 0) {
-            let dish = {
-              dish_id: numberInputs[i].id,
-              quantity: numberInputs[i].value,
-            };
-            store.myOrder["dishes"].push(dish);
+            if (!store.myOrder[i]) store.myOrder[i] = {};
+            store.myOrder[i]["dish_id"] = numberInputs[i].id;
+            store.myOrder[i]["quantity"] = numberInputs[i].value;
+            console.log(store.myOrder);
           }
         }
+        localStorage.setItem(storage.myOrder);
       } else {
         alert("Stavi già ordinando da un altro ristorante!");
       }
@@ -87,24 +89,6 @@ export default {
       let input = document.getElementById(event);
       if (!input.value) input.value = 0;
     },
-    isEmpty(obj) {
-      return Object.keys(obj).length === 0 && obj.constructor === Object;
-    },
-    cartQuantity() {
-      console.log("funziono");
-      if (this.isEmpty(store.myOrder)) {
-        console.log("Ordine vuoto");
-      } else {
-        console.log(store.myOrder);
-      }
-
-      // if (store.myOrder && this.restaurant.id == store.myOrder.restaurant_id) {
-      //   // for (let i = 0; i < store.myOrder.dishes.length; i++) {
-      //   //   let dish = document.getElementById(store.myOrder.dishes[i].dish_id);
-      //   //   dish.value = store.myOrder.dishes[i].quantity;
-      //   // }
-      // }
-    },
   },
 
   created() {
@@ -112,46 +96,12 @@ export default {
     // this.fetchTypes();
   },
 
-  mounted() {
-    this.cartQuantity();
-  },
+  mounted() {},
 };
 </script>
 
 <template>
   <div class="row justify-content-between containerApp ps-3">
-    <div class="col-sm-12 col-md-3 bg-white pe-0 leftColumn">
-      <router-link
-        :to="{ name: 'restaurants.index' }"
-        href="#"
-        class="col-lg-3 col-md-6 col-sm-12"
-        id="addButton"
-      >
-        <!-- <div class="col-lg-3 col-md-6 col-sm-12" id="addButton"> -->
-        <button class="ballButton">👈🏻</button>
-      </router-link>
-      <!-- </div> -->
-      <!-- RESTAURANT DETAILS -->
-      <img :src="restaurant.image" :alt="restaurant.name" class="w-100" />
-      <div class="my-3">
-        <h1>
-          {{ restaurant.name }}
-        </h1>
-        <h5>☎️{{ restaurant.phone }}</h5>
-        <h5 class="detailCap">🏠{{ restaurant.address }}</h5>
-      </div>
-      <!-- BADGE -->
-      <div id="badgesContainer">
-        <div class="badge" v-for="badge in types">
-          <div class="typeBadge">
-            <div class="badgeImg">
-              <img :src="badge.image" alt="" width="100%" />
-            </div>
-            <span>{{ badge.label }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="col-12 col-md-9 rightColumn px-2">
       <div
         v-for="dish in restaurant.dishes"
@@ -247,17 +197,6 @@ export default {
         </div>
       </div>
     </div>
-
-    <!-- <router-link
-      :to="{
-        name: 'restaurants.checkout',
-        params: { slug: restaurant.slug },
-      }"
-      class="router-link"
-    > -->
-    <div class="goToCart" @click="addToCart()">🛒</div>
-    <!-- </router-link
-    > -->
   </div>
 </template>
 
