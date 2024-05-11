@@ -6,14 +6,7 @@ import AppCard from "../components/AppCard.vue";
 
 export default {
   data() {
-    return {
-      title: "Ristoranti",
-      store,
-      restaurants: [],
-      types: [],
-      searchOn: false,
-      activeTypes: [],
-    };
+    return {};
   },
 
   components: { AppCard },
@@ -36,13 +29,6 @@ export default {
           this.restaurants = response.data.restaurants;
         });
     },
-
-    // 1 TUTTI I BOTTONI SONO ATTIVI
-    // 2 QUANDO SEARCH DIVENTA ON , TUTTI I BOTTONI DIVENTANO INATTIVI TRANNE QUELLI CLICCATI
-    // 3 QUANDO CLICCO UN ALTRO BOTTONE, GLI ALTRI ATTIVI NON DEVONO SPEGNERSI
-    // 4 SE RICLICCO UN BOTTONE, DEVE FARE TOGGLE LA CLASSE -> RIMUOVERSI DALLA STRINGA PER LA CALL AXIOS
-
-    // 1 - TUTTI BADGE CLASSE OFF - AL CLICK, AGGIUNGI LABEL IN ACTIVETYPE -  SE BUTTON INNERTEXT SI TROVA IN ACTIVETYPES, CLASSE OFF VIENE RIMOSSA
 
     search(name) {
       console.log(
@@ -95,18 +81,28 @@ export default {
 
         <!-- Type Badges for search -->
         <div class="badges-wrapper container-fluid justify-content-md-start">
-          <div class="badge" v-for="badge in types">
+          <div
+            class="badge"
+            v-for="badge in types"
+            :style="
+              `background-image:url(` +
+              badge.image +
+              `); background-size: cover; background-repeat: no-repeat; padding: 30px;`
+            "
+          >
             <div class="badgeContainer">
               <div class="imgBadge me-2">
-                <img
+                <!-- <img
                   @click="search(badge.label)"
                   :src="badge.image"
-                  :alt="badge.name" />
+                  :alt="badge.name"
+                /> -->
               </div>
               <div
                 @click="search(badge.label)"
                 class="label h-100 w-100 d-none d-md-block"
-                :for="badge.id">
+                :for="badge.id"
+              >
                 {{ badge.label }}
               </div>
             </div>
@@ -119,10 +115,12 @@ export default {
         <h3 class="mb-3 title text-center">I nostri ristoranti</h3>
 
         <div
-          class="row pe-2 d-flex justify-content-center justify-content-md-start">
+          class="row pe-2 d-flex justify-content-center justify-content-md-start"
+        >
           <div
             v-for="(restaurant, index) in this.restaurants"
-            class="col-sm-5 col-md-4 col-xl-3 p-2 mb-3 cardContainer">
+            class="col-sm-5 col-md-4 col-xl-3 p-2 mb-3 cardContainer"
+          >
             <app-card :restaurant="restaurant" :index="index" class="h-100" />
           </div>
 
