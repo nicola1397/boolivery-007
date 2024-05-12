@@ -44,7 +44,7 @@ export default {
         });
     },
 
-    search(name) {
+    search(name, event) {
       console.log(
         "ho cliccato: " + name + " " + "Tipi attivi ora: " + this.activeTypes
       );
@@ -57,22 +57,12 @@ export default {
         );
         console.log("c'era " + this.activeTypes);
       }
-      let buttons = document.querySelectorAll(".badge");
-
-      buttons.forEach((button) => {
-        button.classList.add("off");
-        if (this.activeTypes.includes(button.innerText)) {
-          button.classList.toggle("off");
-        }
-      });
-
+      let thisButton = document.getElementById(event);
+      thisButton.classList.toggle("on");
       this.filteredRestaurants(this.activeTypes);
-      if (this.activeTypes.length == 0) {
-        console.log("è vuotoooooooo");
+
+      if (this.activeTypes.length === 0) {
         this.fetchRestaurants();
-        buttons.forEach((button) => {
-          button.classList.remove("off");
-        });
       }
     },
   },
@@ -106,20 +96,21 @@ export default {
     <!-- ROW -->
     <div class="row">
       <!-- Search column -->
-      <div
-        class="col-2 col-md-3 searchColumn d-flex flex-column py-4 px-1"
-        id="search"
-      >
-        <div class="sidebar">
-          <div class="sidebar-brand">
-            <h3 class="mb-3 title d-none d-lg-block">Filtri</h3>
-          </div>
-          <ul class="sidebar-nav">
-            <li v-for="badge in types">{{ badge.label }}</li>
-          </ul>
-          <div class="sidebar-toggle" @click="sideToggler()">
-            <span class="navbar-toggler-icon"></span>
-          </div>
+      <div class="col-2 col-md-2 searchColumn" id="search">
+        <h3 class="my-3 title">Filtri</h3>
+
+        <ul class="d-flex flex-column align-items-center">
+          <li
+            v-for="badge in types"
+            class="badgeSelector"
+            :id="badge.label"
+            @click="search(badge.label, $event.target.id)"
+          >
+            {{ badge.label }}
+          </li>
+        </ul>
+        <div class="sidebar-toggle" @click="sideToggler()">
+          <span class="navbar-toggler-icon"></span>
         </div>
       </div>
 
@@ -151,6 +142,21 @@ export default {
 <style lang="scss" scoped>
 @use "../style/partials/mixins" as *;
 @use "../style/partials/variables" as *;
+
+li {
+  position: relative;
+  min-width: 140px;
+  &.on {
+    color: green !important;
+    border: 3px solid green !important;
+    &::before {
+      position: absolute;
+      content: "✔";
+      left: 15px;
+    }
+  }
+}
+
 #jumboTron {
   // min-height: calc(100vh - $headerHeight - $footerHeight);
   background-image: url(../assets/img/jumbo-2.svg);
@@ -237,12 +243,15 @@ export default {
 
 // TYPE BADGES
 
+#search {
+  min-width: 160px;
+}
+
 .searchColumn {
   background-color: white;
   text-align: center;
   height: calc(100vh - $headerHeight - $footerHeight);
   border-right: 2px solid rgba($midblue, 0.2);
-  overflow: scroll;
   position: relative;
 
   .title {
@@ -286,6 +295,18 @@ export default {
       }
     }
   }
+}
+
+.badgeSelector {
+  cursor: pointer;
+  color: $darkblue;
+  font-size: 1.3rem;
+  text-align: center;
+  width: 80%;
+  margin: 7px 0;
+
+  border: 2px solid $darkblue;
+  border-radius: 500px;
 }
 
 // RESTAURANT CARDS
