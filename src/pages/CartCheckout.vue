@@ -2,7 +2,6 @@
 import axios from "axios";
 
 import { store, api } from "../store";
-// import AppCard from "../components/AppCard.vue";
 
 export default {
   data() {
