@@ -124,36 +124,6 @@ export default {
       console.log("localStorage svuotato!");
     },
 
-    // ADD ITEMS TO CART
-    addToCart() {
-      const localOrder = JSON.parse(localStorage.getItem("myOrder")) || {};
-      console.log("arrivato");
-      console.log(localOrder);
-
-      if (
-        !localOrder["restaurant_id"] ||
-        localOrder["restaurant_id"] == this.restaurant.id
-      ) {
-        const numberInputs = document.querySelectorAll('input[type="number"]');
-        localOrder["restaurant_id"] = this.restaurant.id;
-        if (!localOrder["dishes"]) localOrder["dishes"] = [];
-        for (let i = 0; i < numberInputs.length; i++) {
-          if (numberInputs[i].value > 0) {
-            let thisDish = {
-              dish_id: numberInputs[i].id,
-              quantity: parseInt(numberInputs[i].value),
-            };
-            localOrder["dishes"].push(thisDish);
-            console.log("Piatto aggiunto");
-            console.log(localOrder);
-          }
-        }
-        localStorage.setItem("myOrder", JSON.stringify(localOrder));
-      } else {
-        alert("Stai già ordinando da un altro ristorante!");
-      }
-    },
-
     // REMOVE OFF CLASS FROM INPUTS
     getClass(event) {
       let input = document.getElementById(event);
@@ -213,6 +183,11 @@ export default {
         this.myOrder = [];
         console.log("MyOrder era vuoto");
       }
+    },
+    euroCheck(price) {
+      let formattedPrice = price.toFixed(2);
+      formattedPrice = formattedPrice.replace(".", ",");
+      return formattedPrice;
     },
   },
 
@@ -364,10 +339,79 @@ export default {
       class="router-link"
     > -->
     <div class="bin" @click="emptyCart()">🗑️</div>
-    <div class="goToCart" @click="addToCart()">🛒</div>
+    <div
+      class="goToCart"
+      type="button"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasScrolling"
+      aria-controls="offcanvasScrolling"
+    >
+      🛒
+    </div>
 
     <!-- </router-link
     > -->
+  </div>
+
+  <!-- CART OFFCANVAS -->
+
+  <div
+    class="offcanvas offcanvas-start"
+    data-bs-scroll="true"
+    data-bs-backdrop="false"
+    tabindex="-1"
+    id="offcanvasScrolling"
+    aria-labelledby="offcanvasScrollingLabel"
+  >
+    <div class="offcanvas-header">
+      <h2 class="offcanvas-title" id="offcanvasScrollingLabel">
+        Il tuo carrello
+      </h2>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="offcanvas"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="offcanvas-body">
+      <div v-for="dish in myOrder.dishes" class="dishCard pe-5">
+        <!-- IMMAGINE -->
+
+        <div
+          class="dishImage col-2"
+          data-bs-toggle="modal"
+          :data-bs-target="`#dish-` + dish.id"
+        >
+          <img :src="dish.image" alt="dish.name" />
+        </div>
+        <!-- TESTO -->
+        <div class="dishInfo col-6 px-2">
+          <h5>{{ dish.name }}</h5>
+          <p>{{ dish.description }}</p>
+        </div>
+        <!-- PREZZO -->
+        <div class="dishPrice col-2">
+          <h5>x {{ dish.quantity }}</h5>
+        </div>
+      </div>
+    </div>
+    <div
+      class="offcanvas-footer d-flex flex-column justify-content-center mb-5"
+    >
+      <h4 class="text-center mb-2">PREZZO TOTALE</h4>
+
+      <h2 class="text-center mb-5">€{{ euroCheck(this.myOrder.price) }}</h2>
+
+      <router-link
+        :to="{ name: 'restaurants.checkout' }"
+        class="router-link text-center"
+      >
+        <button type="button" class="btn btn-primary btn-lg">
+          Procedi al pagamento
+        </button>
+      </router-link>
+    </div>
   </div>
 </template>
 
