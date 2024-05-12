@@ -164,6 +164,7 @@ export default {
             // SCORRO TUTTI I PIATTI E LI TROVO IN PAGINA AGGIORNANDO CLASSE E VALORE
             for (let i = 0; i < order.dishes.length; i++) {
               console.log("ciclo gli elementi");
+              console.log(order.dishes[i].id);
               let dish = document.getElementById(order.dishes[i].id);
               console.log(dish);
               dish.value = order.dishes[i].quantity;
@@ -356,6 +357,7 @@ export default {
   <!-- CART OFFCANVAS -->
 
   <div
+    v-if="this.myOrder.dishes"
     class="offcanvas offcanvas-start"
     data-bs-scroll="true"
     data-bs-backdrop="false"
