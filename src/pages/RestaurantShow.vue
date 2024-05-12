@@ -9,8 +9,10 @@ export default {
     return {
       restaurant: null,
       filled: false,
+      cartCheck: false,
       types: [],
       store,
+      myOrder: [],
     };
   },
   watch: {
@@ -24,9 +26,19 @@ export default {
       },
       deep: true,
     },
+    myOrder: {
+      handler() {
+        if (this.myOrder && this.cartCheck === true) {
+          localStorage.setItem("myOrder", JSON.stringify(this.myOrder));
+          console.log("Pushed to storage");
+        }
+      },
+      deep: true,
+    },
   },
 
   methods: {
+    // AXIOS CALL FOR RESTAURANT SHOW
     fetchRestaurants() {
       const restaurantSlug = this.$route.params.slug;
       axios
@@ -36,7 +48,7 @@ export default {
           this.types = response.data.restaurants[0].types;
         });
     },
-
+    // PLUS AND MINUS BUTTONS
     quantity(operator, dish) {
       let value = document.getElementById(dish);
       if (operator == "minus" && value.value > 0) {
@@ -45,20 +57,74 @@ export default {
           thisPlate.classList.add("off");
         }
         value.value--;
+        let dishObject = this.restaurant.dishes.find((d) => d.id === dish);
+        if (dishObject) {
+          let dishInOrder = this.myOrder.dishes.find((d) => d.id === dish);
+          if (dishInOrder) {
+            dishInOrder.quantity--;
+            if (dishInOrder.quantity === 0) {
+              // Rimuovere il piatto dall'ordine se la quantità è 0
+              this.myOrder.dishes = this.myOrder.dishes.filter(
+                (d) => d.id !== dish
+              );
+            }
+            this.myOrder.price -= dishObject.price;
+          }
+        }
       }
       if (operator == "plus") {
-        if (value.value == 0) {
-          let thisPlate = document.getElementById(dish);
-          thisPlate.classList.remove("off");
+        if (!this.myOrder.dishes) {
+          this.myOrder = {
+            restaurant_id: this.restaurant.id,
+            dishes: [],
+            price: 0,
+          };
         }
-        value.value++;
+        // SE L'ID DEL RISTORANTE COMBACIA CON QUELLO NELL'ORDINE
+        if (this.myOrder.restaurant_id == this.restaurant.id) {
+          // SE ORDINE NON ESISTE
+          // SE IL VALUE SALE
+          if (value.value == 0) {
+            let thisPlate = document.getElementById(dish);
+            thisPlate.classList.remove("off");
+          }
+          value.value++;
+          // console.log(this.restaurant.dishes);
+          // LOGICA PLUS
+          let dishObject = this.restaurant.dishes.find((d) => d.id === dish);
+          if (dishObject) {
+            let dishInOrder = this.myOrder.dishes.find((d) => d.id === dish);
+            if (dishInOrder) {
+              dishInOrder.quantity++;
+            } else {
+              this.myOrder.dishes.push({ ...dishObject, quantity: 1 });
+            }
+          }
+          this.myOrder.price =
+            parseFloat(this.myOrder.price) + parseFloat(dishObject.price);
+        } else {
+          if (
+            confirm(
+              "Il carrello contiene piatti di un altro ristorante! Svuotare il carrello?"
+            )
+          ) {
+            this.myOrder = [];
+          } else {
+            history.back();
+          }
+        }
       }
-    },
 
+      console.log(this.myOrder);
+    },
+    // EMPTY CART OF ALL ITEMS
     emptyCart() {
       localStorage.removeItem("myOrder");
+      this.myOrder = null;
       console.log("localStorage svuotato!");
     },
+
+    // ADD ITEMS TO CART
     addToCart() {
       const localOrder = JSON.parse(localStorage.getItem("myOrder")) || {};
       console.log("arrivato");
@@ -88,6 +154,7 @@ export default {
       }
     },
 
+    // REMOVE OFF CLASS FROM INPUTS
     getClass(event) {
       let input = document.getElementById(event);
       if (input.value > 0) {
@@ -96,38 +163,55 @@ export default {
         input.classList.add("off");
       }
     },
-    emptyField(event) {
+    // VALIDATION FOR INPUTS
+    inputValidation(event) {
       let input = document.getElementById(event);
       if (!input.value) input.value = 0;
+      input.reportValidity();
     },
+    // CHECK IF INPUT IS EMPTY
     isEmpty(obj) {
       return Object.keys(obj).length === 0 && obj.constructor === Object;
     },
+
+    // RECOVER DATA QUANTITIES FROM ORDER
     cartQuantity() {
       if (this.restaurant) {
         console.log("partita la funzione");
-        console.log(this.restaurant);
+        // PROVO A RECUPERARE L'ORDINE
         const orderString = localStorage.getItem("myOrder");
-
+        // CONTROLLO SE L'ORDINE ESISTE
         if (orderString !== null) {
           console.log("Ordine trovato");
           const order = JSON.parse(orderString);
-          console.log(order.dishes);
+          console.log(order);
+          // MYORDER UGUALE A LOCALSTORAGE
+          this.myOrder = order;
+          // CONTROLLO SE L'ORDINE CORRISPONDE AL RISTORANTE
           if (this.restaurant.id == order.restaurant_id) {
+            console.log(this.restaurant.id);
+
+            // SCORRO TUTTI I PIATTI E LI TROVO IN PAGINA AGGIORNANDO CLASSE E VALORE
             for (let i = 0; i < order.dishes.length; i++) {
               console.log("ciclo gli elementi");
-              let dish = document.getElementById(order.dishes[i].dish_id);
+              let dish = document.getElementById(order.dishes[i].id);
               console.log(dish);
               dish.value = order.dishes[i].quantity;
               dish.classList.remove("off");
             }
           }
-          store.myOrder = order;
         } else {
           console.log("Ordine non trovato");
-          // Inizializza store.myOrder come un oggetto vuoto se non esiste
-          store.myOrder = {};
         }
+      }
+      this.cartCheck = true;
+    },
+
+    addToCart() {},
+    checkEmpty() {
+      if (this.myOrder.dishes.length == 0) {
+        this.myOrder = [];
+        console.log("MyOrder era vuoto");
       }
     },
   },
@@ -152,7 +236,7 @@ export default {
         id="addButton"
       >
         <!-- <div class="col-lg-3 col-md-6 col-sm-12" id="addButton"> -->
-        <button class="ballButton">👈🏻</button>
+        <button class="ballButton" @click="checkEmpty()">👈🏻</button>
       </router-link>
       <!-- </div> -->
       <!-- RESTAURANT DETAILS -->
@@ -259,7 +343,7 @@ export default {
             value="0"
             class="off"
             @keyup="getClass($event.target.id)"
-            @blur="emptyField($event.target.id)"
+            @blur="inputValidation($event.target.id)"
           />
           <button
             id="plus"
