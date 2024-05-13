@@ -1,11 +1,12 @@
 <script>
 import axios from "axios";
-
+import Payment from "../components/Payment.vue";
 import { store, api } from "../store";
 
 export default {
   data() {
     return {
+      tokenApi: "",
       restaurant: [],
       types: [],
       store,
@@ -13,7 +14,7 @@ export default {
     };
   },
 
-  // components: { AppCard },
+  components: { Payment },
 
   methods: {
     fetchRestaurants() {
@@ -52,7 +53,11 @@ export default {
     // this.fetchTypes();
   },
 
-  mounted() {},
+  async mounted() {
+    let response = await axios.get(api.baseApiURI + "order/generate");
+    this.tokenApi = response.data.token;
+    console.log(this.tokenApi);
+  },
 };
 </script>
 
@@ -87,6 +92,7 @@ export default {
     <div>
       <h2 class="totalPrice">€ {{ euroCheck(this.myOrder.price) }}</h2>
     </div>
+    <div><Payment :authorization="this.tokenApi"></Payment></div>
   </div>
 </template>
 

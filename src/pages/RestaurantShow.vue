@@ -357,7 +357,6 @@ export default {
   <!-- CART OFFCANVAS -->
 
   <div
-    v-if="this.myOrder.dishes"
     class="offcanvas offcanvas-start"
     data-bs-scroll="true"
     data-bs-backdrop="false"
@@ -400,6 +399,7 @@ export default {
     </div>
     <div
       class="offcanvas-footer d-flex flex-column justify-content-center mb-5"
+      v-if="this.myOrder.dishes"
     >
       <h4 class="text-center mb-2">PREZZO TOTALE</h4>
 
