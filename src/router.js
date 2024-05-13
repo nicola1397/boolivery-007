@@ -19,7 +19,7 @@ const router = createRouter({
       component: RestaurantShow,
     },
     {
-      path: "/:slug/checkout",
+      path: "/checkout",
       name: "restaurants.checkout",
       component: CartCheckout,
     },
