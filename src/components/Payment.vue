@@ -39,8 +39,7 @@ export default {
               if (err) {
                 console.error(err);
               } else {
-                // Submit payload.nonce to your server here
-                // Example: postNonceToServer(payload.nonce);
+                alert(payload.nonce);
               }
             });
           });
