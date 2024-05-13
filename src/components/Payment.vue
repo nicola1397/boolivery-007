@@ -49,7 +49,7 @@ export default {
     },
     euroCheck(price) {
       let formattedPrice = price.toFixed(2);
-      formattedPrice = formattedPrice.replace(".", ",");
+      // formattedPrice = formattedPrice.replace(".", ",");
       return formattedPrice;
     },
     getCurrentDateTime() {
@@ -70,15 +70,16 @@ export default {
 };
 </script>
 <!-- :action="api.baseApiURI + 'order/make/payment'" -->
-
+<!-- action="https://learning.tizianonicolai.com/request-catcher/index.php" -->
 <template>
   <div>
     <div>
       <form
         id="payment-form"
-        action="https://learning.tizianonicolai.com/request-catcher/index.php"
+        :action="api.baseApiURI + 'order/make/payment'"
         method="post"
       >
+        @csrf
         <!-- Name field with pattern restriction for letters only -->
         <div class="mb-3">
           <label for="customer_name" class="form-label"
@@ -157,10 +158,14 @@ export default {
             readonly
           />
         </div>
-        <input type="hidden" name="orderData" :value="myOrder" />
+        <input
+          type="hidden"
+          name="orderData"
+          :value="JSON.stringify(myOrder.dishes)"
+        />
         <!-- BRAINTREE DATA -->
         <input type="hidden" name="amount" :value="euroCheck(myOrder.price)" />
-        <input type="hidden" name="paymentMethodNonce" :value="authorization" />
+        <input type="hidden" name="token" :value="authorization" />
 
         <div id="dropin-container"></div>
         <button type="submit" class="btn btn-primary">Submit</button>
