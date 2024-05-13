@@ -9,7 +9,7 @@ export default {
       tokenApi: "",
       restaurant: [],
       store,
-      myOrder: [],
+      myOrder: {},
     };
   },
 
@@ -21,6 +21,7 @@ export default {
       if (order) {
         this.myOrder = JSON.parse(order);
         console.log(this.myOrder);
+        console.log(this.myOrder.dishes.length);
       }
     },
     euroCheck(price) {
@@ -98,14 +99,15 @@ export default {
 
 <template>
   <div class="row justify-content-between containerApp ps-3">
-    <div class="col-12 col-md-9 rightColumn px-2">
-      <div v-if="this.myOrder.dishes.lenght == 0">
+    <div class="col-12 col-md-8 px-2">
+      <h2>{{ this.myOrder.dishes.lenght }}</h2>
+      <div v-if="this.myOrder.dishes.length == 0">
         <h1 class="text-danger">Il tuo carrello è vuoto!</h1>
         <router-link to="/">
           <button class="btn btn-primary">Torna alla home</button></router-link
         >
       </div>
-      <div v-if="this.myOrder.dishes.lenght > 0">
+      <div v-if="this.myOrder.dishes.length > 0">
         <div
           v-for="dish in myOrder.dishes"
           class="dishCard pe-5 col-12 col-md-6"
@@ -162,8 +164,10 @@ export default {
         <div>
           <h2 class="totalPrice">€ {{ euroCheck(this.myOrder.price) }}</h2>
         </div>
-        <div><Payment :authorization="this.tokenApi"></Payment></div>
       </div>
+    </div>
+    <div class="col-12 col-md-4 px-2 pe-5">
+      <Payment :authorization="this.tokenApi" :myOrder="this.myOrder"></Payment>
     </div>
   </div>
 </template>
@@ -216,16 +220,16 @@ export default {
   overflow-x: hidden;
 }
 
-.leftColumn {
-  height: 100%;
-  position: relative;
-  color: $darkblue;
-  background-color: white;
-  text-align: center;
-  // min-height: calc(100vh - $headerHeight - $footerHeight);
-  border-right: 2px solid rgba($midblue, 0.2);
-  border-bottom: 2px solid rgba($midblue, 0.2);
-}
+// .leftColumn {
+//   height: 100%;
+//   position: relative;
+//   color: $darkblue;
+//   background-color: white;
+//   text-align: center;
+//   // min-height: calc(100vh - $headerHeight - $footerHeight);
+//   border-right: 2px solid rgba($midblue, 0.2);
+//   border-bottom: 2px solid rgba($midblue, 0.2);
+// }
 
 #badgesContainer {
   margin-bottom: 30px;
@@ -263,7 +267,7 @@ export default {
   }
 }
 
-.rightColumn {
+.leftColumn {
   padding: 0;
   // height: calc(100vh - $headerHeight - $footerHeight);
   overflow: auto;

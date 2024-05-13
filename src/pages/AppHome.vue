@@ -81,7 +81,14 @@ export default {
       <h2 class="display-2 title text-center">
         Ordina subito con Boolivery! 🛵🍝
       </h2>
-
+      <div
+        class="btn-restaurant mb-3 col-8"
+        onclick="document.getElementById('searchSection').scrollIntoView();"
+      >
+        <div class="btn btn--action">
+          <span class="guest">Vai alla ricerca</span>
+        </div>
+      </div>
       <h5 class="title">oppure</h5>
       <h3 class="display-5 title">Sei un ristoratore?</h3>
       <!-- BUTTON -->
@@ -92,9 +99,9 @@ export default {
       </div>
     </div>
   </div>
-  <div class="containerApp">
+  <div class="containerApp" id="searchSection">
     <!-- ROW -->
-    <div class="row">
+    <div class="row h-100">
       <!-- Search column -->
       <div class="col-2 col-md-2 searchColumn" id="search">
         <h3 class="my-3 title">Filtri</h3>
@@ -142,6 +149,10 @@ export default {
 <style lang="scss" scoped>
 @use "../style/partials/mixins" as *;
 @use "../style/partials/variables" as *;
+
+#searchSection {
+  height: 100vh;
+}
 
 li {
   position: relative;
@@ -236,7 +247,7 @@ li {
   color: $darkblue;
 }
 .containerApp {
-  min-height: calc(100vh - $headerHeight - $footerHeight);
+  min-height: 100vh;
   overflow: auto;
   overflow-x: hidden;
 }
@@ -250,7 +261,6 @@ li {
 .searchColumn {
   background-color: white;
   text-align: center;
-  height: calc(100vh - $headerHeight - $footerHeight);
   border-right: 2px solid rgba($midblue, 0.2);
   position: relative;
 
@@ -311,7 +321,6 @@ li {
 
 // RESTAURANT CARDS
 .result-column {
-  height: calc(100vh - $headerHeight - $footerHeight);
   overflow: auto;
   background-color: white;
   .cardContainer {
