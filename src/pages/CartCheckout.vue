@@ -12,6 +12,17 @@ export default {
       myOrder: {},
     };
   },
+  watch: {
+    myOrder: {
+      handler() {
+        if (this.myOrder && this.cartCheck === true) {
+          localStorage.setItem("myOrder", JSON.stringify(this.myOrder));
+          console.log("Pushed to storage");
+        }
+      },
+      deep: true,
+    },
+  },
 
   components: { Payment },
 
@@ -22,6 +33,14 @@ export default {
         this.myOrder = JSON.parse(order);
         console.log(this.myOrder);
         console.log(this.myOrder.dishes.length);
+      }
+    },
+    getClass(event) {
+      let input = document.getElementById(event);
+      if (input.value > 0) {
+        input.classList.remove("off");
+      } else {
+        input.classList.add("off");
       }
     },
     euroCheck(price) {
@@ -82,6 +101,23 @@ export default {
       }
 
       console.log(this.myOrder);
+    },
+    // VALIDATION FOR INPUTS
+    inputValidation(event, dish) {
+      let input = document.getElementById(event);
+      if (!input.value) input.value = 0;
+      if (input.reportValidity()) {
+        let dishInOrder = this.myOrder.dishes.find((d) => d.id === dish.id);
+        dishInOrder.quantity = input.value;
+        this.myOrder.price = dishInOrder.quantity * dish.price;
+      }
+      if (input.value == 0) {
+        let previousQuantity = dishInOrder.quantity;
+        this.myOrder.price -= previousQuantity * dish.price;
+        this.myOrder.dishes = this.myOrder.dishes.filter(
+          (d) => d.id !== dish.id
+        );
+      }
     },
   },
 
@@ -146,7 +182,7 @@ export default {
               min="0"
               :value="dish.quantity"
               @keyup="getClass($event.target.id)"
-              @blur="inputValidation($event.target.id)"
+              @blur="inputValidation($event.target.id, dish)"
             />
             <button
               id="plus"
