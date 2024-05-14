@@ -9,7 +9,7 @@ export default {
       tokenApi: "",
       restaurant: [],
       store,
-      myOrder: {},
+      myOrder: [],
     };
   },
   watch: {
@@ -60,7 +60,7 @@ export default {
           value.classList.add("off");
         }
         value.value--;
-
+        console.log("hai cliccato minus");
         let dishInOrder = this.myOrder.dishes.find((d) => d.id === dish.id);
         if (dishInOrder) {
           dishInOrder.quantity--;
@@ -74,6 +74,8 @@ export default {
         }
       }
       if (operator == "plus") {
+        console.log("hai cliccato plus");
+
         // SE MYORDER NON ESISTE
         if (!this.myOrder.dishes) {
           this.myOrder = {
@@ -112,16 +114,6 @@ export default {
             "Aggiungendo questo piatto, si supererebbe il limite di prezzo del carrello di 9999.99€."
           );
         }
-      } else {
-        if (
-          confirm(
-            "Il carrello contiene piatti di un altro ristorante! Svuotare il carrello?"
-          )
-        ) {
-          this.myOrder = [];
-        } else {
-          history.back();
-        }
       }
 
       console.log(this.myOrder);
@@ -135,14 +127,7 @@ export default {
       ) {
         return;
       }
-      // Inizializza l'ordine se non esiste
-      if (!this.myOrder.dishes) {
-        this.myOrder = {
-          restaurant_id: this.restaurant.id,
-          dishes: [],
-          price: 0,
-        };
-      }
+
       if (!input.value) input.value = 0;
 
       if (input.reportValidity()) {
@@ -245,7 +230,7 @@ export default {
             <button
               id="minus"
               class="quantityButton rounded-start"
-              @click="quantity($event.target.id, dish.id)"
+              @click="quantity($event.target.id, dish)"
             >
               -
             </button>
@@ -260,7 +245,7 @@ export default {
             <button
               id="plus"
               class="quantityButton rounded-end"
-              @click="quantity($event.target.id, dish.id)"
+              @click="quantity($event.target.id, dish)"
             >
               +
             </button>
