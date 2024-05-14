@@ -93,8 +93,6 @@ export default {
   },
 };
 </script>
-<!-- :action="api.baseApiURI + 'order/make/payment'" -->
-<!-- action="https://learning.tizianonicolai.com/request-catcher/index.php" -->
 <template>
   <div>
     <div>
