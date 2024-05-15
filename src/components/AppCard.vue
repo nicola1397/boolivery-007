@@ -60,9 +60,9 @@ export default {
 .myCard {
   background-color: white;
   height: 100%;
-  color: $darkblue;
+  color: $secondary;
   border-radius: 5px;
-  border: 1px solid $darkblue;
+  border: 1px solid $secondary;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -118,7 +118,7 @@ h3.detailCap {
   //   margin-right: 10px;
 
   //   .typeBadge {
-  //     // border: 3px solid $midblue;
+  //     // border: 3px solid $primary;
   //     width: 100%;
   //     border-radius: 60%;
   //     overflow: hidden;
@@ -151,7 +151,7 @@ h3.detailCap {
   padding: 0;
   // height: calc(100vh - $headerHeight - $footerHeight);
   overflow: auto;
-  // background-color: $midblue;
+  // background-color: $primary;
   display: flex;
   justify-content: start;
   flex-wrap: wrap;

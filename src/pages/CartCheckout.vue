@@ -7,7 +7,6 @@ export default {
   data() {
     return {
       tokenApi: "",
-      restaurant: [],
       store,
       myOrder: [],
     };
@@ -17,7 +16,12 @@ export default {
       handler() {
         if (this.myOrder && this.cartCheck === true) {
           localStorage.setItem("myOrder", JSON.stringify(this.myOrder));
-          console.log("Pushed to storage");
+          // console.log("Pushed to storage");
+        }
+        if (this.myOrder.dishes && this.myOrder.dishes.length == 0) {
+          this.myOrder = [];
+          localStorage.removeItem("myOrder");
+          // console.log("Removed from storage");
         }
       },
       deep: true,
@@ -43,29 +47,26 @@ export default {
         input.classList.add("off");
       }
     },
+    // CONVERT TO EURO FORMAT
     euroCheck(price) {
-      let formattedPrice = price.toFixed(2);
+      let formattedPrice = Number(price).toFixed(2);
       formattedPrice = formattedPrice.replace(".", ",");
       return formattedPrice;
     },
-    // ************************
-    //  ADDING AND REMOVING DISHES
-    //
     // PLUS AND MINUS BUTTONS
     quantity(operator, dish) {
       let value = document.getElementById(dish.id);
-      console.log("questo è dish", dish);
+      console.log("QUANTITY -> questo è dish", dish);
       if (operator == "minus" && value.value > 0) {
         if (value.value == 1) {
           value.classList.add("off");
         }
         value.value--;
-        console.log("hai cliccato minus");
+
         let dishInOrder = this.myOrder.dishes.find((d) => d.id === dish.id);
         if (dishInOrder) {
           dishInOrder.quantity--;
           if (dishInOrder.quantity === 0) {
-            // Rimuovere il piatto dall'ordine se la quantità è 0
             this.myOrder.dishes = this.myOrder.dishes.filter(
               (d) => d.id !== dish.id
             );
@@ -74,8 +75,6 @@ export default {
         }
       }
       if (operator == "plus") {
-        console.log("hai cliccato plus");
-
         // SE MYORDER NON ESISTE
         if (!this.myOrder.dishes) {
           this.myOrder = {
@@ -84,7 +83,9 @@ export default {
             price: 0,
           };
         }
+
         // SE L'ID DEL RISTORANTE COMBACIA CON QUELLO NELL'ORDINE
+
         // SE ORDINE NON ESISTE
         // SE IL VALUE SALE
         if (value.value == 0) {
@@ -92,10 +93,9 @@ export default {
         }
 
         let potentialPrice =
-          this.myOrder.price +
-          parseFloat(this.myOrder.price) +
-          parseFloat(dish.price);
-        if (potentialPrice < 9999.99) {
+          parseFloat(this.myOrder.price) + parseFloat(dish.price);
+
+        if (potentialPrice <= 9999.99) {
           value.value++;
           // console.log(this.restaurant.dishes);
           // LOGICA PLUS
@@ -116,8 +116,9 @@ export default {
         }
       }
 
-      console.log(this.myOrder);
+      // console.log(this.myOrder);
     },
+
     // VALIDATION FOR INPUTS
     inputValidation(event, dish) {
       let input = document.getElementById(event);
@@ -156,6 +157,7 @@ export default {
           alert(
             "Il limite di prezzo del carrello di 9999.99€ è stato superato. La quantità è stata aggiustata al valore massimo possibile."
           );
+          potentialNewPrice;
         }
 
         // Aggiorna l'ordine solo se la nuova quantità è maggiore di zero
@@ -176,6 +178,7 @@ export default {
           this.myOrder.price -= dishInOrder.quantity * dish.price;
         }
       }
+      console.log("INPUT VALIDATION -> myOrder", this.myOrder);
     },
   },
 
@@ -222,7 +225,7 @@ export default {
           </div>
           <!-- PREZZO -->
           <div class="dishPrice col-2">
-            <h5>€ {{ dish.price }}</h5>
+            <h5>€ {{ euroCheck(dish.price) }}</h5>
           </div>
 
           <!-- QUANTITA -->
@@ -272,13 +275,13 @@ export default {
 @use "../style/partials/variables" as *;
 
 .totalPrice {
-  color: $darkblue;
+  color: $secondary;
 }
 
 // GO TO CART
 .goToCart {
   position: absolute;
-  background-color: $midblue;
+  background-color: $primary;
   border-radius: 50%;
   aspect-ratio: 1/1;
   max-width: 100px;
@@ -286,7 +289,7 @@ export default {
   justify-content: center;
   align-items: center;
   font-size: 4rem;
-  text-shadow: 5px 5px 5px $darkblue;
+  text-shadow: 5px 5px 5px $secondary;
   right: 30px;
   bottom: 30px;
 
@@ -317,12 +320,12 @@ export default {
 // .leftColumn {
 //   height: 100%;
 //   position: relative;
-//   color: $darkblue;
+//   color: $secondary;
 //   background-color: white;
 //   text-align: center;
 //   // min-height: calc(100vh - $headerHeight - $footerHeight);
-//   border-right: 2px solid rgba($midblue, 0.2);
-//   border-bottom: 2px solid rgba($midblue, 0.2);
+//   border-right: 2px solid rgba($primary, 0.2);
+//   border-bottom: 2px solid rgba($primary, 0.2);
 // }
 
 #badgesContainer {
@@ -332,7 +335,7 @@ export default {
     margin-right: 10px;
 
     .typeBadge {
-      // border: 3px solid $midblue;
+      // border: 3px solid $primary;
       width: 100%;
       border-radius: 50px;
       overflow: hidden;
@@ -365,7 +368,7 @@ export default {
   padding: 0;
   // height: calc(100vh - $headerHeight - $footerHeight);
   overflow: auto;
-  // background-color: $midblue;
+  // background-color: $primary;
   display: flex;
   justify-content: start;
   flex-wrap: wrap;
@@ -444,7 +447,7 @@ button {
   display: flex;
   background-color: white;
   flex: 0 0 auto;
-  color: $darkblue;
+  color: $secondary;
   .dishImage {
     height: 80px;
     width: 80px;
@@ -460,7 +463,7 @@ button {
   .dishInfo,
   .dishPrice {
     display: flex;
-    border-bottom: 1px solid rgba($midblue, 0.2);
+    border-bottom: 1px solid rgba($primary, 0.2);
     flex-direction: column;
     justify-content: center;
 
@@ -480,7 +483,7 @@ button {
 .amountContainer {
   align-items: center;
   display: flex;
-  border-bottom: 1px solid rgba($midblue, 0.2);
+  border-bottom: 1px solid rgba($primary, 0.2);
 
   // INPUT NUMBER ARROW HIDDEN
   input[type="number"] {
@@ -501,7 +504,7 @@ button {
     flex-shrink: 0;
     height: 30px;
     width: 30px;
-    background-color: $midblue;
+    background-color: $primary;
     color: white;
     font-size: 20px;
     display: flex;
@@ -514,7 +517,7 @@ button {
 }
 
 .blueColor {
-  background-color: $midblue;
+  background-color: $primary;
   color: white;
 }
 </style>

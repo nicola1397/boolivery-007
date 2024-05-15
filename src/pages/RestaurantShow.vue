@@ -141,7 +141,7 @@ export default {
           let potentialPrice =
             parseFloat(this.myOrder.price) + parseFloat(dish.price);
 
-          if (potentialPrice < 9999.99) {
+          if (potentialPrice <= 9999.99) {
             value.value++;
             // console.log(this.restaurant.dishes);
             // LOGICA PLUS
@@ -431,7 +431,7 @@ export default {
       }"
       class="router-link"
     > -->
-    <div class="bin" @click="emptyCart()">🗑️</div>
+
     <div
       class="goToCart"
       type="button"
@@ -468,7 +468,11 @@ export default {
       ></button>
     </div>
     <div class="offcanvas-body">
-      <div v-for="dish in myOrder.dishes" class="d-flex flex-column pe-5">
+      <div
+        v-if="myOrder.dishes"
+        v-for="dish in myOrder.dishes"
+        class="d-flex flex-column pe-5"
+      >
         <div class="dishCard">
           <!-- IMMAGINE -->
 
@@ -496,6 +500,10 @@ export default {
           >{{ euroCheck(dish.price) }} x {{ dish.quantity }}</span
         >
       </div>
+
+      <div v-else class="d-flex flex-column pe-5">
+        <span class="text-secondary">Il tuo carrello è vuoto.</span>
+      </div>
     </div>
     <div
       class="offcanvas-footer d-flex flex-column justify-content-center mb-5"
@@ -513,6 +521,9 @@ export default {
           Procedi al pagamento
         </button>
       </router-link>
+      <div class="btn btn-danger btn-lg" @click="emptyCart()">
+        Svuota il carrello
+      </div>
     </div>
   </div>
 </template>
@@ -550,7 +561,7 @@ export default {
 // GO TO CART
 .goToCart {
   position: absolute;
-  background-color: $midblue;
+  background-color: $primary;
   border-radius: 50%;
   aspect-ratio: 1/1;
   max-width: 100px;
@@ -558,7 +569,7 @@ export default {
   justify-content: center;
   align-items: center;
   font-size: 4rem;
-  text-shadow: 5px 5px 5px $darkblue;
+  text-shadow: 5px 5px 5px $secondary;
   right: 30px;
   bottom: 30px;
 
@@ -589,12 +600,12 @@ export default {
 .leftColumn {
   height: 100%;
   position: relative;
-  color: $darkblue;
+  color: $secondary;
   background-color: white;
   text-align: center;
   // min-height: calc(100vh - $headerHeight - $footerHeight);
-  border-right: 2px solid rgba($midblue, 0.2);
-  border-bottom: 2px solid rgba($midblue, 0.2);
+  border-right: 2px solid rgba($primary, 0.2);
+  border-bottom: 2px solid rgba($primary, 0.2);
 }
 
 #badgesContainer {
@@ -604,7 +615,7 @@ export default {
     margin-right: 10px;
 
     .typeBadge {
-      // border: 3px solid $midblue;
+      // border: 3px solid $primary;
       width: 100%;
       border-radius: 50px;
       overflow: hidden;
@@ -637,7 +648,7 @@ export default {
   padding: 0;
   // height: calc(100vh - $headerHeight - $footerHeight);
   overflow: auto;
-  // background-color: $midblue;
+  // background-color: $primary;
   display: flex;
   justify-content: start;
   flex-wrap: wrap;
@@ -716,7 +727,7 @@ button {
   display: flex;
   background-color: white;
   flex: 0 0 auto;
-  color: $darkblue;
+  color: $secondary;
   .dishImage {
     height: 80px;
     width: 80px;
@@ -732,7 +743,7 @@ button {
   .dishInfo,
   .dishPrice {
     display: flex;
-    border-bottom: 1px solid rgba($midblue, 0.2);
+    border-bottom: 1px solid rgba($primary, 0.2);
     flex-direction: column;
     justify-content: center;
 
@@ -752,7 +763,7 @@ button {
 .amountContainer {
   align-items: center;
   display: flex;
-  border-bottom: 1px solid rgba($midblue, 0.2);
+  border-bottom: 1px solid rgba($primary, 0.2);
 
   // INPUT NUMBER ARROW HIDDEN
   input[type="number"] {
@@ -773,7 +784,7 @@ button {
     flex-shrink: 0;
     height: 30px;
     width: 30px;
-    background-color: $midblue;
+    background-color: $primary;
     color: white;
     font-size: 20px;
     display: flex;
@@ -786,7 +797,7 @@ button {
 }
 
 .blueColor {
-  background-color: $midblue;
+  background-color: $primary;
   color: white;
 }
 </style>

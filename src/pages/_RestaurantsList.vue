@@ -140,7 +140,7 @@ export default {
 @use "../style/partials/variables" as *;
 
 .title {
-  color: $darkblue;
+  color: $secondary;
 }
 .containerApp {
   min-height: calc(100vh - $headerHeight - $footerHeight);
@@ -154,7 +154,7 @@ export default {
   background-color: white;
   text-align: center;
   height: calc(100vh - $headerHeight - $footerHeight);
-  border-right: 2px solid rgba($midblue, 0.2);
+  border-right: 2px solid rgba($primary, 0.2);
   overflow: scroll;
 
   .title {
@@ -189,7 +189,7 @@ export default {
         }
 
         .label {
-          color: $darkblue;
+          color: $secondary;
           text-align: left;
           font-size: large;
           font-weight: 100;

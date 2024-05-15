@@ -36,7 +36,6 @@ export default {
       const argumentString = Array.isArray(argument)
         ? argument.join("&")
         : argument;
-
       axios
         .get(api.baseApiURI + "restaurants/search=" + argumentString)
         .then((response) => {
@@ -45,22 +44,16 @@ export default {
     },
 
     search(name, event) {
-      console.log(
-        "ho cliccato: " + name + " " + "Tipi attivi ora: " + this.activeTypes
-      );
       if (!this.activeTypes.includes(name)) {
         this.activeTypes.push(name);
-        console.log("non c'era " + this.activeTypes);
       } else {
         this.activeTypes = this.activeTypes.filter(
           (elemento) => elemento !== name
         );
-        console.log("c'era " + this.activeTypes);
       }
       let thisButton = document.getElementById(event);
       thisButton.classList.toggle("on");
       this.filteredRestaurants(this.activeTypes);
-
       if (this.activeTypes.length === 0) {
         this.fetchRestaurants();
       }
@@ -169,7 +162,7 @@ li {
 }
 
 #jumboTron {
-  // min-height: calc(100vh - $headerHeight - $footerHeight);
+  max-height: 65vh;
   background-image: url(../assets/img/jumbo-2.svg);
   background-repeat: no-repeat;
   background-size: cover;
@@ -189,10 +182,10 @@ li {
         display: block;
         padding: 1rem;
         border-radius: 100px;
-        background-color: $midblue;
+        background-color: $primary;
         color: white;
         transition: all 0.5s ease 0s;
-        box-shadow: 0 10px $darkblue;
+        box-shadow: 0 10px $secondary;
       }
 
       .btn--action span {
@@ -218,7 +211,7 @@ li {
         content: "🧑🏻‍🍳";
       }
       .btn--action:hover {
-        background-color: $darkblue;
+        background-color: $secondary;
       }
 
       .btn--action:hover span {
@@ -235,7 +228,7 @@ li {
       }
     }
     .title {
-      color: $midblue;
+      color: $primary;
       margin-bottom: 30px;
       // text-shadow: -2px -2px 15px #4477d5, 2px -2px 15px #4477d5,
       //   -2px 2px 15px #4477d5, 2px 2px 15px #4477d5;
@@ -244,7 +237,7 @@ li {
 }
 
 .title {
-  color: $darkblue;
+  color: $secondary;
 }
 .containerApp {
   min-height: 100vh;
@@ -261,7 +254,7 @@ li {
 .searchColumn {
   background-color: white;
   text-align: center;
-  border-right: 2px solid rgba($midblue, 0.2);
+  border-right: 2px solid rgba($primary, 0.2);
   position: relative;
 
   .title {
@@ -296,7 +289,7 @@ li {
         }
 
         .label {
-          color: $darkblue;
+          color: $secondary;
           text-align: left;
           font-size: large;
           font-weight: 100;
@@ -309,13 +302,13 @@ li {
 
 .badgeSelector {
   cursor: pointer;
-  color: $darkblue;
+  color: $secondary;
   font-size: 1.3rem;
   text-align: center;
   width: 80%;
   margin: 7px 0;
 
-  border: 2px solid $darkblue;
+  border: 2px solid $secondary;
   border-radius: 500px;
 }
 
