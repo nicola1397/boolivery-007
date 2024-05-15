@@ -12,35 +12,6 @@ export default {
 </script>
 
 <template>
-  <!-- <nav class="headerNav navbar navbar-expand-lg">
-    <div class="container-md d-flex">
-      <ul class="navbar-ul">
-        <li class="nav-item me-4">
-          <router-link
-            :to="{ name: 'home' }"
-            class="nav-link text-white"
-            aria-current="page"
-          >
-            <a class="navbar-brand"
-              ><img src="../assets/img/boolivery_manager.svg" alt="" /></a
-          ></router-link>
-          <a href="#"><i class="fa-solid fa-cart-shopping"></i></a>
-        </li>
-        <li class="nav-item me-4">
-          <router-link
-            :to="{ name: 'home' }"
-            class="nav-link text-white"
-            aria-current="page"
-            >Home</router-link
-          >
-        </li>
-      </ul>
-      <ul class="chart-icon">
-        <li>
-          <a href="#"><i class="fa-solid fa-cart-shopping chart-icon"></i></a>
-        </li>
-      </ul> -->
-
   <nav class="navbar navbar-expand-lg bg-white">
     <div class="container-sm">
       <router-link
@@ -65,57 +36,38 @@ export default {
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarToggler">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <ul class="navbar-nav">
           <li class="nav-item">
             <router-link
               :to="{ name: 'home' }"
-              class="nav-link text-white"
+              class="nav-link"
               aria-current="page"
               exact-active-class="active"
               >Home</router-link
             >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Ristoranti</a>
+            <router-link
+              :to="{ name: 'restaurants' }"
+              class="nav-link"
+              aria-current="page"
+              exact-active-class="active"
+              >Ristoranti</router-link
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link"><i class="fa-solid fa-basket-shopping"></i></a>
+            <router-link
+              :to="{ name: 'restaurants.checkout' }"
+              class="nav-link"
+              aria-current="page"
+              exact-active-class="active"
+              ><i class="fa-solid fa-basket-shopping"></i
+            ></router-link>
           </li>
         </ul>
       </div>
     </div>
   </nav>
-
-  <!-- <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <router-link
-              :to="{ name: 'home' }"
-              class="nav-link text-white"
-              aria-current="page"
-              >Home</router-link
-            >
-          </li>
-          <li class="nav-item">
-            <router-link
-              :to="{ name: 'restaurants.index' }"
-              class="nav-link text-white"
-              href="#"
-              >Ristoranti</router-link
-            >
-          </li>
-        </ul>
-      </div> -->
 </template>
 
 <style lang="scss" scoped>
@@ -124,8 +76,9 @@ export default {
 
 .navbar {
   height: $headerHeight;
-  .container-sm {
-    height: headerHeight;
+
+  .nav-link {
+    padding: 0 5px;
   }
 }
 .logo {
@@ -135,12 +88,19 @@ export default {
 
 .active {
   color: $primary !important;
-  box-shadow: inset 0 -15px 0 $primary;
+  box-shadow: inset 0 -7px 0 $primary;
 }
 
-li {
-  font-size: 1.2rem;
-  margin-right: 30px;
-  line-height: $headerHeight;
+ul {
+  width: 100%;
+  li {
+    font-size: 1.2rem;
+    margin-right: 30px;
+    line-height: $headerHeight;
+
+    &:last-of-type {
+      margin-left: auto;
+    }
+  }
 }
 </style>

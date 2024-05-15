@@ -69,11 +69,12 @@ export default {
 </script>
 
 <template>
-  <div class="row align-items-center" id="jumboTron">
-    <div class="col-sm-12 col-md-6 jumboTextContainer">
-      <h2 class="display-2 title text-center">
-        Ordina subito con Boolivery! 🛵🍝
-      </h2>
+  <div class="row align-items-center justify-content-center" id="jumboTron">
+    <div class="jumboTextContainer col-5">
+      <h2 class="display-2 title text-center mt-3">Ordina subito con</h2>
+      <h1 class="display-1 fw-bold my-0 title text-center">Boolivery!</h1>
+      <h2 class="display-1 title text-center mb-5">🛵🍝</h2>
+
       <div
         class="btn-restaurant mb-3 col-8"
         onclick="document.getElementById('searchSection').scrollIntoView();"
@@ -82,16 +83,18 @@ export default {
           <span class="guest">Vai alla ricerca</span>
         </div>
       </div>
-      <h5 class="title">oppure</h5>
-      <h3 class="display-5 title">Sei un ristoratore?</h3>
-      <!-- BUTTON -->
-      <div class="btn-restaurant mb-3 col-8">
-        <a class="btn btn--action" href="http://127.0.0.1:8000/login"
-          ><span class="user">Accedi al tuo account</span></a
-        >
-      </div>
+      <span class="text-white">oppure</span>
+
+      <span class="text-white fs-4">Sei un ristoratore?</span>
+
+      <a href="http://127.0.0.1:8000/login"
+        ><span class="text-white text-center text-decoration-underline"
+          >Accedi al tuo ristorante</span
+        ></a
+      >
     </div>
   </div>
+
   <div class="containerApp" id="searchSection">
     <!-- ROW -->
     <div class="row h-100">
@@ -163,7 +166,7 @@ li {
 
 #jumboTron {
   max-height: 65vh;
-  background-image: url(../assets/img/jumbo-2.svg);
+  background-image: url(../assets/img/bg_hero-wide.png);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -182,8 +185,8 @@ li {
         display: block;
         padding: 1rem;
         border-radius: 100px;
-        background-color: $primary;
-        color: white;
+        background-color: white;
+        color: $primary;
         transition: all 0.5s ease 0s;
         box-shadow: 0 10px $secondary;
       }
@@ -211,7 +214,8 @@ li {
         content: "🧑🏻‍🍳";
       }
       .btn--action:hover {
-        background-color: $secondary;
+        background-color: rgba($secondary, 0.5);
+        color: white;
       }
 
       .btn--action:hover span {
@@ -229,7 +233,7 @@ li {
     }
     .title {
       color: $primary;
-      margin-bottom: 30px;
+
       // text-shadow: -2px -2px 15px #4477d5, 2px -2px 15px #4477d5,
       //   -2px 2px 15px #4477d5, 2px 2px 15px #4477d5;
     }
