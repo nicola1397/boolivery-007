@@ -1,8 +1,8 @@
 <script>
 import { store, api } from "../store";
-
 import axios from "axios";
 import AppCard from "../components/AppCard.vue";
+import Slider from "../components/Slider.vue";
 
 export default {
   data() {
@@ -16,7 +16,7 @@ export default {
       activeTypes: [],
     };
   },
-  components: { AppCard },
+  components: { AppCard, Slider },
   methods: {
     sideToggler() {
       const sidebar = document.querySelector(".sidebar");
@@ -69,29 +69,39 @@ export default {
 </script>
 
 <template>
+  <!-- JUMBO -->
   <div class="row align-items-center justify-content-center" id="jumboTron">
     <div class="jumboTextContainer col-5">
-      <h2 class="display-2 title text-center mt-3">Ordina subito con</h2>
+      <h2 class="display-2 title text-center mt-3 text-nowrap">
+        Ordina subito con
+      </h2>
       <h1 class="display-1 fw-bold my-0 title text-center">Boolivery!</h1>
       <h2 class="display-1 title text-center mb-5">🛵🍝</h2>
 
       <div
-        class="btn-restaurant mb-3 col-8"
+        class="btn-restaurant mb-3 col-12 col-md-8"
         onclick="document.getElementById('searchSection').scrollIntoView();"
       >
         <div class="btn btn--action">
           <span class="guest">Vai alla ricerca</span>
         </div>
       </div>
-      <span class="text-white">oppure</span>
+      <span class="text-white text-center">oppure</span>
 
-      <span class="text-white fs-4">Sei un ristoratore?</span>
+      <span class="text-white text-center fs-4">Sei un ristoratore?</span>
 
       <a href="http://127.0.0.1:8000/login"
         ><span class="text-white text-center text-decoration-underline"
           >Accedi al tuo ristorante</span
         ></a
       >
+    </div>
+  </div>
+
+  <div id="categoriesSlider">
+    <div id="waveBackground"></div>
+    <div class="container">
+      <Slider :types="types" />
     </div>
   </div>
 
@@ -214,7 +224,7 @@ li {
         content: "🧑🏻‍🍳";
       }
       .btn--action:hover {
-        background-color: rgba($secondary, 0.5);
+        background-color: $tertiary;
         color: white;
       }
 
@@ -233,11 +243,58 @@ li {
     }
     .title {
       color: $primary;
-
-      // text-shadow: -2px -2px 15px #4477d5, 2px -2px 15px #4477d5,
-      //   -2px 2px 15px #4477d5, 2px 2px 15px #4477d5;
     }
   }
+}
+
+#categoriesSlider {
+  position: relative;
+  margin: 0;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url(../assets/img/wave3.svg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    filter: invert(34%) sepia(52%) saturate(2509%) hue-rotate(215deg)
+      brightness(97%) contrast(99%);
+  }
+  .container {
+    position: relative;
+
+    .thumbnail {
+      width: 200px;
+      img {
+        width: 200px;
+      }
+    }
+  }
+}
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+
+  /* Center slide text vertically */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .title {

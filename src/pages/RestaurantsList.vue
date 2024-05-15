@@ -6,7 +6,10 @@ import AppCard from "../components/AppCard.vue";
 
 export default {
   data() {
-    return {};
+    return {
+      restaurants: [],
+      types: [],
+    };
   },
 
   components: { AppCard },
@@ -78,7 +81,6 @@ export default {
       <!-- Search column -->
       <div class="col-2 col-md-3 searchColumn d-flex flex-column py-4 px-1">
         <h3 class="mb-3 title d-none d-lg-block">Cucina</h3>
-
         <!-- Type Badges for search -->
         <div class="badges-wrapper container-fluid justify-content-md-start">
           <div

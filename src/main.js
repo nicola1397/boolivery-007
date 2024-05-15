@@ -82,8 +82,12 @@ import App from "./App.vue";
 
 // * import route
 import { router } from "./router";
+// import Flicking from "@egjs/vue3-flicking/dist/flicking.esm";
+// import "@egjs/vue3-flicking/dist/flicking.css";
+// import "@egjs/vue3-flicking/dist/flicking-inline.css";
 
 const app = createApp(App);
 
 app.component("font-awesome-icon", FontAwesomeIcon);
+// app.component("Flicking", Flicking);
 app.use(router).mount("#app");
