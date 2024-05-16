@@ -8,6 +8,7 @@ export default {
     };
   },
   props: { restaurant: Object, index: Number, types: Array },
+  methods: {},
 };
 </script>
 
@@ -31,23 +32,9 @@ export default {
       </div>
 
       <!-- BADGE -->
-      <div id="badgesContainer">
-        <span
-          v-for="badge in restaurant.types"
-          class="badge mx-2"
-          :style="
-            `background-image:url(` +
-            badge.image +
-            `); background-size: cover; background-repeat: no-repeat; border-radius: 0`
-          "
-        >
+      <div class="badgesContainer" :id="'list-' + this.index">
+        <span v-for="badge in restaurant.types" class="badge mx-2">
           {{ badge.label }}
-          <!-- <div class="typeBadge">
-            <div class="badgeImg">
-              <img :src="badge.image" alt="" width="100%" />
-            </div>
-            <span>{{ badge.label }}</span>
-          </div> -->
         </span>
       </div>
     </div>
@@ -87,10 +74,13 @@ export default {
     overflow: hidden;
     // border-radius: 10px;
     margin-bottom: 15px;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 16 / 9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     img {
-      height: 100%;
+      width: 100%;
     }
   }
 }
@@ -111,40 +101,19 @@ h3.detailCap {
   text-decoration: none;
 }
 
-#badgesContainer {
-  margin-bottom: 30px;
-  // .badge {
-  //   display: inline-block;
-  //   margin-right: 10px;
+.badgesContainer {
+  position: absolute;
+  border: 1px solid $secondary;
+  background-color: white;
+  display: none;
+  flex-direction: column;
+  z-index: 9999;
+  margin: 0;
 
-  //   .typeBadge {
-  //     // border: 3px solid $primary;
-  //     width: 100%;
-  //     border-radius: 60%;
-  //     overflow: hidden;
-  //     position: relative;
-  //     display: flex;
-  //     justify-content: center;
-  //     align-items: center;
-  //     height: 32px;
-  //     width: 100%;
-  //     object-fit: cover;
-
-  //     span {
-  //       z-index: 2;
-  //       text-shadow: 0px 0px 20px black;
-  //       font-size: 100%;
-  //       letter-spacing: 2px;
-  //       text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000,
-  //         2px 2px 0 #000;
-  //     }
-  //     .badgeImg {
-  //       position: absolute;
-  //       width: 100%;
-  //       filter: brightness(90%);
-  //     }
-  //   }
-  // }
+  .badge {
+    color: $secondary;
+    font-size: 17px;
+  }
 }
 
 .rightColumn {

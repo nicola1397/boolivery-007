@@ -281,8 +281,17 @@ export default {
       }
       this.cartCheck = true;
     },
-  },
 
+    openModal(dish) {
+      let modal = document.getElementById("dish-modal-" + dish);
+      console.log("dish-modal-" + dish);
+      modal.style.display = "block";
+    },
+    closeModal(dish) {
+      let modal = document.getElementById("dish-modal-" + dish);
+      modal.style.display = "none";
+    },
+  },
   created() {
     this.fetchRestaurants();
   },
@@ -292,158 +301,119 @@ export default {
 </script>
 
 <template>
+  <!-- CODICE -->
   <div
     class="row justify-content-between containerApp ps-3"
     v-if="this.restaurant"
   >
-    <div class="col-sm-12 col-md-3 bg-white pe-0 leftColumn">
-      <router-link
-        :to="{ name: 'home' }"
-        class="col-lg-3 col-md-6 col-sm-12"
-        id="addButton"
-      >
-        <!-- <div class="col-lg-3 col-md-6 col-sm-12" id="addButton"> -->
-        <button class="ballButton" @click="checkEmpty()">👈🏻</button>
-      </router-link>
-      <!-- </div> -->
-      <!-- RESTAURANT DETAILS -->
-      <img :src="restaurant.image" :alt="restaurant.name" class="w-100" />
-      <div class="my-3">
-        <h1>
-          {{ restaurant.name }}
-        </h1>
-        <h5>☎️{{ restaurant.phone }}</h5>
-        <h5 class="detailCap">🏠{{ restaurant.address }}</h5>
-      </div>
-      <!-- BADGE -->
-      <div id="badgesContainer">
-        <div class="badge" v-for="badge in types">
-          <div class="typeBadge">
-            <div class="badgeImg">
-              <img :src="badge.image" alt="" width="100%" />
-            </div>
-            <span>{{ badge.label }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-12 col-md-9 rightColumn px-2">
-      <div
-        v-for="dish in restaurant.dishes"
-        class="dishCard pe-5 col-12 col-md-6"
-      >
-        <!-- IMMAGINE -->
-
-        <div
-          class="dishImage col-2"
-          data-bs-toggle="modal"
-          :data-bs-target="`#dish-` + dish.id"
-        >
-          <img :src="dish.image" alt="dish.name" />
-        </div>
-        <!-- TESTO -->
-        <div class="dishInfo col-6 px-2">
-          <h5>{{ dish.name }}</h5>
-          <p>{{ dish.description }}</p>
-        </div>
-        <!-- PREZZO -->
-        <div class="dishPrice col-2">
-          <h5>€ {{ euroCheck(dish.price) }}</h5>
-        </div>
-        <!-- MODAL CONTENT -->
-        <div
-          class="modal fade"
-          :id="`dish-` + dish.id"
-          data-bs-backdrop="static"
-          data-bs-keyboard="false"
-          tabindex="-1"
-          :aria-labelledby="`dish-` + dish.id"
-          aria-hidden="true"
-        >
-          <div
-            class="modal-dialog modal-dialog-centered position-absolute top-50 start-50 translate-middle"
-          >
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">
-                  Dettagli: {{ dish.name }}
-                </h5>
-                <button
-                  type="button"
-                  class="btn-close w-25"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div class="modal-body">
-                <img :src="dish.image" alt="dish.name" class="modalImage" />
-                <p>Descrizione: {{ dish.description }}</p>
-                <h6>Prezzo: €{{ euroCheck(dish.price) }}</h6>
-              </div>
-              <div
-                class="modal-footer d-flex flex-column justify-content-center align-items-center"
-              >
-                <button
-                  type="button"
-                  class="btn btn-secondary mb-2"
-                  data-bs-dismiss="modal"
-                >
-                  Chiudi
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- QUANTITA -->
-        <div class="amountContainer col-2">
-          <button
-            id="minus"
-            class="quantityButton rounded-start"
-            @click="quantity($event.target.id, dish)"
-          >
-            -
-          </button>
-          <input
-            type="number"
-            :id="dish.id"
-            min="0"
-            step="1"
-            value="0"
-            class="off"
-            @keyup="getClass($event.target.id)"
-            @blur="inputValidation($event.target.id, dish)"
-          />
-          <button
-            id="plus"
-            class="quantityButton rounded-end"
-            @click="quantity($event.target.id, dish)"
-          >
-            +
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- <router-link
-      :to="{
-        name: 'restaurants.checkout',
-        params: { slug: restaurant.slug },
-      }"
-      class="router-link"
-    > -->
-
     <div
-      class="goToCart"
-      type="button"
-      data-bs-toggle="offcanvas"
-      data-bs-target="#offcanvasScrolling"
-      aria-controls="offcanvasScrolling"
-    >
-      🛒
-    </div>
+      class="col-12 bg-white p-0 m-0 restaurantJumbo"
+      :style="
+        'background-image: url(' +
+        restaurant.image +
+        ');background-size: cover; background-position: center'
+      "
+    ></div>
+    <!-- RESTAURANT DETAILS -->
+    <div id="data">
+      <div class="container" id="info">
+        <router-link :to="{ name: 'home' }" class="" id="backButton">
+          <button class="ballButton" @click="checkEmpty()">
+            👈🏻<span class="fs-5">Indietro</span>
+          </button>
+        </router-link>
+        <div class="row">
+          <!-- RESTAURANT DATA -->
+          <div class="my-3">
+            <h1 class="restaurantTitle">
+              {{ restaurant.name }}
+            </h1>
+            <h5>☎️ {{ restaurant.phone }}</h5>
+            <h5 class="detailCap">🏠 {{ restaurant.address }}</h5>
+          </div>
+          <!-- BADGE -->
+          <div id="badgesContainer">
+            <div class="badge" v-for="badge in types">
+              <div class="typeBadge">
+                <div class="badgeImg">
+                  <img :src="badge.image" alt="" width="100%" />
+                </div>
+                <span>{{ badge.label }}</span>
+              </div>
+            </div>
+          </div>
+          <!-- END BADGES -->
+          <hr />
+          <div class="dishesContainer">
+            <div
+              v-for="dish in restaurant.dishes"
+              class="dishCard pe-5 col-12 col-md-6"
+            >
+              <!-- IMMAGINE -->
 
-    <!-- </router-link
-    > -->
+              <div class="dishImage col-2" @click="openModal(dish.id)">
+                >
+                <img :src="dish.image" alt="dish.name" />
+              </div>
+              <!-- TESTO -->
+              <div class="dishInfo col-6 px-2">
+                <h5>{{ dish.name }}</h5>
+                <p>{{ dish.description }}</p>
+              </div>
+
+              <!-- PREZZO -->
+              <div class="dishPrice col-4">
+                <h5>€ {{ euroCheck(dish.price) }}</h5>
+                <!-- QUANTITA -->
+                <div class="amountContainer col-2">
+                  <button
+                    id="minus"
+                    class="quantityButton me-2"
+                    @click="quantity($event.target.id, dish)"
+                  >
+                    -
+                  </button>
+                  <input
+                    type="number"
+                    :id="dish.id"
+                    min="0"
+                    step="1"
+                    value="0"
+                    class="off rounded border border-primary-subtle border-2"
+                    @keyup="getClass($event.target.id)"
+                    @blur="inputValidation($event.target.id, dish)"
+                  />
+                  <button
+                    id="plus"
+                    class="quantityButton ms-2"
+                    @click="quantity($event.target.id, dish)"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <!-- MODAL -->
+              <div class="customModal" :id="'dish-modal-' + dish.id">
+                <div class="close" @click="closeModal(dish.id)">
+                  <i class="fa-solid fa-circle-xmark fa-2xl text-primary"></i>
+                </div>
+                <div>
+                  <h3>{{ dish.name }}</h3>
+                </div>
+                <div class="modalImage">
+                  <img :src="dish.image" :alt="dish.name" />
+                </div>
+                <div>
+                  <p class="fs-5">{{ dish.description }}</p>
+                  <span class="fs-2">€ {{ euroCheck(dish.price) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- CART OFFCANVAS -->
@@ -533,81 +503,75 @@ export default {
 
 @use "../style/partials/variables" as *;
 
-// GO TO CART
-.bin {
-  position: absolute;
-  background-color: red;
-  border-radius: 50%;
-  aspect-ratio: 1/1;
-  max-width: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 4rem;
-  text-shadow: 0 1px 5px black;
-  right: 150px;
-  bottom: 30px;
-
-  &:hover {
-    transform: scale(1.1);
-    transition: all 0.08s ease 0.08s;
-  }
-  &:hover {
-    transform: scale(1.1);
-    transition: all 0.08s ease 0.08s;
-  }
-}
-
-// GO TO CART
-.goToCart {
-  position: absolute;
-  background-color: $primary;
-  border-radius: 50%;
-  aspect-ratio: 1/1;
-  max-width: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 4rem;
-  text-shadow: 5px 5px 5px $secondary;
-  right: 30px;
-  bottom: 30px;
-
-  &:hover {
-    transform: scale(1.1);
-    transition: all 0.08s ease 0.08s;
-  }
-  &:hover {
-    transform: scale(1.1);
-    transition: all 0.08s ease 0.08s;
-  }
-}
-
 // MODAL CLASSES
 
-.modalImage {
-  width: 100%;
-  margin-bottom: 20px;
+.customModal {
+  display: none;
+  background-color: white;
+  z-index: 5;
+  max-width: 30vw;
+  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 5px 0 rgba(black, 0.2);
+  .modalImage {
+    width: 100%;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    margin: 20px 0;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+    }
+  }
+
+  .close {
+    position: absolute;
+    right: 30px;
+    top: 20px;
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
 }
 
 .containerApp {
-  height: calc(100vh - $headerHeight - $footerHeight);
   background-color: white;
-  overflow: auto;
   overflow-x: hidden;
 }
 
-.leftColumn {
-  height: 100%;
+.restaurantJumbo {
+  aspect-ratio: 11 / 3;
+  overflow: hidden;
+  display: flex;
   position: relative;
-  color: $secondary;
-  background-color: white;
-  text-align: center;
-  // min-height: calc(100vh - $headerHeight - $footerHeight);
-  border-right: 2px solid rgba($primary, 0.2);
-  border-bottom: 2px solid rgba($primary, 0.2);
 }
 
+#data {
+  display: flex;
+
+  #info {
+    box-shadow: 0 0 10px 0 rgba(black, 0.2);
+    flex: 1;
+    // position: relative;
+    background-color: white;
+    z-index: 0;
+    margin-top: -15%;
+    border-radius: 15px;
+    color: $secondary;
+    text-align: center;
+    .restaurantTitle {
+      color: $tertiary;
+    }
+    padding-bottom: 15px;
+  }
+  padding-bottom: 30px;
+}
 #badgesContainer {
   margin-bottom: 30px;
   .badge {
@@ -644,17 +608,6 @@ export default {
   }
 }
 
-.rightColumn {
-  padding: 0;
-  // height: calc(100vh - $headerHeight - $footerHeight);
-  overflow: auto;
-  // background-color: $primary;
-  display: flex;
-  justify-content: start;
-  flex-wrap: wrap;
-  align-content: flex-start;
-}
-
 .detailCap {
   text-transform: capitalize;
   white-space: nowrap;
@@ -667,24 +620,23 @@ export default {
 // BUTTON
 /* BACK BUTTON */
 
-#addButton {
-  transform: translate(30%, 7%);
+#backButton {
+  transform: translate(0, -150%);
   position: absolute;
   left: 0;
   top: 0;
   align-items: center;
-  min-height: 350px;
   text-decoration: none;
 
   .ballButton {
-    height: 40px;
-    width: 40px;
+    background-color: $primary;
+    box-shadow: 0 0 10px 0 rgba(black, 0.2);
     position: relative;
-    background-color: white;
-    padding: 10px;
-    border-radius: 50%;
+    color: white;
+    padding: 5px 10px 10px 10px;
+    border-radius: 500px;
     position: relative;
-    font-size: 1.5rem;
+    font-size: 2rem;
     text-align: center;
     transform: translate3d(0, 0, 0);
     transition: transform ease-out 200ms;
@@ -702,6 +654,10 @@ export default {
 
     &:hover {
       transform: scale(1.2, 1.2) translate3d(0, 0, 0);
+    }
+    span {
+      line-height: 50px;
+      transform: translateY(10%);
     }
   }
 }
@@ -722,18 +678,28 @@ button {
 
 // DISH CARD
 
+.dishesContainer {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
 .dishCard {
+  padding: 20px;
   height: fit-content;
   display: flex;
   background-color: white;
   flex: 0 0 auto;
   color: $secondary;
+  border-bottom: 1px solid rgba($primary, 0.2);
+
   .dishImage {
-    height: 80px;
-    width: 80px;
+    height: 100px;
+    width: 100px;
     overflow: hidden;
     object-fit: contain;
     display: flex;
+    border-radius: 500px;
     justify-content: center;
     img {
       height: 100%;
@@ -743,7 +709,6 @@ button {
   .dishInfo,
   .dishPrice {
     display: flex;
-    border-bottom: 1px solid rgba($primary, 0.2);
     flex-direction: column;
     justify-content: center;
 
@@ -763,7 +728,7 @@ button {
 .amountContainer {
   align-items: center;
   display: flex;
-  border-bottom: 1px solid rgba($primary, 0.2);
+  justify-content: center;
 
   // INPUT NUMBER ARROW HIDDEN
   input[type="number"] {
@@ -784,6 +749,7 @@ button {
     flex-shrink: 0;
     height: 30px;
     width: 30px;
+    border-radius: 500px;
     background-color: $primary;
     color: white;
     font-size: 20px;

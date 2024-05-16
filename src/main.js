@@ -15,10 +15,6 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 // * import braintree */
 import vueBraintree from "vue-braintree";
 
-// import function to register Swiper custom elements
-import { register } from "swiper/element/bundle";
-// register Swiper custom elements
-
 // * import specific icons */
 import {
   faCircleArrowLeft,
@@ -90,5 +86,4 @@ import { router } from "./router";
 const app = createApp(App);
 
 app.component("font-awesome-icon", FontAwesomeIcon);
-register();
 app.use(router).mount("#app");

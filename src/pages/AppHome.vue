@@ -83,6 +83,23 @@ export default {
         behavior: "smooth",
       });
     },
+
+    // coordinates(e) {
+    //   let hoverDiv = document.getElementById("list-" + this.index);
+    //   let rect = hoverDiv.getBoundingClientRect();
+    //   console.log(rect);
+    //   hoverDiv.style.left = e.clientX + "px";
+    //   hoverDiv.style.top = e.clientY + "px";
+    // },
+
+    // mouseover() {
+    //   const hoverDiv = document.getElementById("list-" + this.index);
+    //   hoverDiv.style.display = "flex";
+    // },
+    // mouseout() {
+    //   const hoverDiv = document.getElementById("list-" + this.index);
+    //   hoverDiv.style.display = "none";
+    // },
   },
 
   created() {
@@ -122,14 +139,15 @@ export default {
       >
     </div>
   </div>
-
+  <!-- SLIDER -->
   <div id="categoriesSlider">
     <div id="waveBackground"></div>
     <div class="container">
-      <Slider :types="types" @filter="thumbFilter" />
+      <Slider :types="types" @filter="thumbFilter" v-if="types.length"></Slider>
     </div>
   </div>
 
+  <!-- RICERCA -->
   <div class="containerApp" id="searchSection">
     <!-- ROW -->
     <div class="row h-100 justify-content-center">
@@ -161,7 +179,7 @@ export default {
         >
           <div
             v-for="(restaurant, index) in this.restaurants"
-            class="col-sm-5 col-md-4 col-lg-3 col-xl-2 p-2 mb-3 cardContainer"
+            class="col-sm-5 col-md-4 col-lg-3 p-2 mb-3 cardContainer"
           >
             <app-card :restaurant="restaurant" :index="index" class="h-100" />
           </div>
@@ -192,8 +210,8 @@ li {
   position: relative;
   min-width: 140px;
   &.on {
-    color: green !important;
-    border: 3px solid green !important;
+    color: $primary !important;
+    border: 3px solid $primary !important;
     &::before {
       position: absolute;
       content: "✔";
@@ -341,7 +359,6 @@ li {
   background-color: white;
   text-align: center;
   // border-right: 2px solid rgba($primary, 0.2);
-  position: relative;
 
   .title {
     width: 30%;
@@ -402,10 +419,5 @@ li {
 .result-column {
   overflow-x: hidden;
   background-color: white;
-  .cardContainer {
-    display: flex;
-    flex-direction: column;
-    // flex-wrap: wrap;
-  }
 }
 </style>
