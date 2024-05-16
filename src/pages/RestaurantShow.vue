@@ -590,6 +590,7 @@ export default {
       height: 40px;
       width: 120px;
       object-fit: cover;
+      box-shadow: 0 2px 3px 2px rgba(black, 0.2);
 
       span {
         z-index: 2;
@@ -755,6 +756,11 @@ button {
     font-size: 20px;
     display: flex;
     justify-content: center;
+    align-items: center;
+    &:active {
+      transform: scale(0.9);
+      background-color: $tertiary;
+    }
   }
 
   .off {

@@ -14,6 +14,7 @@ export default {
       types: [],
       searchOn: false,
       activeTypes: [],
+      hoverTimeout: null,
     };
   },
   components: { AppCard, Slider },
@@ -83,23 +84,28 @@ export default {
         behavior: "smooth",
       });
     },
+    mouseover(index) {
+      clearTimeout(this.hoverTimeout);
 
-    // coordinates(e) {
-    //   let hoverDiv = document.getElementById("list-" + this.index);
-    //   let rect = hoverDiv.getBoundingClientRect();
-    //   console.log(rect);
-    //   hoverDiv.style.left = e.clientX + "px";
-    //   hoverDiv.style.top = e.clientY + "px";
-    // },
+      this.hoverTimeout = setTimeout(() => {
+        const hoverDiv = document.getElementById("list-" + index);
+        hoverDiv.style.display = "flex";
+      }, 1000);
+    },
+    coordinates(e, index) {
+      let hoverDiv = document.getElementById("list-" + index);
+      var xOffset = e.layerX;
+      var yOffset = e.layerY;
 
-    // mouseover() {
-    //   const hoverDiv = document.getElementById("list-" + this.index);
-    //   hoverDiv.style.display = "flex";
-    // },
-    // mouseout() {
-    //   const hoverDiv = document.getElementById("list-" + this.index);
-    //   hoverDiv.style.display = "none";
-    // },
+      hoverDiv.style.left = xOffset + "px";
+      hoverDiv.style.top = yOffset + "px";
+    },
+
+    mouseout(index) {
+      clearTimeout(this.hoverTimeout);
+      const hoverDiv = document.getElementById("list-" + index);
+      hoverDiv.style.display = "none";
+    },
   },
 
   created() {
@@ -181,9 +187,21 @@ export default {
             v-for="(restaurant, index) in this.restaurants"
             class="col-sm-5 col-md-4 col-lg-3 p-2 mb-3 cardContainer"
           >
-            <app-card :restaurant="restaurant" :index="index" class="h-100" />
+            <app-card
+              :restaurant="restaurant"
+              :index="index"
+              @mouseover="mouseover(restaurant.id)"
+              @mouseout="mouseout(restaurant.id)"
+              @mousemove="coordinates($event, restaurant.id)"
+            />
+            <div class="badgesContainer" :id="'list-' + restaurant.id">
+              <span v-for="badge in restaurant.types" class="badge mx-2">
+                {{ badge.label }}
+              </span>
+            </div>
           </div>
 
+          <!-- BADGE -->
           <div v-if="this.restaurants.length == 0">
             <p class="text-center text-secondary">
               Nessun risultato corrispondente. 😓
@@ -198,6 +216,21 @@ export default {
 <style lang="scss" scoped>
 @use "../style/partials/mixins" as *;
 @use "../style/partials/variables" as *;
+
+.badgesContainer {
+  z-index: 999;
+  position: absolute;
+  border: 1px solid $secondary;
+  // transform: translate(50%, -50%);
+  background-color: white;
+  display: none;
+  flex-direction: column;
+  margin: 25px;
+  .badge {
+    color: $secondary;
+    font-size: 17px;
+  }
+}
 
 #searchSection {
   width: 80%;
@@ -419,5 +452,17 @@ li {
 .result-column {
   overflow-x: hidden;
   background-color: white;
+}
+
+.cardContainer {
+  position: relative;
+}
+
+.typesHover {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: absolute;
+  top: 0;
 }
 </style>

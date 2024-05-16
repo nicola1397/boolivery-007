@@ -21,6 +21,11 @@ export default {
     class="router-link"
   >
     <div class="myCard">
+      <!-- <div class="badgesContainer" :id="'list-' + restaurant.id">
+        <span v-for="badge in restaurant.types" class="badge mx-2">
+          {{ badge.label }}
+        </span>
+      </div> -->
       <!-- Restaurant image -->
       <div class="coverImage">
         <img :src="restaurant.image" />
@@ -30,13 +35,6 @@ export default {
         <h3 class="detailCap">{{ restaurant.name }}</h3>
         <p class="detailCap">{{ restaurant.address }}</p>
       </div>
-
-      <!-- BADGE -->
-      <div class="badgesContainer" :id="'list-' + this.index">
-        <span v-for="badge in restaurant.types" class="badge mx-2">
-          {{ badge.label }}
-        </span>
-      </div>
     </div>
   </router-link>
 </template>
@@ -44,9 +42,26 @@ export default {
 <style lang="scss" scoped>
 @use "../style/partials/mixins" as *;
 @use "../style/partials/variables" as *;
+
+// .badgesContainer {
+//   position: absolute;
+//   border: 1px solid $secondary;
+//   background-color: white;
+//   display: none;
+//   flex-direction: column;
+//   margin: 0;
+//   transform: translateZ(50);
+//   .badge {
+//     color: $secondary;
+//     font-size: 17px;
+//   }
+// }
+
 .myCard {
+  position: relative;
   background-color: white;
   height: 100%;
+  z-index: 2;
   color: $secondary;
   border-radius: 5px;
   border: 1px solid $secondary;
@@ -99,21 +114,6 @@ h3.detailCap {
 
 .router-link {
   text-decoration: none;
-}
-
-.badgesContainer {
-  position: absolute;
-  border: 1px solid $secondary;
-  background-color: white;
-  display: none;
-  flex-direction: column;
-  z-index: 9999;
-  margin: 0;
-
-  .badge {
-    color: $secondary;
-    font-size: 17px;
-  }
 }
 
 .rightColumn {
