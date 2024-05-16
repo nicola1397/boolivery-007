@@ -58,6 +58,31 @@ export default {
         this.fetchRestaurants();
       }
     },
+
+    thumbFilter(name) {
+      if (!this.activeTypes.includes(name)) {
+        this.activeTypes.push(name);
+      } else {
+        this.activeTypes = this.activeTypes.filter(
+          (elemento) => elemento !== name
+        );
+      }
+      let filterButtons = document.querySelectorAll(".badgeSelector");
+      console.log(filterButtons);
+      filterButtons.forEach((element) => {
+        if (element.innerText == name) {
+          element.classList.toggle("on");
+        }
+      });
+
+      this.filteredRestaurants(this.activeTypes);
+      if (this.activeTypes.length === 0) {
+        this.fetchRestaurants();
+      }
+      document.getElementById("restaurantsView").scrollIntoView({
+        behavior: "smooth",
+      });
+    },
   },
 
   created() {
@@ -101,13 +126,13 @@ export default {
   <div id="categoriesSlider">
     <div id="waveBackground"></div>
     <div class="container">
-      <Slider :types="types" />
+      <Slider :types="types" @filter="thumbFilter" />
     </div>
   </div>
 
   <div class="containerApp" id="searchSection">
     <!-- ROW -->
-    <div class="row h-100">
+    <div class="row h-100 justify-content-center">
       <!-- Search column -->
       <div class="col-2 col-md-2 searchColumn" id="search">
         <h3 class="my-3 title">Filtri</h3>
@@ -128,7 +153,7 @@ export default {
       </div>
 
       <!-- Results column -->
-      <div class="col result-column px-3 py-4">
+      <div class="col result-column px-3 py-4" id="restaurantsView">
         <h3 class="mb-3 title text-center">I nostri ristoranti</h3>
 
         <div
@@ -136,7 +161,7 @@ export default {
         >
           <div
             v-for="(restaurant, index) in this.restaurants"
-            class="col-sm-5 col-md-4 col-xl-3 p-2 mb-3 cardContainer"
+            class="col-sm-5 col-md-4 col-lg-3 col-xl-2 p-2 mb-3 cardContainer"
           >
             <app-card :restaurant="restaurant" :index="index" class="h-100" />
           </div>
@@ -157,7 +182,10 @@ export default {
 @use "../style/partials/variables" as *;
 
 #searchSection {
-  height: 100vh;
+  width: 80%;
+  overflow-x: hidden;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 li {
@@ -249,7 +277,9 @@ li {
 
 #categoriesSlider {
   position: relative;
-  margin: 0;
+  padding: 50px 0;
+  display: flex;
+  flex-wrap: nowrap;
   &::before {
     content: "";
     position: absolute;
@@ -300,11 +330,6 @@ li {
 .title {
   color: $secondary;
 }
-.containerApp {
-  min-height: 100vh;
-  overflow: auto;
-  overflow-x: hidden;
-}
 
 // TYPE BADGES
 
@@ -315,7 +340,7 @@ li {
 .searchColumn {
   background-color: white;
   text-align: center;
-  border-right: 2px solid rgba($primary, 0.2);
+  // border-right: 2px solid rgba($primary, 0.2);
   position: relative;
 
   .title {
@@ -375,75 +400,12 @@ li {
 
 // RESTAURANT CARDS
 .result-column {
-  overflow: auto;
+  overflow-x: hidden;
   background-color: white;
   .cardContainer {
     display: flex;
     flex-direction: column;
     // flex-wrap: wrap;
   }
-}
-
-// SIDEBAR
-
-.sidebar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 250px;
-  transition: width 0.3s ease-in-out;
-}
-
-.sidebar.collapsed {
-  width: 50px;
-}
-
-.sidebar.collapsed.sidebar-brand,
-.sidebar.collapsed.sidebar-nav li {
-  display: none;
-}
-
-.sidebar.collapsed.sidebar-brand.collapsed,
-.sidebar.collapsed.sidebar-nav li.collapsed {
-  display: block;
-}
-
-.sidebar-brand {
-  padding: 1rem;
-  text-align: center;
-}
-
-.sidebar-nav {
-  list-style: none;
-  padding: 0;
-}
-
-.sidebar-nav li a {
-  display: block;
-  padding: 0.5rem 1rem;
-  color: #333;
-  text-decoration: none;
-}
-
-.sidebar-nav li a:hover {
-  background-color: #ddd;
-}
-
-.sidebar-toggle {
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 1rem;
-  cursor: pointer;
-}
-
-.main-content {
-  margin-left: 250px;
-  padding: 1rem;
-  transition: margin-left 0.3s ease-in-out;
-}
-
-.main-content.collapsed {
-  margin-left: 50px;
 }
 </style>

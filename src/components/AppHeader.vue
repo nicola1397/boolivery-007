@@ -46,7 +46,7 @@ export default {
               >Home</router-link
             >
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link
               :to="{ name: 'restaurants' }"
               class="nav-link"
@@ -54,7 +54,7 @@ export default {
               exact-active-class="active"
               >Ristoranti</router-link
             >
-          </li>
+          </li> -->
           <li class="nav-item">
             <router-link
               :to="{ name: 'restaurants.checkout' }"

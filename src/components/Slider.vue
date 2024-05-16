@@ -1,134 +1,84 @@
 <script>
 // import { store } from "../store";
-import Flicking from "@egjs/vue3-flicking";
+import { register } from "swiper/element/bundle";
+
+import { Swiper, SwiperSlide } from "swiper/vue";
+
+// Import Swiper styles
+
+// import required modules
+import { Autoplay, Pagination, Navigation } from "swiper/modules";
+register();
 
 export default {
   data() {
     return {};
   },
   props: { types: Object },
-  components: { Flicking },
+  methods: {},
+  emits: ["filter"],
+  created() {},
 };
 </script>
 
 <template>
-  <Flicking :options="{ moveType: 'freeScroll', autoResize: true }">
-    <button v-for="type in types" :key="type.id" class="me-5">
-      {{ type.label }}
-    </button>
-  </Flicking>
+  <!-- Repeat this block for each card -->
+  <swiper-container
+    slidesPerView="5"
+    freeMode="true"
+    loop="true"
+    allowTouchMove="false"
+    :autoplay="{
+      delay: 0,
+      disableOnInteraction: false,
+    }"
+    :breakpoints="{
+      768: {
+        slidesPerView: 3,
+      },
+      992: {
+        slidesPerView: 6.5,
+      },
+    }"
+    speed="10000"
+  >
+    <swiper-slide v-for="item in types">
+      <div class="card" @click="this.$emit('filter', item.label)">
+        <img :src="item.image" class="card-img-top" :alt="item.label" />
+        <div class="card-body">
+          <h5 class="card-title">{{ item.label }}</h5>
+        </div>
+      </div>
+    </swiper-slide>
+  </swiper-container>
 </template>
 
 <style lang="scss" scoped>
 @use "../style/partials/mixins" as *;
 @use "../style/partials/variables" as *;
-.myCard {
-  background-color: white;
-  height: 100%;
-  color: $secondary;
-  border-radius: 5px;
-  border: 1px solid $secondary;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  // overflow: hidden;
-  // white-space: nowrap;
 
-  .restaurantDetails {
-    padding: 0px 15px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    flex-grow: 1;
-  }
-  &:hover {
-    box-shadow: 0 0 7px black;
-    transform: scale(1.02);
-    transition: all 0.1s ease-in-out 0.1s;
-  }
+@import "/node_modules/swiper/swiper-bundle.css";
 
-  .coverImage {
-    width: 100%;
-    overflow: hidden;
-    // border-radius: 10px;
-    margin-bottom: 15px;
-    aspect-ratio: 1 / 1;
+@import "/node_modules/swiper/modules/pagination.css";
+@import "/node_modules/swiper/modules/navigation.css";
 
-    img {
-      height: 100%;
-    }
-  }
+.card {
+  height: auto; /* Adjust based on your content */
+  margin-right: 20px;
 }
 
-h3.detailCap {
-  font-size: 25px;
-}
-.detailCap {
-  text-transform: capitalize;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: block;
+.card-img-top {
   width: 100%;
-}
-
-.router-link {
-  text-decoration: none;
-}
-
-#badgesContainer {
-  margin-bottom: 30px;
-  // .badge {
-  //   display: inline-block;
-  //   margin-right: 10px;
-
-  //   .typeBadge {
-  //     // border: 3px solid $primary;
-  //     width: 100%;
-  //     border-radius: 60%;
-  //     overflow: hidden;
-  //     position: relative;
-  //     display: flex;
-  //     justify-content: center;
-  //     align-items: center;
-  //     height: 32px;
-  //     width: 100%;
-  //     object-fit: cover;
-
-  //     span {
-  //       z-index: 2;
-  //       text-shadow: 0px 0px 20px black;
-  //       font-size: 100%;
-  //       letter-spacing: 2px;
-  //       text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000,
-  //         2px 2px 0 #000;
-  //     }
-  //     .badgeImg {
-  //       position: absolute;
-  //       width: 100%;
-  //       filter: brightness(90%);
-  //     }
-  //   }
-  // }
-}
-
-.rightColumn {
-  padding: 0;
-  // height: calc(100vh - $headerHeight - $footerHeight);
-  overflow: auto;
-  // background-color: $primary;
-  display: flex;
-  justify-content: start;
-  flex-wrap: wrap;
-  align-content: flex-start;
-}
-
-.detailCap {
-  text-transform: capitalize;
-  white-space: nowrap;
+  height: 100px; /* Adjust height as needed */
+  object-fit: cover;
   overflow: hidden;
-  text-overflow: ellipsis;
-  display: block;
-  width: 100%;
+}
+.card-body {
+  text-align: center;
+  padding: 10px 0;
+
+  .card-title {
+    margin: 0;
+  }
 }
 </style>
