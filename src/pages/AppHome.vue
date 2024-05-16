@@ -90,7 +90,7 @@ export default {
       this.hoverTimeout = setTimeout(() => {
         const hoverDiv = document.getElementById("list-" + index);
         hoverDiv.style.display = "flex";
-      }, 1000);
+      }, 650);
     },
     coordinates(e, index) {
       let hoverDiv = document.getElementById("list-" + index);
