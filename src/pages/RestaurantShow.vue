@@ -31,7 +31,6 @@ export default {
         if (this.myOrder && this.cartCheck === true) {
           localStorage.setItem("myOrder", JSON.stringify(this.myOrder));
           console.log("Pushed to storage");
-          // console.log(localStorage.getItem("myOrder"));
         }
         if (this.myOrder.dishes && this.myOrder.dishes.length == 0) {
           this.myOrder = [];

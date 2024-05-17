@@ -188,6 +188,7 @@ export default {
             class="col-sm-5 col-md-4 col-lg-3 p-2 mb-3 cardContainer"
           >
             <app-card
+              v-if="restaurant"
               :restaurant="restaurant"
               :index="index"
               @mouseover="mouseover(restaurant.id)"

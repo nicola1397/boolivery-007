@@ -4,13 +4,13 @@ export default {
   data() {
     return {
       store,
-      myOrder: this.initialOrder(),
       quantity: 0,
     };
   },
+  computed: {},
   methods: {
     onStorageChange(event) {
-      console.log("EEEEEEE", event.key);
+      console.log("EEEEEEE", event);
       if (event.key === "myOrder") {
         console.log("l'ordine è cambiato");
         this.myOrder = JSON.parse(event.newValue);
@@ -30,9 +30,7 @@ export default {
       window.removeEventListener("storage", onStorageChange());
     },
   },
-  mounted() {
-    window.addEventListener("storage", this.onStorageChange);
-  },
+  mounted() {},
 };
 </script>
 
@@ -96,7 +94,11 @@ export default {
                 <div>
                   <h5>Il tuo carrello</h5>
                 </div>
-                <div class="cartItem" v-for="item in myOrder"></div>
+                <div
+                  class="cartItem"
+                  v-if="store.myOrder"
+                  v-for="item in myOrder"
+                ></div>
               </div>
             </div>
           </li>
