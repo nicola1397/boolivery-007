@@ -217,6 +217,9 @@ export default {
 @use "../style/partials/mixins" as *;
 @use "../style/partials/variables" as *;
 
+.row {
+  margin: 0;
+}
 .badgesContainer {
   z-index: 999;
   position: absolute;
@@ -259,6 +262,7 @@ li {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+
   .jumboTextContainer {
     display: flex;
     justify-content: center;
@@ -329,10 +333,13 @@ li {
 #categoriesSlider {
   position: relative;
   padding: 50px 0;
+  margin: 0;
   display: flex;
   flex-wrap: nowrap;
   &::before {
     content: "";
+    margin: 0;
+    padding: 0;
     position: absolute;
     top: 0;
     left: 0;

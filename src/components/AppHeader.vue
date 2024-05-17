@@ -1,13 +1,38 @@
 <script>
-// import { store } from "../store";
+import { store } from "../store";
 export default {
   data() {
     return {
-      // store,
+      store,
+      myOrder: this.initialOrder(),
+      quantity: 0,
     };
   },
+  methods: {
+    onStorageChange(event) {
+      console.log("EEEEEEE", event.key);
+      if (event.key === "myOrder") {
+        console.log("l'ordine è cambiato");
+        this.myOrder = JSON.parse(event.newValue);
+        this.quantity = this.myOrder.dishes.reduce(
+          (total, dish) => total + dish.quantity,
+          0
+        );
+      }
+    },
+    initialOrder() {
+      console.log("initial order");
 
-  methods: {},
+      const storedOrder = localStorage.getItem("myOrder");
+      return storedOrder ? JSON.parse(storedOrder) : { dishes: [] };
+    },
+    beforeDestroy() {
+      window.removeEventListener("storage", onStorageChange());
+    },
+  },
+  mounted() {
+    window.addEventListener("storage", this.onStorageChange);
+  },
 };
 </script>
 
@@ -36,7 +61,7 @@ export default {
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarToggler">
-        <ul class="navbar-nav">
+        <ul class="navbar-nav d-flex align-items-center">
           <li class="nav-item">
             <router-link
               :to="{ name: 'home' }"
@@ -55,7 +80,7 @@ export default {
               >Ristoranti</router-link
             >
           </li> -->
-          <li class="nav-item">
+          <li class="nav-item" id="cartIcon">
             <router-link
               :to="{ name: 'restaurants.checkout' }"
               class="nav-link"
@@ -63,6 +88,17 @@ export default {
               exact-active-class="active"
               ><i class="fa-solid fa-basket-shopping"></i
             ></router-link>
+            <span class="cartAmount" v-if="this.quantity > 0">{{
+              quantity
+            }}</span>
+            <div id="cartHover">
+              <div class="cartContent">
+                <div>
+                  <h5>Il tuo carrello</h5>
+                </div>
+                <div class="cartItem" v-for="item in myOrder"></div>
+              </div>
+            </div>
           </li>
         </ul>
       </div>
@@ -73,6 +109,37 @@ export default {
 <style lang="scss" scoped>
 @use "../style/partials/mixins" as *;
 @use "../style/partials/variables" as *;
+
+#cartIcon {
+  position: relative;
+  cursor: pointer;
+  .cartAmount {
+    position: absolute;
+    top: 35%;
+    left: 0;
+    transform: translate(-25%, -50%);
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    border-radius: 50px;
+    font-size: 10px;
+    color: white;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font: 10px;
+  }
+  #cartHover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    // display: none;
+    .cartContent {
+      display: none;
+    }
+  }
+}
 
 .navbar {
   height: $headerHeight;
