@@ -37,8 +37,6 @@ export default {
       let order = localStorage.getItem("myOrder");
       if (order) {
         this.myOrder = JSON.parse(order);
-        console.log(this.myOrder);
-        console.log(this.myOrder.dishes.length);
       }
     },
 
@@ -166,6 +164,25 @@ export default {
       }
       console.log("INPUT VALIDATION -> myOrder", this.myOrder);
     },
+
+    openModal(dish) {
+      let modal = document.getElementById("dish-modal-" + dish);
+      console.log("dish-modal-" + dish);
+      modal.style.display = "block";
+    },
+    closeModal(dish) {
+      let modal = document.getElementById("dish-modal-" + dish);
+      modal.style.display = "none";
+    },
+    //DEFINED CHECK
+    exists(item) {
+      // console.log("controllo", item);
+      if (item != undefined && item.length) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
 
   created() {
@@ -183,7 +200,6 @@ export default {
 <template>
   <div class="row justify-content-between containerApp ps-3">
     <div class="col-12 col-md-8 px-2">
-      <h2>{{ this.myOrder.dishes.lenght }}</h2>
       <div v-if="this.myOrder.dishes.length == 0">
         <h1 class="text-danger">Il tuo carrello è vuoto!</h1>
         <router-link to="/">
@@ -191,60 +207,74 @@ export default {
         >
       </div>
       <div v-if="this.myOrder.dishes.length > 0">
-        <div
-          v-for="dish in myOrder.dishes"
-          class="dishCard pe-5 col-12 col-md-6"
-        >
-          <!-- IMMAGINE -->
+        <div class="dishesContainer">
+          <div v-for="dish in this.myOrder.dishes" class="dishCard pe-5 col-12">
+            <!-- IMMAGINE -->
 
-          <div
-            class="dishImage col-2"
-            data-bs-toggle="modal"
-            :data-bs-target="`#dish-` + dish.id"
-          >
-            <img :src="dish.image" alt="dish.name" />
-          </div>
-          <!-- TESTO -->
-          <div class="dishInfo col-6 px-2">
-            <h5>{{ dish.name }}</h5>
-            <p>{{ dish.description }}</p>
-          </div>
-          <!-- PREZZO -->
-          <div class="dishPrice col-2">
-            <h5>€ {{ euroCheck(dish.price) }}</h5>
-          </div>
+            <div class="dishImage col-2" @click="openModal(dish.id)">
+              >
+              <img :src="dish.image" alt="dish.name" />
+            </div>
+            <!-- TESTO -->
+            <div class="dishInfo col-6 px-2">
+              <h5>{{ dish.name }}</h5>
+              <p>{{ dish.description }}</p>
+            </div>
 
-          <!-- QUANTITA -->
-          <div class="amountContainer col-2">
-            <button
-              id="minus"
-              class="quantityButton rounded-start"
-              @click="quantity($event.target.id, dish)"
-            >
-              -
-            </button>
-            <input
-              type="number"
-              :id="dish.id"
-              min="0"
-              :value="dish.quantity"
-              @blur="inputValidation($event.target.id, dish)"
-            />
-            <button
-              id="plus"
-              class="quantityButton rounded-end"
-              @click="quantity($event.target.id, dish)"
-            >
-              +
-            </button>
+            <!-- PREZZO -->
+            <div class="dishPrice col-4">
+              <h5 class="text-center">€ {{ euroCheck(dish.price) }}</h5>
+              <!-- QUANTITA -->
+              <div class="amountContainer col-2">
+                <button
+                  id="minus"
+                  class="quantityButton me-2"
+                  @click="quantity($event.target.id, dish)"
+                >
+                  -
+                </button>
+                <input
+                  type="number"
+                  :id="dish.id"
+                  min="0"
+                  step="1"
+                  :value="dish.quantity"
+                  class="off rounded border border-primary-subtle border-2"
+                  @keyup="getClass($event.target.id)"
+                  @blur="inputValidation($event.target.id, dish)"
+                />
+                <button
+                  id="plus"
+                  class="quantityButton ms-2"
+                  @click="quantity($event.target.id, dish)"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            <!-- MODAL -->
+            <div class="customModal" :id="'dish-modal-' + dish.id">
+              <div class="close" @click="closeModal(dish.id)">
+                <i class="fa-solid fa-circle-xmark fa-2xl text-primary"></i>
+              </div>
+              <div>
+                <h3>{{ dish.name }}</h3>
+              </div>
+              <div class="modalImage">
+                <img :src="dish.image" :alt="dish.name" />
+              </div>
+              <div>
+                <p class="fs-5">{{ dish.description }}</p>
+                <span class="fs-2">€ {{ euroCheck(dish.price) }}</span>
+              </div>
+            </div>
           </div>
-          <!-- QUANTITA
-          <div class="dishPrice col-2">
-            <h5>x {{ dish.quantity }}</h5>
-          </div> -->
         </div>
         <div>
-          <h2 class="totalPrice">€ {{ euroCheck(this.myOrder.price) }}</h2>
+          <h2 class="totalPrice">
+            TOTALE € {{ euroCheck(this.myOrder.price) }}
+          </h2>
         </div>
       </div>
     </div>
@@ -261,6 +291,43 @@ export default {
 
 .totalPrice {
   color: $secondary;
+  text-align: center;
+  margin-top: 30px;
+}
+
+.customModal {
+  display: none;
+  background-color: white;
+  z-index: 5;
+  max-width: 30vw;
+  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 5px 0 rgba(black, 0.2);
+  .modalImage {
+    width: 100%;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    margin: 20px 0;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+    }
+  }
+
+  .close {
+    position: absolute;
+    right: 30px;
+    top: 20px;
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
 }
 
 // GO TO CART
@@ -288,30 +355,12 @@ export default {
   }
 }
 
-// MODAL CLASSES
-
-.modalImage {
-  width: 100%;
-  margin-bottom: 20px;
-}
-
 .containerApp {
   height: calc(100vh - $headerHeight - $footerHeight);
   background-color: white;
   overflow: auto;
   overflow-x: hidden;
 }
-
-// .leftColumn {
-//   height: 100%;
-//   position: relative;
-//   color: $secondary;
-//   background-color: white;
-//   text-align: center;
-//   // min-height: calc(100vh - $headerHeight - $footerHeight);
-//   border-right: 2px solid rgba($primary, 0.2);
-//   border-bottom: 2px solid rgba($primary, 0.2);
-// }
 
 #badgesContainer {
   margin-bottom: 30px;
@@ -320,7 +369,6 @@ export default {
     margin-right: 10px;
 
     .typeBadge {
-      // border: 3px solid $primary;
       width: 100%;
       border-radius: 50px;
       overflow: hidden;
@@ -351,9 +399,7 @@ export default {
 
 .leftColumn {
   padding: 0;
-  // height: calc(100vh - $headerHeight - $footerHeight);
   overflow: auto;
-  // background-color: $primary;
   display: flex;
   justify-content: start;
   flex-wrap: wrap;
@@ -427,18 +473,28 @@ button {
 
 // DISH CARD
 
+.dishesContainer {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
 .dishCard {
+  padding: 20px;
   height: fit-content;
   display: flex;
   background-color: white;
   flex: 0 0 auto;
   color: $secondary;
+  border-bottom: 1px solid rgba($primary, 0.2);
+
   .dishImage {
-    height: 80px;
-    width: 80px;
+    height: 100px;
+    width: 100px;
     overflow: hidden;
     object-fit: contain;
     display: flex;
+    border-radius: 500px;
     justify-content: center;
     img {
       height: 100%;
@@ -448,7 +504,6 @@ button {
   .dishInfo,
   .dishPrice {
     display: flex;
-    border-bottom: 1px solid rgba($primary, 0.2);
     flex-direction: column;
     justify-content: center;
 
@@ -468,7 +523,7 @@ button {
 .amountContainer {
   align-items: center;
   display: flex;
-  border-bottom: 1px solid rgba($primary, 0.2);
+  justify-content: center;
 
   // INPUT NUMBER ARROW HIDDEN
   input[type="number"] {
@@ -489,11 +544,17 @@ button {
     flex-shrink: 0;
     height: 30px;
     width: 30px;
+    border-radius: 500px;
     background-color: $primary;
     color: white;
     font-size: 20px;
     display: flex;
     justify-content: center;
+    align-items: center;
+    &:active {
+      transform: scale(0.9);
+      background-color: $tertiary;
+    }
   }
 }
 
