@@ -4,32 +4,13 @@ export default {
   data() {
     return {
       store,
-      quantity: 0,
     };
   },
-  computed: {},
-  methods: {
-    onStorageChange(event) {
-      console.log("EEEEEEE", event);
-      if (event.key === "myOrder") {
-        console.log("l'ordine è cambiato");
-        this.myOrder = JSON.parse(event.newValue);
-        this.quantity = this.myOrder.dishes.reduce(
-          (total, dish) => total + dish.quantity,
-          0
-        );
-      }
-    },
-    initialOrder() {
-      console.log("initial order");
-
-      const storedOrder = localStorage.getItem("myOrder");
-      return storedOrder ? JSON.parse(storedOrder) : { dishes: [] };
-    },
-    beforeDestroy() {
-      window.removeEventListener("storage", onStorageChange());
-    },
+  watch: {
+    "store.myOrder": function (val) {},
   },
+  computed: {},
+  methods: {},
   mounted() {},
 };
 </script>
@@ -86,8 +67,8 @@ export default {
               exact-active-class="active"
               ><i class="fa-solid fa-basket-shopping"></i
             ></router-link>
-            <span class="cartAmount" v-if="this.quantity > 0">{{
-              quantity
+            <span class="cartAmount" v-if="store.quantity > 0">{{
+              store.quantity
             }}</span>
             <div id="cartHover">
               <div class="cartContent">
@@ -97,7 +78,7 @@ export default {
                 <div
                   class="cartItem"
                   v-if="store.myOrder"
-                  v-for="item in myOrder"
+                  v-for="item in store.myOrder"
                 ></div>
               </div>
             </div>

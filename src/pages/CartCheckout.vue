@@ -14,13 +14,15 @@ export default {
   watch: {
     myOrder: {
       handler() {
-        if (this.myOrder && this.cartCheck === true) {
+        if (this.myOrder) {
           localStorage.setItem("myOrder", JSON.stringify(this.myOrder));
+          store.myOrder = this.myOrder;
           // console.log("Pushed to storage");
         }
         if (this.myOrder.dishes && this.myOrder.dishes.length == 0) {
           this.myOrder = [];
           localStorage.removeItem("myOrder");
+          store.myOrder = this.myOrder;
           // console.log("Removed from storage");
         }
       },
@@ -39,14 +41,7 @@ export default {
         console.log(this.myOrder.dishes.length);
       }
     },
-    getClass(event) {
-      let input = document.getElementById(event);
-      if (input.value > 0) {
-        input.classList.remove("off");
-      } else {
-        input.classList.add("off");
-      }
-    },
+
     // CONVERT TO EURO FORMAT
     euroCheck(price) {
       let formattedPrice = Number(price).toFixed(2);
@@ -58,9 +53,6 @@ export default {
       let value = document.getElementById(dish.id);
       console.log("QUANTITY -> questo è dish", dish);
       if (operator == "minus" && value.value > 0) {
-        if (value.value == 1) {
-          value.classList.add("off");
-        }
         value.value--;
 
         let dishInOrder = this.myOrder.dishes.find((d) => d.id === dish.id);
@@ -85,12 +77,6 @@ export default {
         }
 
         // SE L'ID DEL RISTORANTE COMBACIA CON QUELLO NELL'ORDINE
-
-        // SE ORDINE NON ESISTE
-        // SE IL VALUE SALE
-        if (value.value == 0) {
-          value.classList.remove("off");
-        }
 
         let potentialPrice =
           parseFloat(this.myOrder.price) + parseFloat(dish.price);
@@ -242,7 +228,6 @@ export default {
               :id="dish.id"
               min="0"
               :value="dish.quantity"
-              @keyup="getClass($event.target.id)"
               @blur="inputValidation($event.target.id, dish)"
             />
             <button
@@ -509,10 +494,6 @@ button {
     font-size: 20px;
     display: flex;
     justify-content: center;
-  }
-
-  .off {
-    color: lightgray;
   }
 }
 
