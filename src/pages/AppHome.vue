@@ -138,7 +138,7 @@ export default {
 
       <span class="text-white text-center fs-4">Sei un ristoratore?</span>
 
-      <a href="http://127.0.0.1:8000/login"
+      <a href="http://127.0.0.1:8000/login" class="text-center"
         ><span class="text-white text-center text-decoration-underline"
           >Accedi al tuo ristorante</span
         ></a

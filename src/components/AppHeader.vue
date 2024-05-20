@@ -17,7 +17,7 @@ export default {
 
 <template>
   <nav class="navbar navbar-expand-lg bg-white">
-    <div class="container-sm">
+    <div class="container-sm flex-nowrap">
       <router-link
         :to="{ name: 'home' }"
         class="nav-link navbar-brand"
@@ -28,63 +28,43 @@ export default {
           alt="boolivery logo"
           class="logo"
       /></router-link>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarToggler"
-        aria-controls="navbarToggler"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarToggler">
-        <ul class="navbar-nav d-flex align-items-center">
-          <li class="nav-item">
-            <router-link
-              :to="{ name: 'home' }"
-              class="nav-link"
-              aria-current="page"
-              exact-active-class="active"
-              >Home</router-link
-            >
-          </li>
-          <!-- <li class="nav-item">
-            <router-link
-              :to="{ name: 'restaurants' }"
-              class="nav-link"
-              aria-current="page"
-              exact-active-class="active"
-              >Ristoranti</router-link
-            >
-          </li> -->
-          <li class="nav-item" id="cartIcon">
-            <router-link
-              :to="{ name: 'restaurants.checkout' }"
-              class="nav-link"
-              aria-current="page"
-              exact-active-class="active"
-              ><i class="fa-solid fa-basket-shopping"></i
-            ></router-link>
-            <span class="cartAmount" v-if="store.quantity > 0">{{
-              store.quantity
-            }}</span>
-            <div id="cartHover">
-              <div class="cartContent">
-                <div>
-                  <h5>Il tuo carrello</h5>
-                </div>
-                <div
-                  class="cartItem"
-                  v-if="store.myOrder"
-                  v-for="item in store.myOrder"
-                ></div>
+
+      <ul class="navbar-nav d-flex align-items-center flex-nowrap flex-row">
+        <li class="nav-item">
+          <router-link
+            :to="{ name: 'home' }"
+            class="nav-link"
+            aria-current="page"
+            exact-active-class="active"
+            >Home</router-link
+          >
+        </li>
+
+        <li class="nav-item" id="cartIcon">
+          <router-link
+            :to="{ name: 'restaurants.checkout' }"
+            class="nav-link"
+            aria-current="page"
+            exact-active-class="active"
+            ><i class="fa-solid fa-basket-shopping"></i
+          ></router-link>
+          <span class="cartAmount" v-if="store.quantity > 0">{{
+            store.quantity
+          }}</span>
+          <div id="cartHover">
+            <div class="cartContent">
+              <div>
+                <h5>Il tuo carrello</h5>
               </div>
+              <div
+                class="cartItem"
+                v-if="store.myOrder"
+                v-for="item in store.myOrder"
+              ></div>
             </div>
-          </li>
-        </ul>
-      </div>
+          </div>
+        </li>
+      </ul>
     </div>
   </nav>
 </template>

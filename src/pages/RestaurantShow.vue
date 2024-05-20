@@ -336,6 +336,11 @@ export default {
       let modal = document.getElementById("dish-modal-" + dish);
       modal.style.display = "none";
     },
+
+    alertModal() {
+      let modal = document.getElementById("restaurantOrderModal");
+      modal.style.display = "block";
+    },
   },
   created() {
     this.fetchRestaurants();
@@ -452,6 +457,23 @@ export default {
                 <div>
                   <p class="fs-5">{{ dish.description }}</p>
                   <span class="fs-2">€ {{ euroCheck(dish.price) }}</span>
+                </div>
+              </div>
+
+              <!-- ALERT MODAL -->
+              <div class="customModal" id="restaurantOrderModal">
+                <div>
+                  <h3 class="text-center">ATTENZIONE</h3>
+                </div>
+                <div>
+                  <p class="fs-5">
+                    Il tuo carrello contiene piatti di un altro ristorante. Vuoi
+                    svuotare il carrello per procedere?
+                  </p>
+                  <div>
+                    <button class="btn btn-primary">Procedi</button>
+                    <button class="btn btn-danger">Annulla</button>
+                  </div>
                 </div>
               </div>
             </div>
