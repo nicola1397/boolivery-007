@@ -242,8 +242,18 @@ export default {
 
       <!-- CART -->
       <div v-if="this.myOrder.dishes && this.myOrder.dishes.length > 0">
+        <div class="col-6 mt-2 ms-2" id="back">
+          <router-link :to="{ name: 'home' }" id="backButton">
+            <button class="ballButton" @click="checkEmpty()">
+              👈🏻<span class="fs-5">Indietro</span>
+            </button>
+          </router-link>
+        </div>
         <div class="dishesContainer">
-          <div v-for="dish in this.myOrder.dishes" class="dishCard pe-5 col-12">
+          <div
+            v-for="dish in this.myOrder.dishes"
+            class="dishCard py-2 pe-5 col-12"
+          >
             <!-- IMMAGINE -->
 
             <div class="dishImage col-2" @click="openModal(dish.id)">
@@ -305,11 +315,15 @@ export default {
             </div>
           </div>
         </div>
-        <div class="row my-4 align-items-center m-0 pe-5" style="padding: 20px">
-          <h2 class="totalPrice col-7">
-            TOTALE € {{ euroCheck(this.myOrder.price) }}
+        <div class="row flex-nowrap my-4 align-items-center m-0 pe-5">
+          <h2 class="totalPrice col-6">TOTALE</h2>
+          <h2 class="totalPrice col-6">
+            € {{ euroCheck(this.myOrder.price) }}
           </h2>
-          <div class="col-4 text-center">
+        </div>
+        <div class="row flex-nowrap my-4 align-items-center m-0 pe-5">
+          <div class="col-6"></div>
+          <div class="text-center col-6">
             <button
               type="button"
               class="deletebutton"
@@ -473,62 +487,6 @@ export default {
   width: 100%;
 }
 
-// BUTTON
-/* BACK BUTTON */
-
-#addButton {
-  transform: translate(30%, 7%);
-  position: absolute;
-  left: 0;
-  top: 0;
-  align-items: center;
-  min-height: 350px;
-  text-decoration: none;
-
-  .ballButton {
-    height: 40px;
-    width: 40px;
-    position: relative;
-    background-color: white;
-    padding: 10px;
-    border-radius: 50%;
-    position: relative;
-    font-size: 1.5rem;
-    text-align: center;
-    transform: translate3d(0, 0, 0);
-    transition: transform ease-out 200ms;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2;
-    transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    transition-duration: 400ms;
-    transform: scale(1.1, 1.1) translate3d(0, 0, 0);
-    cursor: pointer;
-    i {
-      color: #2929b9;
-    }
-
-    &:hover {
-      transform: scale(1.2, 1.2) translate3d(0, 0, 0);
-    }
-  }
-}
-
-button {
-  background-color: transparent;
-  border: 0;
-  cursor: pointer;
-}
-
-.btn-primary {
-  background-color: #0d6efd;
-}
-
-.btn-secondary {
-  background-color: grey;
-}
-
 // DISH CARD
 
 .dishesContainer {
@@ -538,7 +496,6 @@ button {
 }
 
 .dishCard {
-  padding: 20px;
   height: fit-content;
   display: flex;
   background-color: white;
@@ -734,5 +691,59 @@ $transition: all #{$speed} cubic-bezier(0.31, -0.105, 0.43, 1.4);
   &:active {
     opacity: 1;
   }
+}
+
+/* BACK BUTTON */
+
+#backButton {
+  align-items: center;
+  text-decoration: none;
+
+  .ballButton {
+    background-color: $primary;
+    box-shadow: 0 0 10px 0 rgba(black, 0.2);
+    position: relative;
+    color: white;
+    padding: 0 7px 7px 7px;
+    border-radius: 500px;
+    position: relative;
+    font-size: 1.5rem;
+    text-align: center;
+    transform: translate3d(0, 0, 0);
+    transition: transform ease-out 200ms;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition-duration: 400ms;
+    transform: scale(1.1, 1.1) translate3d(0, 0, 0);
+    cursor: pointer;
+    i {
+      color: #2929b9;
+    }
+
+    &:hover {
+      transform: scale(1.2, 1.2) translate3d(0, 0, 0);
+    }
+    span {
+      line-height: 50px;
+      transform: translateY(10%);
+    }
+  }
+}
+
+button {
+  // background-color: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #0d6efd;
+}
+
+.btn-secondary {
+  background-color: grey;
 }
 </style>

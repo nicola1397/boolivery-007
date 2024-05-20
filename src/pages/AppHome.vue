@@ -119,7 +119,7 @@ export default {
 <template>
   <!-- JUMBO -->
   <div class="row align-items-center justify-content-center" id="jumboTron">
-    <div class="jumboTextContainer col-5">
+    <div class="jumboTextContainer col-sm-9 col-md-5">
       <h2 class="display-2 title text-center mt-3 text-nowrap">
         Ordina subito con
       </h2>
@@ -154,7 +154,7 @@ export default {
   </div>
 
   <!-- RICERCA -->
-  <div class="containerApp" id="searchSection">
+  <div class="containerApp container-sm" id="searchSection">
     <!-- ROW -->
     <div class="row h-100 justify-content-center">
       <!-- Search column -->
@@ -237,7 +237,6 @@ export default {
 }
 
 #searchSection {
-  width: 80%;
   overflow-x: hidden;
   margin-left: auto;
   margin-right: auto;

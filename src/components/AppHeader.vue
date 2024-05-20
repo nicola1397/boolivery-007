@@ -31,7 +31,7 @@ export default {
 </script>
 
 <template>
-  <nav class="navbar navbar-expand-lg bg-white">
+  <nav class="navbar navbar-expand-lg bg-white sticky-sm-top">
     <div class="container-sm flex-nowrap">
       <router-link
         :to="{ name: 'home' }"
@@ -73,18 +73,20 @@ export default {
               <div>
                 <h5 class="text-center my-0">Il tuo carrello</h5>
               </div>
-              <div
-                class="cartItem"
-                v-if="store.myOrder"
-                v-for="item in store.myOrder.dishes"
-              >
-                <div class="image">
-                  <img :src="item.image" :alt="item.name" />
+              <div v-if="store.myOrder">
+                <div class="cartItem" v-for="item in store.myOrder.dishes">
+                  <div class="image">
+                    <img :src="item.image" :alt="item.name" />
+                  </div>
+                  <span class="name">{{ item.name }}</span>
+                  <span class="quantity">x {{ item.quantity }}</span>
                 </div>
-                <span class="name">{{ item.name }}</span>
-                <span class="quantity">x {{ item.quantity }}</span>
+                <div class="d-flex flex-nowrap justify-content-between">
+                  <span>TOTALE</span>
+                  <span>€ {{ store.myOrder.price }}</span>
+                </div>
               </div>
-              <div class="cartItem" v-else>
+              <div v-else class="cartItem">
                 <span class="text-secondary text-center"
                   >Il tuo carrello è vuoto</span
                 >
@@ -131,7 +133,7 @@ export default {
     position: absolute;
     bottom: 0;
     right: 0;
-    transform: translate(25%, 100%);
+    transform: translate(0, 100%);
     display: none;
     color: $secondary;
     background-color: white;

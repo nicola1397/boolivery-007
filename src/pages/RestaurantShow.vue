@@ -355,14 +355,16 @@ export default {
     <!-- RESTAURANT DETAILS -->
     <div id="data">
       <div class="container" id="info">
-        <router-link :to="{ name: 'home' }" class="" id="backButton">
-          <button class="ballButton" @click="checkEmpty()">
-            👈🏻<span class="fs-5">Indietro</span>
-          </button>
-        </router-link>
+        <div id="back" class="d-flex justify-content-center d-md-block">
+          <router-link :to="{ name: 'home' }" class="" id="backButton">
+            <button class="ballButton" @click="checkEmpty()">
+              👈🏻<span class="fs-5">Indietro</span>
+            </button>
+          </router-link>
+        </div>
         <div class="row">
           <!-- RESTAURANT DATA -->
-          <div class="my-3">
+          <div class="my-5">
             <h1 class="restaurantTitle">
               {{ restaurant.name }}
             </h1>
@@ -551,6 +553,7 @@ export default {
   display: flex;
 
   #info {
+    position: relative;
     box-shadow: 0 0 10px 0 rgba(black, 0.2);
     flex: 1;
     // position: relative;
@@ -616,44 +619,49 @@ export default {
 // BUTTON
 /* BACK BUTTON */
 
-#backButton {
-  transform: translate(0, -150%);
-  position: absolute;
-  left: 0;
-  top: 0;
-  align-items: center;
-  text-decoration: none;
+#back {
+  margin-top: -7%;
 
-  .ballButton {
-    background-color: $primary;
-    box-shadow: 0 0 10px 0 rgba(black, 0.2);
-    position: relative;
-    color: white;
-    padding: 5px 10px 10px 10px;
-    border-radius: 500px;
-    position: relative;
-    font-size: 2rem;
-    text-align: center;
-    transform: translate3d(0, 0, 0);
-    transition: transform ease-out 200ms;
-    display: flex;
+  #backButton {
+    // transform: translate(0, -150%);
+    // position: absolute;
+    // left: 0;
+    // top: 0;
+
     align-items: center;
-    justify-content: center;
-    z-index: 2;
-    transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    transition-duration: 400ms;
-    transform: scale(1.1, 1.1) translate3d(0, 0, 0);
-    cursor: pointer;
-    i {
-      color: #2929b9;
-    }
+    text-decoration: none;
 
-    &:hover {
-      transform: scale(1.2, 1.2) translate3d(0, 0, 0);
-    }
-    span {
-      line-height: 50px;
-      transform: translateY(10%);
+    .ballButton {
+      background-color: $primary;
+      box-shadow: 0 0 10px 0 rgba(black, 0.2);
+      position: relative;
+      color: white;
+      padding: 5px 10px 10px 10px;
+      border-radius: 500px;
+      position: relative;
+      font-size: 2rem;
+      text-align: center;
+      transform: translate3d(0, 0, 0);
+      transition: transform ease-out 200ms;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition-duration: 400ms;
+      transform: scale(1.1, 1.1) translate3d(0, 0, 0);
+      cursor: pointer;
+      i {
+        color: #2929b9;
+      }
+
+      &:hover {
+        transform: scale(1.2, 1.2) translate3d(0, 0, 0);
+      }
+      span {
+        line-height: 50px;
+        transform: translateY(10%);
+      }
     }
   }
 }
