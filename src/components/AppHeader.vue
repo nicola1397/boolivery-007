@@ -73,20 +73,22 @@ export default {
               <div>
                 <h5 class="text-center my-0">Il tuo carrello</h5>
               </div>
-              <div v-if="store.myOrder">
+              <div v-if="store.myOrder.dishes" class="col-12">
                 <div class="cartItem" v-for="item in store.myOrder.dishes">
                   <div class="image">
                     <img :src="item.image" :alt="item.name" />
                   </div>
                   <span class="name">{{ item.name }}</span>
-                  <span class="quantity">x {{ item.quantity }}</span>
+                  <span class="quantity"
+                    >€{{ item.price }}<br />x{{ item.quantity }}</span
+                  >
                 </div>
                 <div class="d-flex flex-nowrap justify-content-between">
                   <span>TOTALE</span>
                   <span>€ {{ store.myOrder.price }}</span>
                 </div>
               </div>
-              <div v-else class="cartItem">
+              <div v-else class="cartItem col-12">
                 <span class="text-secondary text-center"
                   >Il tuo carrello è vuoto</span
                 >
@@ -149,6 +151,9 @@ export default {
 
       .cartItem {
         display: flex;
+        padding: 7px 0;
+        width: 100%;
+        // flex: 1 0 auto;
         flex-wrap: nowrap;
         justify-content: space-between;
         align-items: center;
@@ -171,13 +176,21 @@ export default {
         }
 
         .name {
-          font-size: 0.9rem;
-          line-height: 0.9rem;
+          display: -webkit-box;
+          font-size: 1rem;
+          line-height: 1rem;
           text-align: left;
           width: 100%;
+          -webkit-line-clamp: 4;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
+
         .quantity {
+          text-align: end;
           margin-left: 10px;
+          line-height: 1rem;
           text-wrap: nowrap;
         }
       }

@@ -195,6 +195,8 @@ export default {
       localStorage.removeItem("myOrder");
       this.myOrder = [];
     },
+
+    goBack() {},
   },
 
   created() {
@@ -243,8 +245,8 @@ export default {
       <!-- CART -->
       <div v-if="this.myOrder.dishes && this.myOrder.dishes.length > 0">
         <div class="col-6 mt-2 ms-2" id="back">
-          <router-link :to="{ name: 'home' }" id="backButton">
-            <button class="ballButton" @click="checkEmpty()">
+          <router-link to="" @click="$router.back()" id="backButton">
+            <button class="ballButton">
               👈🏻<span class="fs-5">Indietro</span>
             </button>
           </router-link>
