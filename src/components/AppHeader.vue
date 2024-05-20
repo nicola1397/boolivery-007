@@ -4,13 +4,28 @@ export default {
   data() {
     return {
       store,
+      hoverTimeout: null,
     };
   },
   watch: {
     "store.myOrder": function (val) {},
   },
   computed: {},
-  methods: {},
+  methods: {
+    mouseover() {
+      clearTimeout(this.hoverTimeout);
+
+      this.hoverTimeout = setTimeout(() => {
+        const hoverDiv = document.getElementById("cartHover");
+        hoverDiv.style.display = "flex";
+      }, 650);
+    },
+    mouseout() {
+      clearTimeout(this.hoverTimeout);
+      const hoverDiv = document.getElementById("cartHover");
+      hoverDiv.style.display = "none";
+    },
+  },
   mounted() {},
 };
 </script>
@@ -46,6 +61,8 @@ export default {
             class="nav-link"
             aria-current="page"
             exact-active-class="active"
+            @mouseover="mouseover()"
+            @mouseout="mouseout()"
             ><i class="fa-solid fa-basket-shopping"></i
           ></router-link>
           <span class="cartAmount" v-if="store.quantity > 0">{{
@@ -54,13 +71,24 @@ export default {
           <div id="cartHover">
             <div class="cartContent">
               <div>
-                <h5>Il tuo carrello</h5>
+                <h5 class="text-center my-0">Il tuo carrello</h5>
               </div>
               <div
                 class="cartItem"
                 v-if="store.myOrder"
-                v-for="item in store.myOrder"
-              ></div>
+                v-for="item in store.myOrder.dishes"
+              >
+                <div class="image">
+                  <img :src="item.image" :alt="item.name" />
+                </div>
+                <span class="name">{{ item.name }}</span>
+                <span class="quantity">x {{ item.quantity }}</span>
+              </div>
+              <div class="cartItem" v-else>
+                <span class="text-secondary text-center"
+                  >Il tuo carrello è vuoto</span
+                >
+              </div>
             </div>
           </div>
         </li>
@@ -76,6 +104,11 @@ export default {
 #cartIcon {
   position: relative;
   cursor: pointer;
+
+  #cartIcon:hover + #cartHover,
+  #cartIcon:hover {
+    display: flex;
+  }
   .cartAmount {
     position: absolute;
     top: 35%;
@@ -94,12 +127,58 @@ export default {
     font: 10px;
   }
   #cartHover {
+    width: 300px;
     position: absolute;
-    top: 0;
-    left: 0;
-    // display: none;
+    bottom: 0;
+    right: 0;
+    transform: translate(25%, 100%);
+    display: none;
+    color: $secondary;
+    background-color: white;
+    z-index: 5;
+    padding: 15px 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 5px 0 rgba(black, 0.2);
+
     .cartContent {
-      display: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      .cartItem {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba($primary, 0.2);
+
+        .image {
+          width: 60px;
+          height: 60px;
+          margin-right: 10px;
+          overflow: hidden;
+          border-radius: 500px;
+          flex: 0 0 auto;
+          object-fit: contain;
+          display: flex;
+          justify-content: center;
+          .img {
+            height: 100%;
+            width: 100%;
+          }
+        }
+
+        .name {
+          font-size: 0.9rem;
+          line-height: 0.9rem;
+          text-align: left;
+          width: 100%;
+        }
+        .quantity {
+          margin-left: 10px;
+          text-wrap: nowrap;
+        }
+      }
     }
   }
 }

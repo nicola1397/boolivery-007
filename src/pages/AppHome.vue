@@ -349,8 +349,8 @@ li {
     background-image: url(../assets/img/wave3.svg);
     background-repeat: no-repeat;
     background-size: cover;
-    filter: invert(34%) sepia(52%) saturate(2509%) hue-rotate(215deg)
-      brightness(97%) contrast(99%);
+    filter: invert(34%) sepia(52%) saturate(2515%) hue-rotate(212deg)
+      brightness(96%) contrast(100%);
   }
   .container {
     position: relative;

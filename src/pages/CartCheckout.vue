@@ -189,6 +189,12 @@ export default {
         return false;
       }
     },
+
+    emptyCart() {
+      store.myOrder = [];
+      localStorage.removeItem("myOrder");
+      this.myOrder = [];
+    },
   },
 
   created() {
@@ -299,10 +305,20 @@ export default {
             </div>
           </div>
         </div>
-        <div>
-          <h2 class="totalPrice">
+        <div class="row my-4 align-items-center m-0 pe-5" style="padding: 20px">
+          <h2 class="totalPrice col-7">
             TOTALE € {{ euroCheck(this.myOrder.price) }}
           </h2>
+          <div class="col-4 text-center">
+            <button
+              type="button"
+              class="deletebutton"
+              @click="this.emptyCart()"
+            >
+              <span>Svuota</span>
+              <div class="icon"><i class="fa-solid fa-trash"></i></div>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -332,7 +348,7 @@ export default {
 .totalPrice {
   color: $secondary;
   text-align: center;
-  margin-top: 30px;
+  margin: 0;
 }
 
 .customModal {
@@ -603,5 +619,120 @@ button {
 .blueColor {
   background-color: $primary;
   color: white;
+}
+
+// Variables
+$color: #c0392b;
+$color-dark: #a53125;
+$color2: orange;
+$color3: #2929b9;
+
+$speed: "0.25s";
+$transition: all #{$speed} cubic-bezier(0.31, -0.105, 0.43, 1.4);
+
+/* DELETE BUTTON */
+.deletebutton {
+  display: inline-block;
+  background-color: $color;
+  width: 150px;
+  height: 50px;
+  line-height: 50px;
+  color: #fff;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 5px;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.3);
+  transition: $transition;
+
+  span,
+  .icon {
+    display: block;
+    height: 100%;
+    text-align: center;
+    position: absolute;
+    top: 0;
+  }
+
+  span {
+    width: 72%;
+    line-height: inherit;
+    font-size: 22px;
+    text-transform: uppercase;
+    left: 0;
+    transition: $transition;
+
+    &:after {
+      content: "";
+      background-color: $color-dark;
+      width: 2px;
+      height: 70%;
+      position: absolute;
+      top: 15%;
+      right: -1px;
+    }
+  }
+
+  .icon {
+    width: 28%;
+    right: 0;
+    transition: $transition;
+
+    .fa {
+      font-size: 30px;
+      vertical-align: middle;
+      transition: $transition, height #{$speed} ease;
+    }
+
+    .fa-remove {
+      height: 36px;
+    }
+
+    .fa-check {
+      display: none;
+    }
+  }
+
+  &.success,
+  &:hover {
+    span {
+      left: -72%;
+      opacity: 0;
+    }
+
+    .icon {
+      width: 100%;
+
+      .fa {
+        font-size: 45px;
+      }
+    }
+  }
+
+  &.success {
+    background-color: #27ae60;
+
+    .icon {
+      .fa-remove {
+        display: none;
+      }
+
+      .fa-check {
+        display: inline-block;
+      }
+    }
+  }
+
+  &:hover {
+    opacity: 0.9;
+
+    .icon .fa-remove {
+      height: 46px;
+    }
+  }
+
+  &:active {
+    opacity: 1;
+  }
 }
 </style>

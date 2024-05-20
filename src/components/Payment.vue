@@ -78,7 +78,8 @@ export default {
           e.preventDefault(); // Previene il comportamento di default del form
 
           var formData = new FormData(this);
-
+          let loading = document.getElementById("loading");
+          loading.style.display = "block";
           fetch(this.action, {
             method: "POST",
             body: formData,
@@ -86,10 +87,12 @@ export default {
             .then((response) => response.json())
             .then((data) => {
               if (data.success) {
+                loading.style.display = "none";
                 console.log("successo");
                 let modal = document.getElementById("paymentModalSuccess");
                 modal.style.display = "block";
               } else {
+                loading.style.display = "none";
                 console.log("fail");
                 this.paymentModalFail();
               }
@@ -110,6 +113,13 @@ export default {
 </script>
 <template>
   <div>
+    <!-- PAYMENT MODAL LOADING -->
+    <div class="customModal" id="loading">
+      <div>
+        <i class="fa-solid fa-spinner fa-spin"></i>
+      </div>
+    </div>
+
     <!-- PAYMENT MODAL SUCCESS -->
     <div class="customModal" id="paymentModalSuccess">
       <div class="close" @click="paymentModalClose('paymentModalSuccess')">
@@ -239,7 +249,7 @@ export default {
         <input type="hidden" name="token" :value="authorization" />
 
         <div id="dropin-container"></div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary mb-2">Submit</button>
       </form>
     </div>
   </div>
@@ -249,6 +259,19 @@ export default {
 @use "../style/partials/mixins" as *;
 
 @use "../style/partials/variables" as *;
+@keyframes rotating {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#loading i {
+  animation: rotating 1.5s linear infinite;
+}
+
 label {
   color: $secondary;
 }
@@ -268,6 +291,14 @@ label {
   padding: 30px;
   border-radius: 15px;
   box-shadow: 0 10px 5px 0 rgba(black, 0.2);
+
+  &#loading {
+    box-shadow: none;
+    border: none;
+    border-radius: none;
+    background: transparent;
+    font-size: 4rem;
+  }
   .modalImage {
     width: 100%;
     overflow: hidden;
