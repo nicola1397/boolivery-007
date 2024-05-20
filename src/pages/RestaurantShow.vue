@@ -137,7 +137,6 @@ export default {
 
         // SE L'ID DEL RISTORANTE COMBACIA CON QUELLO NELL'ORDINE
         if (this.myOrder.restaurant_id == this.restaurant.id) {
-          // SE ORDINE NON ESISTE
           // SE IL VALUE SALE
           if (value.value == 0) {
             value.classList.remove("off");
@@ -171,7 +170,17 @@ export default {
               "Il carrello contiene piatti di un altro ristorante! Svuotare il carrello?"
             )
           ) {
-            this.myOrder = [];
+            this.myOrder = {
+              restaurant_id: this.restaurant.id,
+              dishes: [],
+              price: 0,
+            };
+            let value = document.getElementById(dish.id);
+            value.classList.remove("off");
+            value.value = 1;
+            this.myOrder.dishes.push({ ...dish, quantity: 1 });
+            this.myOrder.price = dish.price;
+            console.log("logging", this.myOrder);
           } else {
             history.back();
           }
@@ -199,52 +208,83 @@ export default {
         };
       }
       if (!input.value) input.value = 0;
+      if (this.myOrder.restaurant_id == this.restaurant.id) {
+        if (input.reportValidity()) {
+          let dishInOrder = this.myOrder.dishes.find((d) => d.id === dish.id);
 
-      if (input.reportValidity()) {
-        let dishInOrder = this.myOrder.dishes.find((d) => d.id === dish.id);
-
-        // Calcola la nuova quantità e il nuovo prezzo potenziale
-        let newQuantity = parseInt(input.value);
-        let potentialNewPrice =
-          this.myOrder.price -
-          (dishInOrder ? dishInOrder.quantity * dish.price : 0) +
-          newQuantity * dish.price;
-
-        // Controlla se il prezzo supera il limite prima di aggiornare l'ordine
-        if (potentialNewPrice > 9999.99) {
-          // Calcola la quantità massima possibile senza superare il limite
-          newQuantity = Math.floor(
-            (9999.99 -
-              (this.myOrder.price -
-                (dishInOrder ? dishInOrder.quantity * dish.price : 0))) /
-              dish.price
-          );
-          potentialNewPrice =
+          // Calcola la nuova quantità e il nuovo prezzo potenziale
+          let newQuantity = parseInt(input.value);
+          let potentialNewPrice =
             this.myOrder.price -
             (dishInOrder ? dishInOrder.quantity * dish.price : 0) +
             newQuantity * dish.price;
-          alert(
-            "Il limite di prezzo del carrello di 9999.99€ è stato superato. La quantità è stata aggiustata al valore massimo possibile."
-          );
-          potentialNewPrice;
-        }
 
-        // Aggiorna l'ordine solo se la nuova quantità è maggiore di zero
-        if (newQuantity > 0) {
-          if (dishInOrder) {
-            this.myOrder.price = potentialNewPrice;
-            dishInOrder.quantity = newQuantity;
-          } else {
-            this.myOrder.dishes.push({ ...dish, quantity: newQuantity });
-            this.myOrder.price = potentialNewPrice;
+          // Controlla se il prezzo supera il limite prima di aggiornare l'ordine
+          if (potentialNewPrice > 9999.99) {
+            // Calcola la quantità massima possibile senza superare il limite
+            newQuantity = Math.floor(
+              (9999.99 -
+                (this.myOrder.price -
+                  (dishInOrder ? dishInOrder.quantity * dish.price : 0))) /
+                dish.price
+            );
+            potentialNewPrice =
+              this.myOrder.price -
+              (dishInOrder ? dishInOrder.quantity * dish.price : 0) +
+              newQuantity * dish.price;
+            alert(
+              "Il limite di prezzo del carrello di 9999.99€ è stato superato. La quantità è stata aggiustata al valore massimo possibile."
+            );
+            potentialNewPrice;
           }
-          input.value = newQuantity;
-        } else if (dishInOrder) {
-          // Rimuovi il piatto dall'ordine se la quantità è 0
-          this.myOrder.dishes = this.myOrder.dishes.filter(
-            (d) => d.id !== dish.id
-          );
-          this.myOrder.price -= dishInOrder.quantity * dish.price;
+
+          // Aggiorna l'ordine solo se la nuova quantità è maggiore di zero
+          if (newQuantity > 0) {
+            if (dishInOrder) {
+              this.myOrder.price = potentialNewPrice;
+              dishInOrder.quantity = newQuantity;
+            } else {
+              this.myOrder.dishes.push({ ...dish, quantity: newQuantity });
+              this.myOrder.price = potentialNewPrice;
+            }
+            input.value = newQuantity;
+          } else if (dishInOrder) {
+            // Rimuovi il piatto dall'ordine se la quantità è 0
+            this.myOrder.dishes = this.myOrder.dishes.filter(
+              (d) => d.id !== dish.id
+            );
+            this.myOrder.price -= dishInOrder.quantity * dish.price;
+          }
+        }
+      } else {
+        if (
+          confirm(
+            "Il carrello contiene piatti di un altro ristorante! Svuotare il carrello?"
+          )
+        ) {
+          this.myOrder = {
+            restaurant_id: this.restaurant.id,
+            dishes: [],
+            price: 0,
+          };
+          let value = document.getElementById(dish.id);
+          value.classList.remove("off");
+          value.value = 1;
+          this.myOrder.dishes.push({ ...dish, quantity: input.value });
+          this.myOrder.price = dish.price * input.value;
+          if (this.myOrder.price > 9999.99) {
+            newQuantity = Math.floor(
+              (9999.99 -
+                (this.myOrder.price -
+                  (dishInOrder ? dishInOrder.quantity * dish.price : 0))) /
+                dish.price
+            );
+            alert(
+              "Il limite di prezzo del carrello di 9999.99€ è stato superato. La quantità è stata aggiustata al valore massimo possibile."
+            );
+          } else {
+            history.back();
+          }
         }
       }
       console.log("INPUT VALIDATION -> myOrder", this.myOrder);

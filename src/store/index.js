@@ -1,4 +1,4 @@
-import { reactive, watch } from "vue";
+import { reactive, watch, onMounted } from "vue";
 
 export const api = {
   baseApiURI: "http://127.0.0.1:8000/api/",
@@ -17,11 +17,22 @@ watch(
   () => {
     store.quantity = 0;
     console.log("store function");
-    store.myOrder.dishes.forEach((element) => {
-      store.quantity += element.quantity;
-    });
+    if (store.myOrder.dishes && store.myOrder.dishes.length > 0) {
+      store.myOrder.dishes.forEach((element) => {
+        store.quantity += element.quantity;
+      });
+    }
   },
   {
     deep: true,
   }
 );
+
+function loadOrder() {
+  const localOrder = localStorage.getItem("myOrder");
+  if (localOrder) {
+    store.myOrder = JSON.parse(localOrder);
+  }
+}
+
+loadOrder();
