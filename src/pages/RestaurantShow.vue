@@ -389,7 +389,7 @@ export default {
                 <i class="fa-solid fa-circle-xmark fa-2xl text-primary"></i>
               </div>
               <div>
-                <h3>ATTENZIONE</h3>
+                <h3 class="text-danger">ATTENZIONE</h3>
               </div>
 
               <div>
@@ -449,7 +449,7 @@ export default {
               <!-- ALERT MODAL -->
               <div class="customModal" id="restaurantOrderModal">
                 <div>
-                  <h3 class="text-center">ATTENZIONE</h3>
+                  <h3 class="text-danger">ATTENZIONE</h3>
                 </div>
                 <div>
                   <p class="fs-5">

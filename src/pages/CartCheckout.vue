@@ -94,9 +94,7 @@ export default {
           this.myOrder.price =
             parseFloat(this.myOrder.price) + parseFloat(dish.price);
         } else {
-          alert(
-            "Aggiungendo questo piatto, si supererebbe il limite di prezzo del carrello di 9999.99€."
-          );
+          this.cartLimitModal();
         }
       }
 
@@ -138,9 +136,8 @@ export default {
             this.myOrder.price -
             (dishInOrder ? dishInOrder.quantity * dish.price : 0) +
             newQuantity * dish.price;
-          alert(
-            "Il limite di prezzo del carrello di 9999.99€ è stato superato. La quantità è stata aggiustata al valore massimo possibile."
-          );
+          this.cartLimitModal();
+
           potentialNewPrice;
         }
 
@@ -174,6 +171,15 @@ export default {
       let modal = document.getElementById("dish-modal-" + dish);
       modal.style.display = "none";
     },
+
+    cartLimitModal() {
+      let modal = document.getElementById("cartLimitModal");
+      modal.style.display = "block";
+    },
+    cartLimitModalClose() {
+      let modal = document.getElementById("cartLimitModal");
+      modal.style.display = "none";
+    },
     //DEFINED CHECK
     exists(item) {
       // console.log("controllo", item);
@@ -200,13 +206,36 @@ export default {
 <template>
   <div class="row justify-content-between containerApp ps-3">
     <div class="col-12 col-md-8 px-2">
-      <div v-if="this.myOrder.dishes.length == 0">
-        <h1 class="text-danger">Il tuo carrello è vuoto!</h1>
+      <!-- MODAL -->
+      <div class="customModal" id="cartLimitModal">
+        <div class="close" @click="cartLimitModalClose()">
+          <i class="fa-solid fa-circle-xmark fa-2xl text-primary"></i>
+        </div>
+        <div>
+          <h3 class="text-danger">ATTENZIONE</h3>
+        </div>
+
+        <div>
+          <p class="fs-5">
+            Hai raggiunto il limite di 9999.99€! Il carrello contiene la
+            quantità massima di piatti possibile.
+          </p>
+        </div>
+      </div>
+
+      <!-- EMPTY CART -->
+      <div
+        v-if="!this.myOrder.dishes || this.myOrder.dishes.length == 0"
+        class="noItems"
+      >
+        <h1 class="text-danger text-center">Il tuo carrello è vuoto!</h1>
         <router-link to="/">
           <button class="btn btn-primary">Torna alla home</button></router-link
         >
       </div>
-      <div v-if="this.myOrder.dishes.length > 0">
+
+      <!-- CART -->
+      <div v-if="this.myOrder.dishes && this.myOrder.dishes.length > 0">
         <div class="dishesContainer">
           <div v-for="dish in this.myOrder.dishes" class="dishCard pe-5 col-12">
             <!-- IMMAGINE -->
@@ -240,7 +269,6 @@ export default {
                   step="1"
                   :value="dish.quantity"
                   class="off rounded border border-primary-subtle border-2"
-                  @keyup="getClass($event.target.id)"
                   @blur="inputValidation($event.target.id, dish)"
                 />
                 <button
@@ -279,7 +307,11 @@ export default {
       </div>
     </div>
     <div class="col-12 col-md-4 px-2 pe-5">
-      <Payment :authorization="this.tokenApi" :myOrder="this.myOrder"></Payment>
+      <Payment
+        :authorization="this.tokenApi"
+        :myOrder="this.myOrder"
+        v-if="this.myOrder.dishes && this.myOrder.dishes.length > 0"
+      ></Payment>
     </div>
   </div>
 </template>
@@ -289,6 +321,14 @@ export default {
 
 @use "../style/partials/variables" as *;
 
+.noItems {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
 .totalPrice {
   color: $secondary;
   text-align: center;
@@ -296,7 +336,9 @@ export default {
 }
 
 .customModal {
+  text-align: center;
   display: none;
+  color: $secondary;
   background-color: white;
   z-index: 5;
   max-width: 30vw;

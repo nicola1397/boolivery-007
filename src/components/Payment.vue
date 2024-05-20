@@ -59,6 +59,17 @@ export default {
       const seconds = String(now.getSeconds()).padStart(2, "0");
       return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     },
+    // paymentModalSuccess() {},
+    // paymentModalFail() {},
+    paymentModalClose(element) {
+      let modal = document.getElementById(element);
+      modal.style.display = "none";
+      if (element === "paymentModalSuccess") {
+        window.location.href = "/";
+        store.myOrder = [];
+        localStorage.removeItem("myOrder");
+      }
+    },
 
     formCatch() {
       document
@@ -76,12 +87,16 @@ export default {
             .then((data) => {
               if (data.success) {
                 console.log("successo");
+                let modal = document.getElementById("paymentModalSuccess");
+                modal.style.display = "block";
               } else {
                 console.log("fail");
+                this.paymentModalFail();
               }
             })
             .catch((error) => {
-              console.log("error");
+              let modal = document.getElementById("paymentModalFail");
+              modal.style.display = "block";
             });
         });
     },
@@ -95,6 +110,40 @@ export default {
 </script>
 <template>
   <div>
+    <!-- PAYMENT MODAL SUCCESS -->
+    <div class="customModal" id="paymentModalSuccess">
+      <div class="close" @click="paymentModalClose('paymentModalSuccess')">
+        <i class="fa-solid fa-circle-xmark fa-2xl text-primary"></i>
+      </div>
+      <div>
+        <i
+          class="fa-solid fa-circle-check display-1 fa-bounce text-success"
+        ></i>
+      </div>
+
+      <div>
+        <h3 class="text-success">L'ordine è avvenuto con successo!</h3>
+        <span class="text-success"
+          >Controlla la tua casella di posta elettronica.</span
+        >
+      </div>
+    </div>
+
+    <!-- PAYMENT MODAL FAIL -->
+    <div class="customModal" id="paymentModalFail">
+      <div class="close" @click="paymentModalClose('paymentModalFail')">
+        <i class="fa-solid fa-circle-xmark fa-2xl text-primary"></i>
+      </div>
+      <div>
+        <i class="fa-solid fa-circle-xmark display-1 fa-bounce text-danger"></i>
+      </div>
+
+      <div>
+        <h3 class="text-danger">L'ordine è stato rifiutato!</h3>
+      </div>
+    </div>
+
+    <!-- FORM -->
     <div>
       <form
         id="payment-form"
@@ -202,6 +251,43 @@ export default {
 @use "../style/partials/variables" as *;
 label {
   color: $secondary;
+}
+
+.customModal {
+  text-align: center;
+  display: none;
+  color: $secondary;
+  background-color: white;
+  z-index: 5;
+  max-width: 30vw;
+  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 5px 0 rgba(black, 0.2);
+  .modalImage {
+    width: 100%;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    margin: 20px 0;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+    }
+  }
+
+  .close {
+    position: absolute;
+    right: 30px;
+    top: 20px;
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
 }
 
 .button {
