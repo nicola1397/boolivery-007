@@ -86,11 +86,12 @@ export default {
     },
     mouseover(index) {
       clearTimeout(this.hoverTimeout);
-
-      this.hoverTimeout = setTimeout(() => {
-        const hoverDiv = document.getElementById("list-" + index);
-        hoverDiv.style.display = "flex";
-      }, 650);
+      try {
+        this.hoverTimeout = setTimeout(() => {
+          const hoverDiv = document.getElementById("list-" + index);
+          hoverDiv.style.display = "flex";
+        }, 650);
+      } catch (error) {}
     },
     coordinates(e, index) {
       let hoverDiv = document.getElementById("list-" + index);
