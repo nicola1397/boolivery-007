@@ -160,34 +160,12 @@ export default {
             this.myOrder.price =
               parseFloat(this.myOrder.price) + parseFloat(dish.price);
           } else {
-            alert(
-              "Aggiungendo questo piatto, si supererebbe il limite di prezzo del carrello di 9999.99€."
-            );
+            this.cartLimitModal();
           }
         } else {
-          if (
-            confirm(
-              "Il carrello contiene piatti di un altro ristorante! Svuotare il carrello?"
-            )
-          ) {
-            this.myOrder = {
-              restaurant_id: this.restaurant.id,
-              dishes: [],
-              price: 0,
-            };
-            let value = document.getElementById(dish.id);
-            value.classList.remove("off");
-            value.value = 1;
-            this.myOrder.dishes.push({ ...dish, quantity: 1 });
-            this.myOrder.price = dish.price;
-            console.log("logging", this.myOrder);
-          } else {
-            history.back();
-          }
+          this.alertModal();
         }
       }
-
-      // console.log(this.myOrder);
     },
 
     // VALIDATION FOR INPUTS
@@ -232,9 +210,7 @@ export default {
               this.myOrder.price -
               (dishInOrder ? dishInOrder.quantity * dish.price : 0) +
               newQuantity * dish.price;
-            alert(
-              "Il limite di prezzo del carrello di 9999.99€ è stato superato. La quantità è stata aggiustata al valore massimo possibile."
-            );
+            this.cartLimitModal();
             potentialNewPrice;
           }
 
@@ -257,35 +233,7 @@ export default {
           }
         }
       } else {
-        if (
-          confirm(
-            "Il carrello contiene piatti di un altro ristorante! Svuotare il carrello?"
-          )
-        ) {
-          this.myOrder = {
-            restaurant_id: this.restaurant.id,
-            dishes: [],
-            price: 0,
-          };
-          let value = document.getElementById(dish.id);
-          value.classList.remove("off");
-          value.value = 1;
-          this.myOrder.dishes.push({ ...dish, quantity: input.value });
-          this.myOrder.price = dish.price * input.value;
-          if (this.myOrder.price > 9999.99) {
-            newQuantity = Math.floor(
-              (9999.99 -
-                (this.myOrder.price -
-                  (dishInOrder ? dishInOrder.quantity * dish.price : 0))) /
-                dish.price
-            );
-            alert(
-              "Il limite di prezzo del carrello di 9999.99€ è stato superato. La quantità è stata aggiustata al valore massimo possibile."
-            );
-          } else {
-            history.back();
-          }
-        }
+        this.alertModal();
       }
       console.log("INPUT VALIDATION -> myOrder", this.myOrder);
     },
@@ -337,9 +285,49 @@ export default {
       modal.style.display = "none";
     },
 
+    cartLimitModal() {
+      let modal = document.getElementById("cartLimitModal");
+      modal.style.display = "block";
+    },
+    cartLimitModalClose() {
+      let modal = document.getElementById("cartLimitModal");
+      modal.style.display = "none";
+    },
+
     alertModal() {
       let modal = document.getElementById("restaurantOrderModal");
       modal.style.display = "block";
+    },
+
+    alertAccept(dish) {
+      let input = document.getElementById(dish.id);
+      if (input.value == 0) input.value = 1;
+      let modal = document.getElementById("restaurantOrderModal");
+      modal.style.display = "none";
+      this.myOrder = {
+        restaurant_id: this.restaurant.id,
+        dishes: [],
+        price: 0,
+      };
+      this.myOrder.dishes.push({ ...dish, quantity: input.value });
+      this.myOrder.price = dish.price * input.value;
+      input.classList.remove("off");
+      if (this.myOrder.price > 9999.99) {
+        newQuantity = Math.floor(
+          (9999.99 -
+            (this.myOrder.price -
+              (dishInOrder ? dishInOrder.quantity * dish.price : 0))) /
+            dish.price
+        );
+        alert(
+          "Il limite di prezzo del carrello di 9999.99€ è stato superato. La quantità è stata aggiustata al valore massimo possibile."
+        );
+      }
+    },
+    alertDecline() {
+      let modal = document.getElementById("restaurantOrderModal");
+      modal.style.display = "none";
+      history.back();
     },
   },
   created() {
@@ -395,6 +383,22 @@ export default {
           <!-- END BADGES -->
           <hr />
           <div class="dishesContainer">
+            <!-- MODAL -->
+            <div class="customModal" id="cartLimitModal">
+              <div class="close" @click="cartLimitModalClose()">
+                <i class="fa-solid fa-circle-xmark fa-2xl text-primary"></i>
+              </div>
+              <div>
+                <h3>ATTENZIONE</h3>
+              </div>
+
+              <div>
+                <p class="fs-5">
+                  Hai raggiunto il limite di 9999.99€! Il carrello contiene la
+                  quantità massima di piatti possibile.
+                </p>
+              </div>
+            </div>
             <div
               v-for="dish in restaurant.dishes"
               class="dishCard pe-5 col-12 col-md-6"
@@ -442,7 +446,29 @@ export default {
                   </button>
                 </div>
               </div>
-
+              <!-- ALERT MODAL -->
+              <div class="customModal" id="restaurantOrderModal">
+                <div>
+                  <h3 class="text-center">ATTENZIONE</h3>
+                </div>
+                <div>
+                  <p class="fs-5">
+                    Il tuo carrello contiene piatti di un altro ristorante. Vuoi
+                    svuotare il carrello per procedere?
+                  </p>
+                  <div class="d-flex justify-content-evenly g-3">
+                    <button
+                      class="btn btn-primary"
+                      @click="this.alertAccept(dish)"
+                    >
+                      Procedi
+                    </button>
+                    <button class="btn btn-danger" @click="this.alertDecline()">
+                      Annulla
+                    </button>
+                  </div>
+                </div>
+              </div>
               <!-- MODAL -->
               <div class="customModal" :id="'dish-modal-' + dish.id">
                 <div class="close" @click="closeModal(dish.id)">
@@ -459,107 +485,9 @@ export default {
                   <span class="fs-2">€ {{ euroCheck(dish.price) }}</span>
                 </div>
               </div>
-
-              <!-- ALERT MODAL -->
-              <div class="customModal" id="restaurantOrderModal">
-                <div>
-                  <h3 class="text-center">ATTENZIONE</h3>
-                </div>
-                <div>
-                  <p class="fs-5">
-                    Il tuo carrello contiene piatti di un altro ristorante. Vuoi
-                    svuotare il carrello per procedere?
-                  </p>
-                  <div>
-                    <button class="btn btn-primary">Procedi</button>
-                    <button class="btn btn-danger">Annulla</button>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- CART OFFCANVAS -->
-
-  <div
-    class="offcanvas offcanvas-start"
-    data-bs-scroll="true"
-    data-bs-backdrop="false"
-    tabindex="-1"
-    id="offcanvasScrolling"
-    aria-labelledby="offcanvasScrollingLabel"
-  >
-    <div class="offcanvas-header">
-      <h2 class="offcanvas-title" id="offcanvasScrollingLabel">
-        Il tuo carrello
-      </h2>
-      <button
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="offcanvas"
-        aria-label="Close"
-      ></button>
-    </div>
-    <div class="offcanvas-body">
-      <div
-        v-if="myOrder.dishes"
-        v-for="dish in myOrder.dishes"
-        class="d-flex flex-column pe-5"
-      >
-        <div class="dishCard">
-          <!-- IMMAGINE -->
-
-          <div
-            class="dishImage col-2"
-            data-bs-toggle="modal"
-            :data-bs-target="`#dish-` + dish.id"
-          >
-            <img :src="dish.image" alt="dish.name" />
-          </div>
-          <!-- TESTO -->
-          <div class="dishInfo col-7 px-2">
-            <h5>{{ dish.name }}</h5>
-            <p>{{ dish.description }}</p>
-          </div>
-          <!-- PREZZO -->
-          <div class="dishPrice col-3">
-            <h5>
-              €
-              {{ euroCheck(parseFloat(dish.price * dish.quantity)) }}
-            </h5>
-          </div>
-        </div>
-        <span class="text-secondary text-end"
-          >{{ euroCheck(dish.price) }} x {{ dish.quantity }}</span
-        >
-      </div>
-
-      <div v-else class="d-flex flex-column pe-5">
-        <span class="text-secondary">Il tuo carrello è vuoto.</span>
-      </div>
-    </div>
-    <div
-      class="offcanvas-footer d-flex flex-column justify-content-center mb-5"
-      v-if="this.myOrder.dishes"
-    >
-      <h4 class="text-center mb-2">PREZZO TOTALE</h4>
-
-      <h2 class="text-center mb-5">€{{ euroCheck(this.myOrder.price) }}</h2>
-
-      <router-link
-        :to="{ name: 'restaurants.checkout' }"
-        class="router-link text-center"
-      >
-        <button type="button" class="btn btn-primary btn-lg">
-          Procedi al pagamento
-        </button>
-      </router-link>
-      <div class="btn btn-danger btn-lg" @click="emptyCart()">
-        Svuota il carrello
       </div>
     </div>
   </div>
@@ -731,7 +659,7 @@ export default {
 }
 
 button {
-  background-color: transparent;
+  // background-color: transparent;
   border: 0;
   cursor: pointer;
 }

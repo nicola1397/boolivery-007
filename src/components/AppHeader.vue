@@ -49,7 +49,7 @@ export default {
             ><i class="fa-solid fa-basket-shopping"></i
           ></router-link>
           <span class="cartAmount" v-if="store.quantity > 0">{{
-            store.quantity
+            parseInt(store.quantity)
           }}</span>
           <div id="cartHover">
             <div class="cartContent">
